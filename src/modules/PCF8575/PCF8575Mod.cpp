@@ -4,15 +4,15 @@
 
 SoftwareSerial ESP_SERIAL_PCF(ESP_RX, ESP_TX);
 
-PCF8575 pcf8575(ADDRRESS_PCFMOD, DEVICE_INTERRUPTED_PIN,  interruptFunct );
-
 bool keyChanged = false;
-uint16_t Confg
 
 void interruptFunct()
 {
     keyChanged = true;
 }
+
+PCF8575 pcf8575(ADDRRESS_PCFMOD, DEVICE_INTERRUPTED_PIN,  interruptFunct );
+
 
 void PCF_Configuration(uint16_t pincConfg){
     for (uint8_t i = 0; i < 16; i++)
@@ -30,7 +30,7 @@ void PCF_Init()
 uint16_t PCF_readBuffer()
 {
     keyChanged = false;
-    return digitalReadAll();
+    return pcf8575.digitalReadAll();
 }
 
-bool PCF_verifyInt(){return keyChanged}
+bool PCF_verifyInt(){return keyChanged;}

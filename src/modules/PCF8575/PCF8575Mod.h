@@ -3,8 +3,6 @@
 
 #include <Arduino.h>
 
-extern bool keyChanged = false;
-
 #if defined(ESP8266)
     #define DEVICE_INTERRUPTED_PIN 9
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
@@ -14,7 +12,7 @@ extern bool keyChanged = false;
 #define ADDRRESS_PCFMOD 0x21
 
 void PCF_Init();
-void PCF_readBuffer();
+uint16_t PCF_readBuffer();
 bool PCF_verifyInt();
 void PCF_Configuration(uint16_t pincConfg);
 

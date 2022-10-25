@@ -14,10 +14,10 @@ void MOD74HC595_Init( )
     sr.setAllLow();
 }
 
-void MOD74HC595_setOutput(uint8_t *pos, uint8_t *output, uint8_t elements )
+void MOD74HC595_setOutput(const struct data_ModBackend *config, uint8_t elements )
 {
     for( uint8_t i = 0; i < elements; i++ ){
-        sr.setNoUpdate(*(pos+i), *(output+i) );
+        if(config[i].posPin >= 0  )sr.setNoUpdate((uint8_t)config[i].posPin , (uint8_t)config[i].estadoPin);
     }
     sr.updateRegisters();
 }

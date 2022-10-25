@@ -1,7 +1,7 @@
-#ifndef _74HC595_H
-#define _74HC595_H
+#ifndef _MOD74HC595_H
+#define _MOD74HC595_H
 
-#include <Arduino.h>
+#include "../ModBackend.h"
 
 #define NUM_MOD_595 3
 
@@ -23,6 +23,6 @@ struct Mod75HC595_Backend {
 };
 
 void MOD74HC595_Init( );
-void MOD74HC595_setOutput(uint8_t *pos, uint8_t *output, uint8_t elements  );
+void MOD74HC595_setOutput(const struct data_ModBackend *config, uint8_t elements  );
 
 #endif // !1
