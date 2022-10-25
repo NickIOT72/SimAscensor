@@ -1,7 +1,7 @@
 #ifndef _BANDERAS_H
 #define _BANDERAS_H
 
-#include "../../modules/Mod74hc595/Mod74hc595.h"
+#include "../../modules/ModBackend.h"
 
 extern uint16_t contadorSecuenciaPiso;
 extern uint8_t contadorBanderas;
@@ -40,5 +40,18 @@ const uint8_t pisosSecuenciaPASPAD[15] = {
 	0b00000101,
 	0b00000111   
 };
+
+enum bitOrder_Seguridades {
+    bitEXD,
+    bitPAD_PN,
+    bitPAS,
+    bitEXS
+};
+
+void Banderas_Init(  const struct data_ModBackend *confg, uint8_t elements);
+
+uint8_t Banderas_leerBanderas();
+void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos);
+void DecrementarBandera(uint8_t *PisoActual);
 
 #endif // !_BANDERAS_H

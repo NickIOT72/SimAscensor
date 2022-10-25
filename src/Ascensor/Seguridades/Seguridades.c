@@ -14,20 +14,20 @@ void Seguridades_Init( const struct data_ModBackend *confg, uint8_t elements)
 }
 
 
-uint8_t leerEstadoPuerta()
+uint8_t Seguridades_leerEstadoPuerta()
 {
     uint8_t estadoPuerta =  (uint8_t)(data_mod_595[bitFPA].estadoPin) << 2 | (uint8_t)(data_mod_595[bitSPC].estadoPin) << 1 | (uint8_t)(data_mod_595[bitSA].estadoPin);
     return estadoPuerta;
 }
 
-void ActivarSM()
+void Seguridades_ActivarSM()
 {
     data_mod_595[bitSM].estadoPin = true;
     struct data_ModBackend data_mod_595_SM[]={data_mod_595[bitSM]};
     MOD74HC595_setOutput(data_mod_595_SM , 1 );
 }
 
-void ApagarSM()
+void Seguridades_ApagarSM()
 {
     data_mod_595[bitSM].estadoPin = false;
     struct data_ModBackend data_mod_595_SM[]={data_mod_595[bitSM]};

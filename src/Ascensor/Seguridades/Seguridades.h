@@ -16,8 +16,8 @@ enum puertaEstado { entrePuerta , CierreEsperandoSPC, CierreEsperandoSA, cerrado
 
 void Seguridades_Init(  const struct data_ModBackend *confg, uint8_t elements);
 
-uint8_t leerEstadoPuerta();
-void ActivarSM();
-void ApagarSM();
+uint8_t Seguridades_leerEstadoPuerta();
+void Seguridades_ActivarSM();
+void Seguridades_ApagarSM();
 
 #endif // !_OLEDMOD_H

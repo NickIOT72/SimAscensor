@@ -5,6 +5,7 @@
 
 #define NUM_PISOS 24
 extern uint8_t TotalPisos;
+extern uint8_t pisoActual;
 
 enum nombreModulos { MS1, MS2, MSA, ME1, MEA };
 
