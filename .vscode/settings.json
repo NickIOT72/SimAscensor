@@ -1,3 +1,7 @@
 {
-    "nrf-connect.toolchain.path": "${nrf-connect.toolchain:2.0.0}"
+    "nrf-connect.toolchain.path": "${nrf-connect.toolchain:2.0.0}",
+    "files.associations": {
+        "*.c": "c",
+        "pcf8575.h": "c"
+    }
 }
