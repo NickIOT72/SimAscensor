@@ -1,6 +1,7 @@
 #ifndef _SEGURIDADES_H
 #define _SEGURIDADES_H
 
+#include <Arduino.h>
 #include "../../modules/ModBackend.h"
 
 #define NUM_SEG 4

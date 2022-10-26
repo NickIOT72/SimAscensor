@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "PCF8575Mod.h"
 #include <PCF8575.h>
 #include "../../Protocols/SoftSerial/SoftSerial.h"
@@ -14,17 +15,34 @@ void interruptFunct()
 PCF8575 pcf8575(ADDRRESS_PCFMOD, DEVICE_INTERRUPTED_PIN,  interruptFunct );
 
 
-void PCF_Configuration(uint16_t pincConfg){
-    for (uint8_t i = 0; i < 16; i++)
-    {
-        pcf8575.pinMode(i, (pincConfg >> i)&(0x0001)  );
+void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements )
+{
+    for( int i = 0; i < elements; i++ ){
+        uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA :config[i].posPin;
+        if ( modIOplaca == OUTPUT ){
+            pcf8575.digitalWrite(posPlaca, config[i].estadoPin);
+        } 
     }
 }
 
-void PCF_Init()
+void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements){
+
+    for( int i = 0; i < elements; i++ ){
+        uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA:config[i].posPin;
+        uint8_t modIOplaca = config[i].modIO;
+        pcf8575.pinMode( posPlaca , modIOplaca   );
+        if ( modIOplaca == OUTPUT ){
+            pcf8575.digitalWrite(posPlaca, config[i].estadoPin);
+        } 
+    }
+
+    
+}
+
+void PCF_Init(const struct data_ModBackend *config, uint8_t elements)
 {
     pcf8575.begin();
-    PCF_Configuration(0);
+    PCF_Configuration(config, elements){
 }
 
 uint16_t PCF_readBuffer()

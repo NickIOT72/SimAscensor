@@ -1,6 +1,7 @@
 #ifndef _BANDERAS_H
 #define _BANDERAS_H
 
+#include <Arduino.h>
 #include "../../modules/ModBackend.h"
 
 extern uint16_t contadorSecuenciaPiso;

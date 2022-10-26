@@ -1,6 +1,7 @@
-#ifndef _BANDERAS_H
-#define _BANDERAS_H
+#ifndef _ALERTAS_H
+#define _ALERTAS_H
 
+#include <Arduino.h>
 #include "../../modules/ModBackend.h"
 
 enum bitOrder_Alertas {
@@ -16,9 +17,9 @@ enum bitOrder_Alertas {
 
 void Alertas_Init(  const struct data_ModBackend *confg, uint8_t elements);
 
-uint8_t Alertas_leerAlertas();
+uint8_t Alertas_leerAlertas(void);
 
 void Alertas_ActivarALerta( uint8_t bitAlerta);
 void Alertas_ApagarAlerta(uint8_t bitAlerta);
 
-#endif // !_BANDERAS_H
+#endif // !_ALERTAS_H

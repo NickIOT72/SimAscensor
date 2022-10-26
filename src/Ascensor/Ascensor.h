@@ -1,11 +1,14 @@
-#ifndef _ASCENSORES_H
-#define _ASCENSORES_H
+#ifndef _ASCENSOR_H
+#define _ASCENSOR_H
 
-#include <Arduino.h>
+#include <ArduinoJson.h>
 
 #define NUM_PISOS 24
 extern uint8_t TotalPisos;
 extern uint8_t pisoActual;
+
+#define NUM_TOTAL_MODULOS 5
+#define NUM_PIN_MODULO 8
 
 enum nombreModulos { MS1, MS2, MSA, ME1, MEA };
 
@@ -37,17 +40,7 @@ enum OrdenConfgPins
   PATINpos
 };
 
-enum moduloExtensor{ MOD595, MODPCF };
-
-struct ModulosExtensores {
-    bool modEst;
-    String ModuloNombre;
-    int posicion[8];
-    String pinNombre[8];
-    int Estado[8];
-};
-
-extern int* CongfPinsPoint[24];
-extern int* EstadoPinsPoint[24];
+void Ascensor_Init( JsonDocument &JSONObject   );
+void ActualizarModulos(JsonDocument &JSONObject);
 
 #endif // !_ASCENSORES_H

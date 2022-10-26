@@ -1,5 +1,4 @@
 #include "Banderas.h"
-#include <Arduino.h>
 #include "../../modules/Mod74hc595/Mod74hc595.h"
 
 struct data_ModBackend data_mod_Banderas[4];
@@ -9,12 +8,22 @@ uint8_t contadorBanderas = 0;
 uint8_t limiteConteoBanderas = 10;
 bool modoConteoBandera = PADPAS;
 
+void Banderas_ActualizarEstadoBanderas( uint8_t SecAct){
+  data_mod_Banderas[bitEXD].estadoPin = ((SecAct>>3)&0x01);
+  data_mod_Banderas[bitPAD_PN].estadoPin = ((SecAct>>2)&0x01);
+  data_mod_Banderas[bitPAS].estadoPin = ((SecAct>>1)&0x01);
+  data_mod_Banderas[bitEXS].estadoPin = ((SecAct>>0)&0x01);
+  MOD74HC595_setOutput(data_mod_Banderas , 4 );
+  contadorBanderas = 0;
+}
+
 void Banderas_Init( const struct data_ModBackend *confg, uint8_t elements)
 {
     for( uint8_t i = 0; i < elements; i++  )
     {
-        data_mod_Banderas[i].posPin = confg[i].posPin;
-        data_mod_Banderas[i].estadoPin = confg[i].estadoPin;
+      data_mod_Banderas[i].device = confg[i].device;
+      data_mod_Banderas[i].posPin = confg[i].posPin;
+      data_mod_Banderas[i].estadoPin = confg[i].estadoPin;
     }
     MOD74HC595_setOutput(data_mod_Banderas , elements );
 }
@@ -57,12 +66,7 @@ void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos)
         *PisoActual = *PisoActual  +1 ;
       }
       
-      data_mod_Banderas[bitEXD].estadoPin = ((SecAct>>3)&0x01);
-      data_mod_Banderas[bitPAD_PN].estadoPin = ((SecAct>>2)&0x01);
-      data_mod_Banderas[bitPAS].estadoPin = ((SecAct>>1)&0x01);
-      data_mod_Banderas[bitEXS].estadoPin = ((SecAct>>0)&0x01);
-
-      contadorBanderas = 0;
+      Banderas_ActualizarEstadoBanderas( SecAct);
     }
   }
 }
@@ -91,12 +95,7 @@ void DecrementarBandera(uint8_t *PisoActual)
       {
         *PisoActual = *PisoActual -1 ;
       }
-      data_mod_Banderas[bitEXD].estadoPin = ((SecAct>>3)&0x01);
-      data_mod_Banderas[bitPAD_PN].estadoPin = ((SecAct>>2)&0x01);
-      data_mod_Banderas[bitPAS].estadoPin = ((SecAct>>1)&0x01);
-      data_mod_Banderas[bitEXS].estadoPin = ((SecAct>>0)&0x01);
-
-      contadorBanderas = 0;
+      Banderas_ActualizarEstadoBanderas( SecAct);
     }
   }
 }

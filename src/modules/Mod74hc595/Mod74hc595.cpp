@@ -5,19 +5,27 @@
 
 SoftwareSerial ESP_SERIAL_595(ESP_RX, ESP_TX);
 
-struct Mod75HC595_Backend ModAsc = {DATAPIN_595,CLKPIN_595,LATCHPIN_595,  NUM_MOD_595 };
-
 ShiftRegister74HC595<NUM_MOD_595> sr(DATAPIN_595, CLKPIN_595, LATCHPIN_595);
 
-void MOD74HC595_Init( )
+void MOD74HC595_Init(const struct data_ModBackend *config, uint8_t elements  )
 {
     sr.setAllLow();
+    MOD74HC595_Configuration( config,  elements );
+}
+
+void MOD74HC595_Configuration( const struct data_ModBackend *config, uint8_t elements )
+{
+    for( int i = 0; i < elements; i++ ){
+        uint8_t posPlaca = config[i].posPin;
+        sr.setNoUpdate(posPlaca, config[i].estadoPin);
+    }
+    sr.updateRegisters();
 }
 
 void MOD74HC595_setOutput(const struct data_ModBackend *config, uint8_t elements )
 {
     for( uint8_t i = 0; i < elements; i++ ){
-        if(config[i].posPin >= 0  )sr.setNoUpdate((uint8_t)config[i].posPin , (uint8_t)config[i].estadoPin);
+        sr.setNoUpdate((uint8_t)config[i].posPin , (uint8_t)config[i].estadoPin);
     }
     sr.updateRegisters();
 }
