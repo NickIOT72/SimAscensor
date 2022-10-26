@@ -4,8 +4,8 @@
 #include <Arduino.h>
 
 struct data_ModBackend {
-    int posPin;
-    int estadoPin;
+    uint8_t posPin;
+    bool estadoPin;
 };
 
 #endif // !1
