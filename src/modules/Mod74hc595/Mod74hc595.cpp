@@ -7,10 +7,24 @@ SoftwareSerial ESP_SERIAL_595(ESP_RX, ESP_TX);
 
 ShiftRegister74HC595<NUM_MOD_595> sr(DATAPIN_595, CLKPIN_595, LATCHPIN_595);
 
-void MOD74HC595_Init(const struct data_ModBackend *config, uint8_t elements  )
+void MOD74HC595_Reset( )
 {
     sr.setAllLow();
-    MOD74HC595_Configuration( config,  elements );
+}
+
+void MOD74HC595_Init( )
+{
+    sr.setAllLow();
+}
+
+uint32_t MOD74HC595_Configuration()
+{
+    uint32_t value = 0;
+    for( uint8_t i; i < 24; i++ )
+    {
+        value |= sr.get(i)<<i;
+    }
+    return value;
 }
 
 void MOD74HC595_Configuration( const struct data_ModBackend *config, uint8_t elements )

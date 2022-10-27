@@ -7,10 +7,16 @@
 extern uint8_t TotalPisos;
 extern uint8_t pisoActual;
 
+#define NUM_IO_TOTAL 24 
+
 #define NUM_TOTAL_MODULOS 5
 #define NUM_PIN_MODULO 8
 
 enum nombreModulos { MS1, MS2, MSA, ME1, MEA };
+
+enum oredenDeviceMod { device595pos=24, devicePCFpos = 40 };
+
+extern enum oredenDeviceMod ordenDev;
 
 enum OrdenConfgPins
 {

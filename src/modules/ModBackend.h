@@ -10,6 +10,7 @@ struct data_ModBackend {
     bool estadoPin;
 };
 
+void Backend_ResetModules();
 void Backend_setOutputDevice(  const struct data_ModBackend *confg, uint8_t elements );
 void Backend_readInputDevice(  const struct data_ModBackend *confg, uint8_t elements );
 

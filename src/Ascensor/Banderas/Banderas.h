@@ -7,7 +7,7 @@
 extern uint16_t contadorSecuenciaPiso;
 extern uint8_t contadorBanderas;
 extern uint8_t limiteConteoBanderas;
-extern bool modoConteoBandera;
+extern uint8_t modoConteoBandera;
 
 enum modoDeBanderas{
     PADPAS,
@@ -42,14 +42,14 @@ const uint8_t pisosSecuenciaPASPAD[15] = {
 	0b00000111   
 };
 
-enum bitOrder_Seguridades {
+enum bitOrder_Banderas {
     bitEXD,
     bitPAD_PN,
     bitPAS,
     bitEXS
 };
 
-void Banderas_Init(  const struct data_ModBackend *confg, uint8_t elements);
+void Banderas_Init(  const struct data_ModBackend *confg, uint8_t elements, uint8_t modoConteoBanderas);
 
 uint8_t Banderas_leerBanderas();
 void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos);

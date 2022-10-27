@@ -13,7 +13,8 @@
 
 #define ADDRRESS_PCFMOD 0x21
 
-void PCF_Init(const struct data_ModBackend *config, uint8_t elements);
+void PCF_Reset();
+void PCF_Init();
 uint16_t PCF_readBuffer();
 bool PCF_verifyInt();
 void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements);

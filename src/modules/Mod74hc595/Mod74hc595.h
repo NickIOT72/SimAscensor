@@ -22,8 +22,10 @@ struct Mod75HC595_Backend {
     uint8_t Modulos;
 };
 
-void MOD74HC595_Init( const struct data_ModBackend *config, uint8_t elements  );
+void MOD74HC595_Init( );
 void MOD74HC595_Configuration( const struct data_ModBackend *config, uint8_t elements );
 void MOD74HC595_setOutput(const struct data_ModBackend *config, uint8_t elements  );
+void MOD74HC595_Reset( );
+uint32_t MOD74HC595_Configuration();
 
 #endif // !1

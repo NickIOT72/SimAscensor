@@ -14,11 +14,19 @@ void interruptFunct()
 
 PCF8575 pcf8575(ADDRRESS_PCFMOD, DEVICE_INTERRUPTED_PIN,  interruptFunct );
 
+void PCF_Reset()
+{
+    for( uint8_t i = 0; i < 16; i++  )
+    {
+        pcf8575.pinMode( i , INPUT   );
+    }
+}
 
 void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements )
 {
     for( int i = 0; i < elements; i++ ){
         uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA :config[i].posPin;
+        uint8_t modIOplaca = config[i].modIO;
         if ( modIOplaca == OUTPUT ){
             pcf8575.digitalWrite(posPlaca, config[i].estadoPin);
         } 
@@ -26,7 +34,6 @@ void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements )
 }
 
 void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements){
-
     for( int i = 0; i < elements; i++ ){
         uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA:config[i].posPin;
         uint8_t modIOplaca = config[i].modIO;
@@ -35,14 +42,12 @@ void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements){
             pcf8575.digitalWrite(posPlaca, config[i].estadoPin);
         } 
     }
-
-    
 }
 
-void PCF_Init(const struct data_ModBackend *config, uint8_t elements)
+void PCF_Init()
 {
     pcf8575.begin();
-    PCF_Configuration(config, elements){
+    PCF_Reset();
 }
 
 uint16_t PCF_readBuffer()

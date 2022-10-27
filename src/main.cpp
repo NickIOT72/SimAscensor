@@ -2,10 +2,14 @@
 #include <ArduinoJson.h>
 #include "Ascensor/Ascensor.h"
 #include "modules/JsonMod/JsonMod.h"
+#include <modules/Mod74hc595/Mod74hc595.h>
+#include <modules/PCF8575/PCF8575Mod.h>
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  MOD74HC595_Init();
+  PCF_Init();
 
 
   String strConfInit = "{";
@@ -38,8 +42,15 @@ void setup() {
 
   DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
   if (!verificarJson( strConfInit,  JSONObjectConfg)) { Serial.println("Eror1");  while (true){delay(1);}}
-  
-  Ascensor_Init(JSONObjectConfg);
+  Serial.println("Init Asc:");
+  long tstart = millis();
+  Serial.println("End Asc: " + String( millis()-tstart ));
+  Ascensor_Init(JSONObjectConfg); 
+  Serial.print("PCF:");
+  Serial.println(PCF_readBuffer(),BIN);
+  Serial.print("74HC595:");
+  Serial.println(MOD74HC595_Configuration() ,BIN);
+
 }
 
 void loop() {
