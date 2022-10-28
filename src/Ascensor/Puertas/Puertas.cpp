@@ -2,7 +2,7 @@
 #include "../../modules/Mod74hc595/Mod74hc595.h"
 #include "../../modules/PCF8575/PCF8575Mod.h"
 
-struct data_ModBackend data_mod_Puertas[2];
+struct data_ModBackend data_mod_Puertas[8];
 
 void Puerta_Rest()
 {

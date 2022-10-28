@@ -15,8 +15,8 @@ bool verificarJson(String Str, JsonDocument &JSONObject )
         ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -30,8 +30,8 @@ bool verificarJson(char* charjson, JsonDocument &JSONObject )
         ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -50,8 +50,8 @@ bool verificarJson(String Str )
         ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -65,8 +65,8 @@ bool verificarJson(char* charjson )
         ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 

@@ -1,13 +1,17 @@
 #include <Arduino.h>
+//#include "../.pio/libdeps/Arduino Mega/avr-debugger/avr8-stub/avr8-stub.h"
 #include <ArduinoJson.h>
 #include "Ascensor/Ascensor.h"
 #include "modules/JsonMod/JsonMod.h"
 #include <modules/Mod74hc595/Mod74hc595.h>
 #include <modules/PCF8575/PCF8575Mod.h>
+#include "Protocols/SoftSerial/SoftSerial.h"
+
+SoftwareSerial ESP_SERIAL(ESP_RX, ESP_TX);
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  ESP_SERIAL.begin(9600);
   MOD74HC595_Init();
   PCF_Init();
 
@@ -17,8 +21,8 @@ void setup() {
   strConfInit += "\"Modelo\": \"V1\",";
   strConfInit += "\"ARCH\": {";
   strConfInit += "\"MS1\": {";
-  strConfInit += "\"PINNAME\": [\"EXD\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"SM\"],";
-  strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 1]";
+  strConfInit += "\"PINNAME\": [\"\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 0]";
   strConfInit += "},";
   strConfInit += "\"MS2\": {";
   strConfInit += "\"PINNAME\": [\"BOMB\", \"EMER\", \"Q1\", \"Q2\", \"FOTO\", \"MANT\", \"PTC\", \"AUTAR\"],";
@@ -33,23 +37,23 @@ void setup() {
   strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
   strConfInit += "},";
   strConfInit += "\"MEA\": {";
-  strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
-  strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
+  strConfInit += "\"PINNAME\": [\"SM\", \"EXD\", \"\", \"\", \"\", \"\", \"\", \"\"],";
+  strConfInit += "\"VAL\": [1, 0, 0, 0, 0, 0, 0, 0]";
   strConfInit += "}";
   strConfInit += "},";
   strConfInit += "\"TIPO_CONTEO\": \"PADPAS\"";
   strConfInit += "}";
 
   DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
-  if (!verificarJson( strConfInit,  JSONObjectConfg)) { Serial.println("Eror1");  while (true){delay(1);}}
-  Serial.println("Init Asc:");
-  long tstart = millis();
-  Serial.println("End Asc: " + String( millis()-tstart ));
-  Ascensor_Init(JSONObjectConfg); 
-  Serial.print("PCF:");
-  Serial.println(PCF_readBuffer(),BIN);
-  Serial.print("74HC595:");
-  Serial.println(MOD74HC595_Configuration() ,BIN);
+  if (!verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
+  ESP_SERIAL.println("Init Asc:");
+  long tstart = micros();
+  Ascensor_Init(JSONObjectConfg);
+  ESP_SERIAL.println("End Asc: " + String( micros()-tstart ));
+  ESP_SERIAL.print("PCF:");
+  ESP_SERIAL.println(PCF_readBuffer(),BIN);
+  ESP_SERIAL.print("74HC595:");
+  ESP_SERIAL.println(MOD74HC595_Configuration() ,BIN);
 
 }
 
