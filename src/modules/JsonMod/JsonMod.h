@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#define JSON_Buffer 1000
+#define JSON_Buffer 2000
 
 bool verificarJson(String Str);
 bool verificarJson(char* json );

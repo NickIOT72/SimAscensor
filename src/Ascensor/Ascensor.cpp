@@ -7,6 +7,7 @@
 #include "Alertas/Alertas.h"
 #include "Puertas/Puertas.h"
 #include "../Protocols/SoftSerial/SoftSerial.h"
+#include "../modules/JsonMod/JsonMod.h"
 
 SoftwareSerial ESP_SERIAL_ASC(ESP_RX, ESP_TX);
 
@@ -30,10 +31,10 @@ uint8_t Ascensor_VerificarModuloSegunPosicion(  uint8_t PosicionEnPlaca )
  * 
  */
 
-void Ascensor_Init( JsonDocument &JSONObject)
+void Ascensor_Init( String StrJSONObject)
 {
   ESP_SERIAL_ASC.begin(9600);
-    ActualizarModulos( JSONObject);
+  ActualizarModulos( StrJSONObject);
 }
 
 /**
@@ -55,8 +56,11 @@ void Ascensor_Init( JsonDocument &JSONObject)
  *
  */
 
-void ActualizarModulos(JsonDocument &JSONObject)
+void ActualizarModulos(String StrJSONObject)
 {
+  DynamicJsonDocument JSONObject(JSON_Buffer);
+  if (!verificarJson( StrJSONObject,  JSONObject)) { ESP_SERIAL_ASC.println("Eror1");  while (true){delay(1);}}
+
   String CongfPinsStr[24] = {"EXD", "PAD_PN", "PAS", "EXS", "FPA", "SPC", "SA", "SM", "BOMB", "EMER", "Q1", "Q2", "FOTO", "MANT", "PTC", "AUTAR","RSUB", "RBAJ", "RAV", "RBV", "RABR", "RCER", "VENT", "PATIN"};//;
   String Modff[NUM_TOTAL_MODULOS] = {"MS1", "MS2", "MSA","ME1","MEA"};
   enum internalOrderPins { posBand=4, posSeg = 8, posAl=16, posPuertas = 18 };
@@ -90,7 +94,7 @@ void ActualizarModulos(JsonDocument &JSONObject)
         {
           if ( CongfPinsStr[k] ==  ms1V[j] )
           {
-            uint8_t PosicionEnPlaca = NUM_TOTAL_MODULOS*i + j;
+            uint8_t PosicionEnPlaca = i*NUM_PIN_MODULO + j;
             struct data_ModBackend data_mod_prov = {0};
             if( k < 4 ){
               data_mod_Band[k].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
@@ -125,6 +129,7 @@ void ActualizarModulos(JsonDocument &JSONObject)
               data_mod_PCF[countPCF] = data_mod_prov;
               countPCF++;
             }
+            //ESP_SERIAL_ASC.print("MOD: " + ms1V[j]  + " => ");
             //String deviceName = (data_mod_prov.device == dev595)?"595":"PCF";
             //ESP_SERIAL_ASC.print("Device:" + deviceName );
             //ESP_SERIAL_ASC.print(", Pos:" + String( data_mod_prov.posPin ) );
@@ -136,6 +141,7 @@ void ActualizarModulos(JsonDocument &JSONObject)
           }
         }
       }
+      
     }
   } 
   Backend_ResetModules();
@@ -144,5 +150,7 @@ void ActualizarModulos(JsonDocument &JSONObject)
   Seguridades_Init( data_mod_Seguridades, 4 );
   Alertas_Init(  data_mod_Alertas , 8);
   Puertas_Init(data_mod_Puertas ,  8 );
+
+  liberarDinMemJsonDoc(JSONObject);
 
 }

@@ -46,7 +46,7 @@ enum OrdenConfgPins
   PATINpos
 };
 
-void Ascensor_Init( JsonDocument &JSONObject   );
-void ActualizarModulos(JsonDocument &JSONObject);
+void Ascensor_Init( String StrJSONObject   );
+void ActualizarModulos(String StrJSONObject);
 
 #endif // !_ASCENSORES_H

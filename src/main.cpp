@@ -38,7 +38,7 @@ void setup() {
   strConfInit += "},";
   strConfInit += "\"MEA\": {";
   strConfInit += "\"PINNAME\": [\"SM\", \"EXD\", \"\", \"\", \"\", \"\", \"\", \"\"],";
-  strConfInit += "\"VAL\": [1, 0, 0, 0, 0, 0, 0, 0]";
+  strConfInit += "\"VAL\": [1, 1, 0, 0, 0, 0, 0, 0]";
   strConfInit += "}";
   strConfInit += "},";
   strConfInit += "\"TIPO_CONTEO\": \"PADPAS\"";
@@ -46,9 +46,10 @@ void setup() {
 
   DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
   if (!verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
+  liberarDinMemJsonDoc(JSONObjectConfg);
   ESP_SERIAL.println("Init Asc:");
   long tstart = micros();
-  Ascensor_Init(JSONObjectConfg);
+  Ascensor_Init(strConfInit);
   ESP_SERIAL.println("End Asc: " + String( micros()-tstart ));
   ESP_SERIAL.print("PCF:");
   ESP_SERIAL.println(PCF_readBuffer(),BIN);

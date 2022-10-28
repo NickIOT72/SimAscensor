@@ -25,6 +25,7 @@ void PCF_Reset()
 void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements )
 {
     for( int i = 0; i < elements; i++ ){
+
         uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA :config[i].posPin;
         uint8_t modIOplaca = config[i].modIO;
         if ( modIOplaca == OUTPUT ){
@@ -34,18 +35,29 @@ void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements )
 }
 
 void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements){
+    PCF_Reset();
     for( int i = 0; i < elements; i++ ){
-        uint8_t posPlaca = config[i].posPin >POS_INIT_PLACA ? config[i].posPin - POS_INIT_PLACA:config[i].posPin;
-        uint8_t modIOplaca = config[i].modIO;
-        pcf8575.pinMode( posPlaca , modIOplaca   );
-        if ( modIOplaca == OUTPUT ){
-            pcf8575.digitalWrite(posPlaca, config[i].estadoPin);
-        } 
+        if ( config[i].modIO == OUTPUT )
+        {
+            ESP_SERIAL_PCF.println("PCF cnfg:");
+            String deviceName = (config[i].device == dev595)?"595":"PCF";
+            ESP_SERIAL_PCF.print("Device:" + deviceName );
+            ESP_SERIAL_PCF.print(", Pos:" + String( config[i].posPin ) );
+            deviceName = (config[i].estadoPin)?"ON":"OFF";
+            ESP_SERIAL_PCF.print(", Estado:" + deviceName  );
+            deviceName = (config[i].modIO == INPUT)?"IN":"OUT";
+            ESP_SERIAL_PCF.println(", IO:" + deviceName  );
+            uint8_t posPlaca = config[i].posPin - 24;
+            uint8_t modIOplaca = config[i].modIO;
+            pcf8575.pinMode( 3 , modIOplaca   );
+            pcf8575.digitalWrite(3, config[i].estadoPin + 0);
+        }
     }
 }
 
 void PCF_Init()
 {
+    ESP_SERIAL_PCF.begin(9600);
     pcf8575.begin();
     PCF_Reset();
 }
@@ -53,7 +65,7 @@ void PCF_Init()
 uint16_t PCF_readBuffer()
 {
     keyChanged = false;
-    return pcf8575.digitalReadAll();
+    return 16;//pcf8575.digitalReadAll();
 }
 
 bool PCF_verifyInt(){return keyChanged;}
