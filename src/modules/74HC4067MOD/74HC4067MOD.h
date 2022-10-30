@@ -8,12 +8,12 @@
 #if defined(ESP8266)
     #define DEVICE_INTERRUPTED_PIN 9
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
-    #define PINA 22
-    #define PINB 23
-    #define PINC 24
-    #define PIND 25
-    #define PINE 26
-    #define PINX 27
+    #define MUX_PINA 22
+    #define MUX_PINB 23
+    #define MUX_PINC 24
+    #define MUX_PIND 25
+    #define MUX_PINE 26
+    #define MUX_PINX 27
 #endif
 
 //void PCF_Reset();

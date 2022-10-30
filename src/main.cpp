@@ -8,6 +8,7 @@
 #include <modules/74HC4067MOD/74HC4067MOD.h>
 #include <Ascensor/Puertas/Puertas.h>
 #include "Ascensor/Seguridades/Seguridades.h"
+#include "Ascensor/Banderas/Banderas.h"
 #include "Protocols/SoftSerial/SoftSerial.h"
 
 #include <Wire.h>
@@ -92,7 +93,8 @@ void setup() {
   strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
   strConfInit += "}";
   strConfInit += "},";
-  strConfInit += "\"TIPO_CONTEO\": \"PADPAS\"";
+  strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
+  strConfInit += "\"TOTAL_PISOS\": 8";
   strConfInit += "}";
 
   DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
@@ -111,6 +113,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  Banderas_resetContadorBanderas();
   ESP_SERIAL.println("Probar Puerta");
   while ( Puertas_leerEstadoPuerta() != puertaAbriendo )
   {
@@ -125,19 +128,20 @@ void loop() {
   ESP_SERIAL.println("Puerta Abierta. Esperando por rele stop");
   while ( Puertas_leerEstadoPuerta() != puertoStop )
   {
-    delay(1000);
+    delay(1);
   }
   ESP_SERIAL.println("Puerta Stop. Esperando por rele de cerrar");
   while ( Puertas_leerEstadoPuerta() != puertaCerrando )
   {
-    delay(1000);
+    delay(1);
   }
-  ESP_SERIAL.println("Cerradno Puerta");
+  ESP_SERIAL.println("Cerrando Puerta");
   while ( Seguridades_leerEstadoPuerta() != cerradoPuerta )
   {
     delay(100);
     Puertas_CerrandoPuerta();
   }
-  ESP_SERIAL.println("Puerta Cerrada. Reiniciando");
-  delay(3000);
+  ESP_SERIAL.println("Puerta Cerrada. Subiendo ascensor");
+  Ascensor_VerificarPosicion();
+  ESP_SERIAL.println("Llego a piso");
 }

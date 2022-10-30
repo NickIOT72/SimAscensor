@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include "../../modules/ModBackend.h"
 
+#define DELAY_AV 100
+#define DELAY_BV 250
+
 extern uint16_t contadorSecuenciaPiso;
 extern uint8_t contadorBanderas;
 extern uint8_t limiteConteoBanderas;
@@ -52,7 +55,8 @@ enum bitOrder_Banderas {
 void Banderas_Init(  const struct data_ModBackend *confg, uint8_t elements, uint8_t modoConteoBanderas);
 
 uint8_t Banderas_leerBanderas();
-void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos);
-void DecrementarBandera(uint8_t *PisoActual);
+void IncrementarBandera(int *PisoActual, int *TotalPisos);
+void DecrementarBandera(int *PisoActual);
+void Banderas_resetContadorBanderas();
 
 #endif // !_BANDERAS_H

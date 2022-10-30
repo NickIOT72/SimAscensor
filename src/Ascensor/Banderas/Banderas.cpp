@@ -1,5 +1,8 @@
 #include "Banderas.h"
 #include "../../modules/ModBackend.h"
+#include "../../Protocols/SoftSerial/SoftSerial.h"
+
+SoftwareSerial ESP_SERIAL_BANDERAS(ESP_RX, ESP_TX);
 
 struct data_ModBackend data_mod_Banderas[4];
 
@@ -23,6 +26,7 @@ void Banderas_resetBanderas()
 }
 
 void Banderas_ActualizarEstadoBanderas( uint8_t SecAct){
+  
   data_mod_Banderas[bitEXD].estadoPin = ((SecAct>>3)&0x01);
   data_mod_Banderas[bitPAD_PN].estadoPin = ((SecAct>>2)&0x01);
   data_mod_Banderas[bitPAS].estadoPin = ((SecAct>>1)&0x01);
@@ -44,6 +48,7 @@ void Banderas_ActualizarEstadoBanderas( uint8_t SecAct){
 
 void Banderas_Init( const struct data_ModBackend *confg, uint8_t elements, uint8_t modoConteoBanderas2)
 {
+    ESP_SERIAL_BANDERAS.begin(9600);
     Banderas_resetBanderas();
     modoConteoBandera = modoConteoBanderas2;
     for( uint8_t i = 0; i < elements; i++  )
@@ -69,7 +74,12 @@ uint8_t Banderas_leerBanderas()
     return mod;
 }
 
-void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos)
+void Banderas_resetContadorBanderas()
+{
+  contadorBanderas = 0;
+}
+
+void IncrementarBandera(int *PisoActual, int *TotalPisos)
 {
   if (  modoConteoBandera == PADPAS )
   {
@@ -79,19 +89,27 @@ void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos)
       if (  contadorBanderas < 14 ) contadorSecuenciaPiso++;
       
       uint8_t SecAct = pisosSecuenciaPASPAD[14 - contadorSecuenciaPiso];
-      if (  contadorSecuenciaPiso == piso_ascensor_y )
+      if ( contadorSecuenciaPiso == piso_base_y )
+      {
+        ESP_SERIAL_BANDERAS.println("Saliendo de referencia");
+      }
+      else if (  contadorSecuenciaPiso == piso_ascensor_y  )
       {
         if (  *PisoActual +1 == *TotalPisos )
         {
           contadorSecuenciaPiso = piso_final_x;
+          ESP_SERIAL_BANDERAS.println("llegando a piso final");
         }
         else {
           contadorSecuenciaPiso = piso_ascensor_x;
+          ESP_SERIAL_BANDERAS.println("llegando a piso seguiente");
         }
       }
       else if(contadorSecuenciaPiso == piso_ascensor_cambio  )
       {
         *PisoActual = *PisoActual  +1 ;
+        ESP_SERIAL_BANDERAS.print("Piso Actual:");
+        ESP_SERIAL_BANDERAS.println(*PisoActual);
       }
       
       Banderas_ActualizarEstadoBanderas( SecAct);
@@ -99,7 +117,7 @@ void IncrementarBandera(uint8_t *PisoActual, uint8_t *TotalPisos)
   }
 }
 
-void DecrementarBandera(uint8_t *PisoActual)
+void DecrementarBandera(int *PisoActual)
 {
   if (  modoConteoBandera == PADPAS )
   {
@@ -109,19 +127,27 @@ void DecrementarBandera(uint8_t *PisoActual)
       if (  contadorBanderas > 0 ) contadorSecuenciaPiso--;
       
       uint8_t SecAct = pisosSecuenciaPASPAD[14 - contadorSecuenciaPiso];
-      if (  contadorSecuenciaPiso == piso_ascensor_x )
+      if ( contadorSecuenciaPiso == piso_final_x )
+      {
+        ESP_SERIAL_BANDERAS.println("Saliendo de piso final");
+      }
+      else if (  contadorSecuenciaPiso == piso_ascensor_x   )
       {
         if (  *PisoActual - 1 == 0 )
         {
           contadorSecuenciaPiso = piso_base_y;
+          ESP_SERIAL_BANDERAS.println("llegando a piso referencia");
         }
         else {
           contadorSecuenciaPiso = piso_ascensor_y;
+          ESP_SERIAL_BANDERAS.println("llegando a piso seguiente");
         }
       }
       else if(contadorSecuenciaPiso == piso_ascensor_cambio  )
       {
         *PisoActual = *PisoActual -1 ;
+        ESP_SERIAL_BANDERAS.print("Piso Actual:");
+        ESP_SERIAL_BANDERAS.println(*PisoActual);
       }
       Banderas_ActualizarEstadoBanderas( SecAct);
     }

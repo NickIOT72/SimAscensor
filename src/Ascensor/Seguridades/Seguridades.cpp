@@ -36,7 +36,7 @@ void Seguridades_Init( const struct data_ModBackend *confg, uint8_t elements)
         data_mod_Seguridades[i].posPin = confg[i].posPin;
         data_mod_Seguridades[i].estadoPin = confg[i].estadoPin;
     }
-    Backend_setOutputDevice(data_mod_Seguridades , elements );
+    MOD74HC595_setOutput(data_mod_Seguridades , elements );
 }
 
 
@@ -62,10 +62,10 @@ void Seguridades_ApagarSM()
 
 void Seguridades_actualizarPuerta( uint8_t LecEstadoPuerta )
 {
-    data_mod_Seguridades[bitFPA].estadoPin = ((LecEstadoPuerta >> 2)&(1)) > 0;
-    data_mod_Seguridades[bitSPC].estadoPin = ((LecEstadoPuerta >> 1)&(1))> 0;
-    data_mod_Seguridades[bitSA].estadoPin = ((LecEstadoPuerta >> 0)&(1))> 0;
+    data_mod_Seguridades[bitFPA].estadoPin = ((LecEstadoPuerta >> 2)&(0X01)) > 0;
+    data_mod_Seguridades[bitSPC].estadoPin = ((LecEstadoPuerta >> 1)&(0X01))> 0;
+    data_mod_Seguridades[bitSA].estadoPin = ((LecEstadoPuerta)&(0X01))> 0;
     
     struct data_ModBackend data_mod_Seguridades_SM[]={data_mod_Seguridades[bitFPA], data_mod_Seguridades[bitSPC],  data_mod_Seguridades[bitSA]  };
-    MOD74HC595_setOutput(data_mod_Seguridades_SM , 1 );
+    MOD74HC595_setOutput(data_mod_Seguridades_SM , 3 );
 }

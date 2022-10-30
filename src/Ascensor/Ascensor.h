@@ -3,9 +3,11 @@
 
 #include <ArduinoJson.h>
 
+
+
 #define NUM_PISOS 24
-extern uint8_t TotalPisos;
-extern uint8_t pisoActual;
+extern int TotalPisos;
+extern int pisoActual;
 
 #define NUM_IO_TOTAL 24 
 
@@ -44,5 +46,6 @@ enum OrdenConfgPins
 
 void Ascensor_Init( String StrJSONObject   );
 void ActualizarModulos(String StrJSONObject);
+void Ascensor_VerificarPosicion();
 
 #endif // !_ASCENSORES_H

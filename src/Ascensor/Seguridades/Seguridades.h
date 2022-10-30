@@ -7,10 +7,10 @@
 #define NUM_SEG 4
 
 enum bitOrder_Seguridades {
-    bitSM,
     bitFPA,
     bitSPC,
-    bitSA
+    bitSA,
+    bitSM
 };
 
 enum puertaEstado { entrePuerta , CierreEsperandoSPC, CierreEsperandoSA, cerradoPuerta , abiertaPuerta, FallaFPA_SA, FALLA_FPA_SPC, FALLA_FPA_SPC_SA };

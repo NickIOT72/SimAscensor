@@ -8,9 +8,12 @@
 #include "Puertas/Puertas.h"
 #include "../Protocols/SoftSerial/SoftSerial.h"
 #include "../modules/JsonMod/JsonMod.h"
+#include "Cabina/Cabina.h"
 
 SoftwareSerial ESP_SERIAL_ASC(ESP_RX, ESP_TX);
 
+int TotalPisos = 8;
+int pisoActual = 0;
 
 uint8_t Ascensor_VerificarModuloSegunPosicion(  uint8_t PosicionEnPlaca )
 {
@@ -67,16 +70,20 @@ void ActualizarModulos(String StrJSONObject)
   enum internalOrderPins { posBand=4, posSeg = 8, posAl=16, posPuertas = 18 };
   String TIPO_CONTEO = JSONObject["TIPO_CONTEO"];
   uint8_t modoConteoBandera = TIPO_CONTEO == "PADPAS"?PADPAS:PN;
+  uint8_t JSON_TOTAL_PISOS = JSONObject["JSON_TOTAL_PISOS"];
+  TotalPisos = JSON_TOTAL_PISOS;
 
   JsonObject EstructuraV = JSONObject["ARCH"];
 
   struct data_ModBackend data_mod_Band[4]; 
   struct data_ModBackend data_mod_Seguridades[4];
   struct data_ModBackend data_mod_Alertas[8];
-  struct data_ModBackend data_mod_Puertas[8];
+  struct data_ModBackend data_mod_Puertas[2];
+  struct data_ModBackend data_mod_Cabinas[4];
 
-  struct data_ModBackend data_mod_PCF[16];
-  uint8_t countPCF = 0;
+  //struct data_ModBackend data_mod_PCF[16];
+  //uint8_t countPCF = 0;
+
   ESP_SERIAL_ASC.println("Start system");
   for (uint8_t i = 0; i < NUM_TOTAL_MODULOS; i++)
   {
@@ -91,39 +98,42 @@ void ActualizarModulos(String StrJSONObject)
     {
       if ( ms1V[j] != ""  )
       {
-        for( uint8_t k = 0; k < NUM_IO_TOTAL; k++ )
+        for( uint8_t k = 0; k < NUM_IO_TOTAL -2; k++ )
         {
           if ( CongfPinsStr[k] ==  ms1V[j] )
           {
             uint8_t PosicionEnPlaca = i*NUM_PIN_MODULO + j;
-            struct data_ModBackend data_mod_prov = {0};
+            //struct data_ModBackend data_mod_prov = {0};
             if( k < 4 ){
               data_mod_Band[k].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
               data_mod_Band[k].posPin = PosicionEnPlaca;
               data_mod_Band[k].estadoPin = ms1Vv[j]>0;
               data_mod_Band[k].modIO = OUTPUT;
-              data_mod_prov = data_mod_Band[k];
             }
             else if ( k < 8 && k >= 4 ){
               data_mod_Seguridades[k-posBand].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
               data_mod_Seguridades[k-posBand].posPin = PosicionEnPlaca;
               data_mod_Seguridades[k-posBand].estadoPin = ms1Vv[j]>0;
               data_mod_Seguridades[k-posBand].modIO = OUTPUT;
-              data_mod_prov = data_mod_Seguridades[k-posBand];
             }
             else if ( k < 16 && k >= 8  ){
               data_mod_Alertas[k-posSeg].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
               data_mod_Alertas[k-posSeg].posPin = PosicionEnPlaca;
               data_mod_Alertas[k-posSeg].estadoPin = ms1Vv[j]>0;
               data_mod_Alertas[k-posSeg].modIO = OUTPUT;
-              data_mod_prov = data_mod_Alertas[k-posSeg];
             }
-            else if ( k < 24  && k >= 16 ){
-              data_mod_Puertas[k-posAl].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Puertas[k-posAl].posPin = PosicionEnPlaca;
-              data_mod_Puertas[k-posAl].estadoPin = ms1Vv[j]>0;
-              data_mod_Puertas[k-posAl].modIO = INPUT;
-              data_mod_prov = data_mod_Puertas[k-posAl];
+            else if ( k < 22  && k >= 20 ){
+              data_mod_Puertas[k-20].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Puertas[k-20].posPin = PosicionEnPlaca;
+              data_mod_Puertas[k-20].estadoPin = ms1Vv[j]>0;
+              data_mod_Puertas[k-20].modIO = INPUT;
+
+            }
+            else if ( k < 20 && k >= 16 ){
+              data_mod_Cabinas[k-16].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Cabinas[k-16].posPin = PosicionEnPlaca;
+              data_mod_Cabinas[k-16].estadoPin = ms1Vv[j]>0;
+              data_mod_Cabinas[k-16].modIO = INPUT;
 
             }
             /*if ( Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca) == devPCF )
@@ -151,8 +161,67 @@ void ActualizarModulos(String StrJSONObject)
   Banderas_Init( data_mod_Band ,  4, modoConteoBandera);
   Seguridades_Init( data_mod_Seguridades, 4 );
   Alertas_Init(  data_mod_Alertas , 8);
-  Puertas_Init(data_mod_Puertas ,  8 );
-
+  Puertas_Init(data_mod_Puertas ,  2 );
+  Cabinas_Init( data_mod_Cabinas, 4 );
   liberarDinMemJsonDoc(JSONObject);
 
+}
+
+void Ascensor_VerificarPosicion()
+{
+  uint8_t lecturaPuertaAct = 0;
+  bool reateardoBaja = true;
+  while( !(lecturaPuertaAct == cabinaSubiendoEnAlta || lecturaPuertaAct  == cabinaSubiendoEnBaja 
+      || lecturaPuertaAct == cabinaBajandoEnAlta || lecturaPuertaAct  == cabinaBajandoEnBaja) && Puertas_leerEstadoPuerta() == puertaCerrando)
+  {
+    lecturaPuertaAct = Cabina_leerEstadoCabina();
+    delay(1);
+  }
+  if(Puertas_leerEstadoPuerta() != puertaCerrando) return;
+  ESP_SERIAL_ASC.println("Cabina en MOviemiento");
+  lecturaPuertaAct = Cabina_leerEstadoCabina();
+  reateardoBaja = lecturaPuertaAct == cabinaSubiendoEnBaja || lecturaPuertaAct  == cabinaBajandoEnBaja  ;
+
+  while (Puertas_leerEstadoPuerta() == puertaCerrando)
+  {
+    while (Cabina_leerEstadoCabina() != cabinaDetenida)
+    {
+      if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta || Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja || Cabina_leerEstadoCabina() == cabinaBajandoEnAlta || Cabina_leerEstadoCabina() == cabinaBajandoEnBaja)
+      {
+        if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta || Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja)
+        {
+          IncrementarBandera(&pisoActual, &TotalPisos);
+          if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta && lecturaPuertaAct != cabinaSubiendoEnAlta)
+          {
+            lecturaPuertaAct = cabinaSubiendoEnAlta;
+            ESP_SERIAL_ASC.println("Cabina Subiendo en Alta");
+            reateardoBaja = false;
+          }
+          else if (Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja && lecturaPuertaAct != cabinaSubiendoEnBaja)
+          {
+            lecturaPuertaAct = cabinaSubiendoEnBaja;
+            ESP_SERIAL_ASC.println("Cabina Subiendo en baja");
+            reateardoBaja = true;
+          }
+        }
+        else if (Cabina_leerEstadoCabina() == cabinaBajandoEnAlta || Cabina_leerEstadoCabina() == cabinaBajandoEnBaja)
+        {
+          DecrementarBandera(&pisoActual);
+          if (Cabina_leerEstadoCabina() == cabinaBajandoEnAlta && lecturaPuertaAct != cabinaBajandoEnAlta)
+          {
+            lecturaPuertaAct = cabinaBajandoEnAlta;
+            ESP_SERIAL_ASC.println("Cabina Bajando en Alta");
+            reateardoBaja = false;
+          }
+          else if (Cabina_leerEstadoCabina() == cabinaBajandoEnBaja && lecturaPuertaAct != cabinaBajandoEnBaja)
+          {
+            lecturaPuertaAct = cabinaBajandoEnBaja;
+            ESP_SERIAL_ASC.println("Cabina Bajando en baja");
+            reateardoBaja = true;
+          }
+        }
+        reateardoBaja ? delay(DELAY_BV) : delay(DELAY_AV);
+      }
+    }
+  }
 }

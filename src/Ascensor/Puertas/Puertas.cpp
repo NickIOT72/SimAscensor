@@ -6,7 +6,7 @@
 
 SoftwareSerial ESP_SERIAL_PUERTA(ESP_RX, ESP_TX);
 
-struct data_ModBackend data_mod_Puertas[8];
+struct data_ModBackend data_mod_Puertas[2];
 
 uint8_t contadorPuertas = 0;
 uint8_t limiteConteoPuertas = 30;
@@ -15,7 +15,7 @@ uint8_t EstadoPuerta = 0;
 
 void Puerta_Rest()
 {
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < 2; i++)
     {
         data_mod_Puertas[i] = {0};
     }
