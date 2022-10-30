@@ -59,3 +59,13 @@ void Seguridades_ApagarSM()
     struct data_ModBackend data_mod_Seguridades_SM[]={data_mod_Seguridades[bitSM]};
     MOD74HC595_setOutput(data_mod_Seguridades_SM , 1 );
 }
+
+void Seguridades_actualizarPuerta( uint8_t LecEstadoPuerta )
+{
+    data_mod_Seguridades[bitFPA].estadoPin = ((LecEstadoPuerta >> 2)&(1)) > 0;
+    data_mod_Seguridades[bitSPC].estadoPin = ((LecEstadoPuerta >> 1)&(1))> 0;
+    data_mod_Seguridades[bitSA].estadoPin = ((LecEstadoPuerta >> 0)&(1))> 0;
+    
+    struct data_ModBackend data_mod_Seguridades_SM[]={data_mod_Seguridades[bitFPA], data_mod_Seguridades[bitSPC],  data_mod_Seguridades[bitSA]  };
+    MOD74HC595_setOutput(data_mod_Seguridades_SM , 1 );
+}

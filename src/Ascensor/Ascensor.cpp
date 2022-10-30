@@ -15,7 +15,8 @@ SoftwareSerial ESP_SERIAL_ASC(ESP_RX, ESP_TX);
 uint8_t Ascensor_VerificarModuloSegunPosicion(  uint8_t PosicionEnPlaca )
 {
   if ( PosicionEnPlaca < device595pos ) return dev595;
-  else if ( PosicionEnPlaca < devicePCFpos ) return devPCF;
+  else if ( PosicionEnPlaca < deviceMUX4067pos ) return dev4067;
+  
 }
 
 
@@ -123,12 +124,13 @@ void ActualizarModulos(String StrJSONObject)
               data_mod_Puertas[k-posAl].estadoPin = ms1Vv[j]>0;
               data_mod_Puertas[k-posAl].modIO = INPUT;
               data_mod_prov = data_mod_Puertas[k-posAl];
+
             }
-            if ( Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca) == devPCF )
+            /*if ( Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca) == devPCF )
             {
               data_mod_PCF[countPCF] = data_mod_prov;
               countPCF++;
-            }
+            }*/
             //ESP_SERIAL_ASC.print("MOD: " + ms1V[j]  + " => ");
             //String deviceName = (data_mod_prov.device == dev595)?"595":"PCF";
             //ESP_SERIAL_ASC.print("Device:" + deviceName );
@@ -145,7 +147,7 @@ void ActualizarModulos(String StrJSONObject)
     }
   } 
   Backend_ResetModules();
-  PCF_Configuration( data_mod_PCF , countPCF );
+  //PCF_Configuration( data_mod_PCF , countPCF );
   Banderas_Init( data_mod_Band ,  4, modoConteoBandera);
   Seguridades_Init( data_mod_Seguridades, 4 );
   Alertas_Init(  data_mod_Alertas , 8);

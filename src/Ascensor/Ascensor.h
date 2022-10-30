@@ -14,10 +14,6 @@ extern uint8_t pisoActual;
 
 enum nombreModulos { MS1, MS2, MSA, ME1, MEA };
 
-enum oredenDeviceMod { device595pos=24, devicePCFpos = 40 };
-
-extern enum oredenDeviceMod ordenDev;
-
 enum OrdenConfgPins
 {
   EXDpos,

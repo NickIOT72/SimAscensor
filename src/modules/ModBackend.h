@@ -1,7 +1,8 @@
 #ifndef _MODBACKEND_H
 #define _MODBACKEND_H
 
-enum deviceMod { dev595, devPCF };
+enum deviceMod { dev595, devPCF, dev4067 };
+enum oredenDeviceMod { device595pos=24, deviceMUX4067pos = 40 };
 
 struct data_ModBackend {
     uint8_t device;

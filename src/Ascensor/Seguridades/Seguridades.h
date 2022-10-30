@@ -20,5 +20,6 @@ void Seguridades_Init(  const struct data_ModBackend *confg, uint8_t elements);
 uint8_t Seguridades_leerEstadoPuerta();
 void Seguridades_ActivarSM();
 void Seguridades_ApagarSM();
+void Seguridades_actualizarPuerta( uint8_t LecEstadoPuerta );
 
 #endif // !_OLEDMOD_H
