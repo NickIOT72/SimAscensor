@@ -60,6 +60,7 @@ void getI2Caddress()
 void setup() {
   ESP_SERIAL.begin(9600);
   MOD74HC595_Init();
+  MUX74HC4067_Init();
   //PCF_Init();
   //getI2Caddress();
   //while (true)
@@ -100,42 +101,132 @@ void setup() {
   if (!verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
   liberarDinMemJsonDoc(JSONObjectConfg);
   ESP_SERIAL.println("Init Asc:");
-  long tstart = micros();
   Ascensor_Init(strConfInit);
-  
+  Banderas_resetContadorBanderas();
+  ESP_SERIAL.println("Probar Puerta");
+  delay(3000);
+
+  ESP_SERIAL.println("Starting firmware");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Banderas_resetContadorBanderas();
-  ESP_SERIAL.println("Probar Puerta");
-  while ( Puertas_leerEstadoPuerta() != puertaAbriendo )
+ 
+
+  uint16_t lecturaPuerta = Puertas_leerEstadoPuerta();
+  uint16_t lecturaSeg = Seguridades_leerEstadoPuerta();
+
+  //ESP_SERIAL.print("Puerta: ");
+  //ESP_SERIAL.print(lecturaPuerta , BIN);
+  //ESP_SERIAL.print("Banderas: ");
+  //ESP_SERIAL.println(lecturaSeg , BIN);
+  //delay(250);
+
+  static bool PuertaAbiertaEsperandoStop = false;
+  static bool PuertaCerradaEsperandoStop = false;
+  static bool PuertaStop = false;
+  bool CabinaEnMovimiento = false;
+
+  
+  switch (lecturaPuerta)
   {
-    delay(1);
+  case puertaAbriendo:
+    switch (lecturaSeg)
+    {
+    case abiertaPuerta:
+      if (PuertaAbiertaEsperandoStop)
+      {
+        break;
+      }
+
+      ESP_SERIAL.println("Puerta Abierta.");
+      PuertaAbiertaEsperandoStop = true;
+      break;
+    case entrePuerta:
+    case CierreEsperandoSPC:
+    case CierreEsperandoSA:
+    case cerradoPuerta:
+      Puertas_AbriendoPuerta();
+      break;
+    default:
+      break;
+    }
+    if (PuertaStop)
+      PuertaStop = false;
+    if (PuertaCerradaEsperandoStop)
+      PuertaCerradaEsperandoStop = false;
+    break;
+  case puertaCerrando:
+    switch (lecturaSeg)
+    {
+    case cerradoPuerta:
+      if (!PuertaCerradaEsperandoStop){
+        ESP_SERIAL.println("Puerta Cerrada");
+        PuertaCerradaEsperandoStop = true;
+      }
+      CabinaEnMovimiento = VerificarCabina();
+      break;
+    case entrePuerta:
+    case CierreEsperandoSPC:
+    case CierreEsperandoSA:
+    case abiertaPuerta:
+      Puertas_CerrandoPuerta();
+      break;
+    default:
+      break;
+    }
+    if (PuertaStop)
+      PuertaStop = false;
+    if (PuertaAbiertaEsperandoStop)
+      PuertaAbiertaEsperandoStop = false;
+    break;
+  case puertoStop:
+
+    if (PuertaStop)
+    {
+      ESP_SERIAL.println("Puerta Stop. Esperando por rele");
+      PuertaStop = false;
+    }
+  default:
+    break;
   }
-  ESP_SERIAL.println("Abriendo Puerta");
-  while ( Seguridades_leerEstadoPuerta() != abiertaPuerta )
-  {
-    delay(100);
-    Puertas_AbriendoPuerta();
-  }
-  ESP_SERIAL.println("Puerta Abierta. Esperando por rele stop");
-  while ( Puertas_leerEstadoPuerta() != puertoStop )
-  {
-    delay(1);
-  }
-  ESP_SERIAL.println("Puerta Stop. Esperando por rele de cerrar");
-  while ( Puertas_leerEstadoPuerta() != puertaCerrando )
-  {
-    delay(1);
-  }
-  ESP_SERIAL.println("Cerrando Puerta");
-  while ( Seguridades_leerEstadoPuerta() != cerradoPuerta )
-  {
-    delay(100);
-    Puertas_CerrandoPuerta();
-  }
-  ESP_SERIAL.println("Puerta Cerrada. Subiendo ascensor");
-  Ascensor_VerificarPosicion();
-  ESP_SERIAL.println("Llego a piso");
+  
+  
+  
+  
+  
+  if ( !CabinaEnMovimiento )delay(40);
+  
+  
+  
+  
+  //while ( Puertas_leerEstadoPuerta() != puertaAbriendo )
+  //{
+  //  delay(1);
+  //}
+  //ESP_SERIAL.println("Abriendo Puerta");
+  //while ( Seguridades_leerEstadoPuerta() != abiertaPuerta )
+  //{
+  //  delay(100);
+  //  Puertas_AbriendoPuerta();
+  //}
+  //ESP_SERIAL.println("Puerta Abierta. Esperando por rele stop");
+  //while ( Puertas_leerEstadoPuerta() != puertoStop )
+  //{
+  //  delay(1);
+  //}
+  //ESP_SERIAL.println("Puerta Stop. Esperando por rele de cerrar");
+  //while ( Puertas_leerEstadoPuerta() != puertaCerrando )
+  //{
+  //  delay(1);
+  //}
+  //ESP_SERIAL.println("Cerrando Puerta");
+  //while ( Seguridades_leerEstadoPuerta() != cerradoPuerta )
+  //{
+  //  delay(100);
+  //  Puertas_CerrandoPuerta();
+  //}
+  //ESP_SERIAL.println("Puerta Cerrada. Subiendo ascensor");
+  //Ascensor_VerificarPosicion();
+  //ESP_SERIAL.println("Llego a piso");
 }

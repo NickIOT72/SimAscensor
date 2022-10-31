@@ -47,5 +47,6 @@ enum OrdenConfgPins
 void Ascensor_Init( String StrJSONObject   );
 void ActualizarModulos(String StrJSONObject);
 void Ascensor_VerificarPosicion();
+bool VerificarCabina();
 
 #endif // !_ASCENSORES_H

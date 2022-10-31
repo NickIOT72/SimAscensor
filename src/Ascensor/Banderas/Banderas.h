@@ -4,12 +4,13 @@
 #include <Arduino.h>
 #include "../../modules/ModBackend.h"
 
-#define DELAY_AV 100
-#define DELAY_BV 250
+#define DELAY_AV 10
+#define DELAY_BV 40
+#define CANT_POS_ASC 15
 
 extern uint16_t contadorSecuenciaPiso;
 extern uint8_t contadorBanderas;
-extern uint8_t limiteConteoBanderas;
+extern uint8_t limiteConteoBanderas[15] ;
 extern uint8_t modoConteoBandera;
 
 enum modoDeBanderas{
@@ -21,28 +22,29 @@ enum limitesConteoPADPAS {
     piso_base_x = 0,
     piso_base_y = 2,
     piso_ascensor_x,
-    piso_ascensor_cambio = 8,
-    piso_ascensor_y = 11,
-    piso_final_x ,
+    piso_ascensor_cambio = 7,
+    piso_ascensor_y = 8,
+    piso_final_x = 12,
     piso_final_y = 14
 };
 
+
 const uint8_t pisosSecuenciaPASPAD[15] = {
-	0b00001110,
-	0b00001010,
-	0b00001000,
-    0b00000000,
-	0b00000010,
-	0b00000000,
-	0b00000100,
-	0b00000110,
-	0b00000010,
-	0b00000000,
-	0b00000100,
-    0b00000000,
-    0b00000001,
-	0b00000101,
-	0b00000111   
+	0b00001110,//2
+	0b00001010,//10
+	0b00001000,//85
+    0b00000000,//100
+	0b00000010,//5
+	0b00000000,//85
+	0b00000100,//10
+	0b00000110,//5
+	0b00000010,//10
+	0b00000000,//100
+	0b00000100,//5
+    0b00000000,//85
+    0b00000001,//85
+	0b00000101,//10
+	0b00000111 //2
 };
 
 enum bitOrder_Banderas {

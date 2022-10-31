@@ -9,7 +9,7 @@ SoftwareSerial ESP_SERIAL_PUERTA(ESP_RX, ESP_TX);
 struct data_ModBackend data_mod_Puertas[2];
 
 uint8_t contadorPuertas = 0;
-uint8_t limiteConteoPuertas = 30;
+uint8_t limiteConteoPuertas = 50;
 
 uint8_t EstadoPuerta = 0;
 
@@ -50,23 +50,39 @@ uint16_t Puertas_leerEstadoPuerta()
 
 void Puertas_AbriendoPuerta()
 {   
+    static bool AperturaCercana = false;
     if( contadorPuertas >= limiteConteoPuertas  ) return;
     if( Puertas_leerEstadoPuerta() != puertaAbriendo  ) return;
     contadorPuertas++;
-    if ( contadorPuertas >= 0 && contadorPuertas < 5 && EstadoPuerta != cerradoPuerta )
+    //ESP_SERIAL_PUERTA.print("Apertura de Puerta Conteo:");
+    //ESP_SERIAL_PUERTA.println(contadorPuertas);
+    
+    if ( contadorPuertas >= 0 && contadorPuertas < 3 && EstadoPuerta != cerradoPuerta )
     {
+        ESP_SERIAL_PUERTA.println("Apertura de Puerta Iniciada");
         EstadoPuerta = cerradoPuerta;
         Seguridades_actualizarPuerta( EstadoPuerta );
-    }else if ( contadorPuertas > 0 && contadorPuertas <= 45 && EstadoPuerta != entrePuerta )
+    }else if ( contadorPuertas >= 3 && contadorPuertas < 5 && EstadoPuerta != CierreEsperandoSA )
     {
-        EstadoPuerta = entrePuerta;
-        Seguridades_actualizarPuerta( entrePuerta );
-    }else if ( contadorPuertas > 45 && contadorPuertas < limiteConteoPuertas && EstadoPuerta != CierreEsperandoSA )
-    {
+        ESP_SERIAL_PUERTA.println("Apertura de Puerta saliendo de SA");
         EstadoPuerta = CierreEsperandoSA;
         Seguridades_actualizarPuerta( EstadoPuerta );
+    }else if ( contadorPuertas >= 5 && contadorPuertas < 45 && EstadoPuerta != entrePuerta )
+    {
+        ESP_SERIAL_PUERTA.println("Apertura de Puerta entre puertas");
+        EstadoPuerta = entrePuerta;
+        Seguridades_actualizarPuerta( EstadoPuerta );
+    }else if ( contadorPuertas >= 45 && contadorPuertas < limiteConteoPuertas && EstadoPuerta == entrePuerta )
+    {
+        if( !AperturaCercana ){
+            AperturaCercana = true;
+            ESP_SERIAL_PUERTA.println("Apertura de Puerta en 90%");  
+        }
+        
     }else if ( contadorPuertas == limiteConteoPuertas && EstadoPuerta != abiertaPuerta )
     {
+        ESP_SERIAL_PUERTA.println("Apertura de Puerta Completada");
+        AperturaCercana = false;
         EstadoPuerta = abiertaPuerta;
         Seguridades_actualizarPuerta( EstadoPuerta );
     }
@@ -75,24 +91,39 @@ void Puertas_AbriendoPuerta()
 
 void Puertas_CerrandoPuerta()
 {
+    static bool AperturaCercana = false;
     if( contadorPuertas == 0  ) return;
     if( Puertas_leerEstadoPuerta() != puertaCerrando  ) return;
     contadorPuertas--;
-    if ( contadorPuertas == 0  &&  EstadoPuerta != cerradoPuerta )
+    if ( contadorPuertas == 0 && EstadoPuerta != cerradoPuerta )
     {
+        ESP_SERIAL_PUERTA.println("Cierre de Puerta finalizado");
         EstadoPuerta = cerradoPuerta;
         Seguridades_actualizarPuerta( EstadoPuerta );
-    }else if ( contadorPuertas > 0 && contadorPuertas <= 45 && EstadoPuerta != entrePuerta )
+        AperturaCercana = false;
+    }
+    else if ( contadorPuertas > 0 && contadorPuertas < 3 && EstadoPuerta == CierreEsperandoSA )
     {
-        EstadoPuerta = entrePuerta;
-        Seguridades_actualizarPuerta( entrePuerta );
-    }else if ( contadorPuertas > 45 && contadorPuertas < limiteConteoPuertas && EstadoPuerta != CierreEsperandoSA )
+        if( !AperturaCercana ){
+            AperturaCercana = true;
+            ESP_SERIAL_PUERTA.println("Cierre de Puerta en 95%");  
+        }
+    }else if ( contadorPuertas >= 3 && contadorPuertas < 5 && EstadoPuerta != CierreEsperandoSA )
     {
+        ESP_SERIAL_PUERTA.println("Cierre de Puerta saliendo de SA");
         EstadoPuerta = CierreEsperandoSA;
         Seguridades_actualizarPuerta( EstadoPuerta );
-    }else if ( contadorPuertas == limiteConteoPuertas && EstadoPuerta != abiertaPuerta )
+    }else if ( contadorPuertas >= 5 && contadorPuertas < 45 && EstadoPuerta != entrePuerta )
     {
+        ESP_SERIAL_PUERTA.println("Cierre de puertas entre puertas");
+        EstadoPuerta = entrePuerta;
+        Seguridades_actualizarPuerta( EstadoPuerta );
+
+    }else if ( contadorPuertas >= 45 && contadorPuertas <= limiteConteoPuertas && EstadoPuerta != abiertaPuerta )
+    {
+        ESP_SERIAL_PUERTA.println("Cierre de Puerta Iniciada");
         EstadoPuerta = abiertaPuerta;
         Seguridades_actualizarPuerta( EstadoPuerta );
+        
     }
 }

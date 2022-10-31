@@ -5,6 +5,8 @@
 
 #define NUM_SEG 4
 
+#define CONTEO_DELAY 10
+
 extern uint8_t contadorPuertas;
 extern uint8_t limiteConteoPuertas;
 
