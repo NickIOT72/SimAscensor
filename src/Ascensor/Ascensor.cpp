@@ -17,10 +17,12 @@ int pisoActual = 1;
 
 uint8_t Ascensor_VerificarModuloSegunPosicion(uint8_t PosicionEnPlaca)
 {
+  uint8_t valRet = 0;
   if (PosicionEnPlaca < device595pos)
-    return dev595;
+    valRet = dev595;
   else if (PosicionEnPlaca < deviceMUX4067pos)
-    return dev4067;
+    valRet = dev4067;
+  return valRet;
 }
 
 /**

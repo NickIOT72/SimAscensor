@@ -6,7 +6,12 @@
 #define POS_INIT_PLACA 24
 
 #if defined(ESP8266)
-    #define DEVICE_INTERRUPTED_PIN 9
+    #define MUX_PINA 15
+    #define MUX_PINB 13
+    #define MUX_PINC 12
+    #define MUX_PIND 14
+    #define MUX_PINE 16
+    #define MUX_PINX 16
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
     #define MUX_PINA 22
     #define MUX_PINB 23

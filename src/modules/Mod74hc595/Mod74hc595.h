@@ -6,9 +6,9 @@
 #define NUM_MOD_595 3
 
 #if defined(ESP8266)
-    #define DATAPIN_595 14
-    #define CLKPIN_595 13
-    #define LATCHPIN_595 16 
+    #define DATAPIN_595 0
+    #define CLKPIN_595 9
+    #define LATCHPIN_595 10
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
     #define DATAPIN_595 A0
     #define CLKPIN_595 A1

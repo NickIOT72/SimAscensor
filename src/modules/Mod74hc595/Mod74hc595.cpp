@@ -20,7 +20,7 @@ void MOD74HC595_Init( )
 uint32_t MOD74HC595_Configuration()
 {
     uint32_t value = 0;
-    for( uint8_t i; i < 24; i++ )
+    for( uint8_t i = 0; i < 24; i++ )
     {
         value |= sr.get(i)<<i;
     }
