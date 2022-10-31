@@ -60,8 +60,7 @@ void getI2Caddress()
 void setup() {
   ESP_SERIAL.begin(9600);
   MOD74HC595_Init();
-  PCF_Init();
-  MUX74HC4067_Init();
+  //PCF_Init();
   //getI2Caddress();
   //while (true)
   //{
@@ -103,12 +102,7 @@ void setup() {
   ESP_SERIAL.println("Init Asc:");
   long tstart = micros();
   Ascensor_Init(strConfInit);
-  ESP_SERIAL.println("End Asc: " + String( micros()-tstart ));
-  ESP_SERIAL.print("595:");
-  ESP_SERIAL.println(PCF_readBuffer(),BIN);
-  ESP_SERIAL.print("74hc4067:");
-  ESP_SERIAL.println(MUX74HC4067_readPinsAll() ,BIN);
-
+  
 }
 
 void loop() {
