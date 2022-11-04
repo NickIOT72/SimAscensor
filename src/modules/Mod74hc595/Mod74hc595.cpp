@@ -7,6 +7,25 @@ SoftwareSerial ESP_SERIAL_595(ESP_RX, ESP_TX);
 
 ShiftRegister74HC595<NUM_MOD_595> sr(DATAPIN_595, CLKPIN_595, LATCHPIN_595);
 
+void SerialTest595()
+{
+    for( int i = 0; i < 24; i++ )
+    {
+        ESP_SERIAL_595.println("Pin#"+ String(i));
+        sr.setNoUpdate(i , HIGH);
+        sr.updateRegisters();
+        delay(3000);
+        sr.setNoUpdate(i, LOW);
+        sr.updateRegisters();
+        delay(3000);
+    }
+    while (true)
+    {
+        delay(1);
+    }
+     
+}
+
 void MOD74HC595_Reset( )
 {
     sr.setAllLow();
@@ -14,6 +33,7 @@ void MOD74HC595_Reset( )
 
 void MOD74HC595_Init( )
 {
+    ESP_SERIAL_595.begin(9600);
     sr.setAllLow();
 }
 

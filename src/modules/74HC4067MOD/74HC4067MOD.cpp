@@ -22,12 +22,18 @@ void MUX74HC4067_Init()
 
 void MUX74HC4067_test()
 {
-   byte data;
+    delay(5000);
+    byte data;
   for (byte i = 0; i < mux.channelCount(); i++) {
     data = mux.read(i) /* Reads from channel i (returns HIGH or LOW) */;
 
     ESP_SERIAL_MUX.print("Push button at channel "); ESP_SERIAL_MUX.print(i); ESP_SERIAL_MUX.print(" is "); ESP_SERIAL_MUX.println(data == LOW ? "pressed" : "not pressed");
+    delay(5000);
   }
+  while (true)
+    {
+        delay(1);
+    }
   ESP_SERIAL_MUX.println();
   delay(1500);
 }

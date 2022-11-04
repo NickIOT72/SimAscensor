@@ -59,8 +59,10 @@ void getI2Caddress()
 
 void setup() {
   ESP_SERIAL.begin(9600);
+
   MOD74HC595_Init();
   MUX74HC4067_Init();
+  //MUX74HC4067_test();
   //PCF_Init();
   //getI2Caddress();
   //while (true)
@@ -72,7 +74,7 @@ void setup() {
   strConfInit += "\"NombrePlaca\": \"\",";
   strConfInit += "\"Modelo\": \"V1\",";
   strConfInit += "\"ARCH\": {";
-  strConfInit += "\"MS1\": {";
+  strConfInit += "\"MSA\": {";
   strConfInit += "\"PINNAME\": [\"EXD\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"SM\"],";
   strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 1]";
   strConfInit += "},";
@@ -80,7 +82,7 @@ void setup() {
   strConfInit += "\"PINNAME\": [\"BOMB\", \"EMER\", \"Q1\", \"Q2\", \"FOTO\", \"MANT\", \"PTC\", \"AUTAR\"],";
   strConfInit += "\"VAL\": [0, 0, 0, 0, 0,0, 0, 0]";
   strConfInit += "},";
-  strConfInit += "\"MSA\": {";
+  strConfInit += "\"MS1\": {";
   strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
   strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0,0, 0]";
   strConfInit += "},";

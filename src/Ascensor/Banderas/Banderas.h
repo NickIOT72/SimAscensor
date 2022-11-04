@@ -10,8 +10,11 @@
 
 extern uint16_t contadorSecuenciaPiso;
 extern uint8_t contadorBanderas;
+extern uint8_t contadorSecuenciaAnterior;
 extern uint8_t limiteConteoBanderas[15] ;
 extern uint8_t modoConteoBandera;
+extern bool llegando;
+extern bool direccion;
 
 enum modoDeBanderas{
     PADPAS,
