@@ -10,6 +10,7 @@
 #include "Ascensor/Seguridades/Seguridades.h"
 #include "Ascensor/Banderas/Banderas.h"
 #include "Protocols/SoftSerial/SoftSerial.h"
+#include "modules/OLEDMod/OLEDMod.h"
 
 #include <Wire.h>
 
@@ -59,7 +60,8 @@ void getI2Caddress()
 
 void setup() {
   ESP_SERIAL.begin(9600);
-
+  OLED_Init();
+  OLED_MensajeInicial();
   MOD74HC595_Init();
   MUX74HC4067_Init();
   //MUX74HC4067_test();

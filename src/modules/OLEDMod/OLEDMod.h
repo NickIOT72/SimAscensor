@@ -21,6 +21,6 @@
 #define WIRE Wire
 
 void OLED_Init();
-
+void OLED_MensajeInicial();
 
 #endif // !_OLEDMOD_H
