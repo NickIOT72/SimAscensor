@@ -13,8 +13,11 @@ SoftwareSerial ESP_SERIAL_ASCWEBSERVER(ESP_RX, ESP_TX);
 
 std::unique_ptr<ESP8266WebServer> AscServer;
 
-void AscWebServer_callHandleSetPin(){AscWebServerAPI_handleSetPin( AscServer );}//WebServerAPI_handleSetPin( server );
 void AscWebServer_callHandleHelloWorld(){ AscWebServerAPI_handleHelloWorld( AscServer ); }//WebServerAPI_handleHelloWorld( server ); 
+void AscWebServer_callHandleSetPin(){AscWebServerAPI_handleSetPin( AscServer );}//WebServerAPI_handleSetPin( server );
+void AscWebServer_callHandleReqConfFile(){ AscWebServerAPI_handleReqConfFile( AscServer ); }//WebServerAPI_handleHelloWorld( server ); 
+void AscWebServer_callHandleSendConfg(){ AscWebServerAPI_handleSendConfg( AscServer ); }//WebServerAPI_handleHelloWorld( server ); 
+void AscWebServer_callHandleDashboardRedirect(){ AscWebServerAPI_handleDashboardRedirect( AscServer ); }//WebServerAPI_handleHelloWorld( server ); 
 
 void AscWebServer_handleClient()
 {
@@ -30,7 +33,11 @@ void AscensorWebServer_InitServer(  )
 
     AscServer->on("/helloWorld", HTTP_POST, AscWebServer_callHandleHelloWorld);
     AscServer->on("/setPin", HTTP_POST, AscWebServer_callHandleSetPin);
-    
+    AscServer->on("/ReqConfgFile", HTTP_GET, AscWebServer_callHandleReqConfFile); // Associate the handler function to the path
+    AscServer->on("/sendConfg", HTTP_POST, AscWebServer_callHandleSendConfg);     // Associate the handler function to the path
+    AscServer->on("/", HTTP_GET, AscWebServer_callHandleDashboardRedirect);
+
+
     AscServer->onNotFound([]() {                                   // If the client requests any URI
       if (!WebServerFile_HandleFileRead(AscServer, AscServer->uri())) // send it if it exists
         WebServerFile_handleNotFound(AscServer);                   // otherwise, respond with a 404 (Not Found) error

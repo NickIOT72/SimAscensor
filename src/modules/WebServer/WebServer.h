@@ -10,6 +10,7 @@
     //void (*f)(std::unique_ptr<ESP8266WebServer> &  );
     void WebServer_InitWiFiManager( void (*f)()    );
     void WebServer_handleClient();
+    void WebServer_redirectClient(std::unique_ptr<ESP8266WebServer> & server , String path);
     //void WebServer_handleServer( void (*f)(std::unique_ptr<ESP8266WebServer>) );
     //std::unique_ptr<ESP8266WebServer> &  return_server();
 

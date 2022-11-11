@@ -21,6 +21,12 @@ SoftwareSerial ESP_SERIAL_WEBSERVER(ESP_RX, ESP_TX);
 
 std::unique_ptr<ESP8266WebServer> server;
 
+void WebServer_redirectClient(  std::unique_ptr<ESP8266WebServer> & server , String path)
+{
+  server->sendHeader("Location", path, true);
+  server->send(302, "text/plain", "");
+}
+
 void WebServer_handleClient()
 {
   server->handleClient();
@@ -43,7 +49,7 @@ void WebServer_InitWiFiManager( void (*f)()  )
   ESP_SERIAL_WEBSERVER.begin(9600);
   WebServerFile_InitSerial();
   WebServerAPI_InitSerial();
-  (*f); 
+  f(); 
 }
 
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)

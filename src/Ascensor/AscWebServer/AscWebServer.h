@@ -6,7 +6,7 @@
 #if defined(ESP8266)
     #include <ESP8266WebServer.h>
     #define WS_PORT 80 
-    extern std::unique_ptr<ESP8266WebServer> AscServer;
+    //extern std::unique_ptr<ESP8266WebServer> AscServer;
     //void (*f)(std::unique_ptr<ESP8266WebServer> &  );
     void AscensorWebServer_InitServer(  );
     void AscWebServer_handleClient();
