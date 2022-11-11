@@ -3,7 +3,7 @@
 
 SoftwareSerial ESP_SERIAL_JSON(ESP_RX, ESP_TX);
 
-bool verificarJson(String Str, JsonDocument &JSONObject )
+bool jsonMod_verificarJson(String Str, JsonDocument &JSONObject )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
     char StrProvp[Str.length() + 1];
@@ -20,7 +20,7 @@ bool verificarJson(String Str, JsonDocument &JSONObject )
     return true;
 }
 
-bool verificarJson(char* charjson, JsonDocument &JSONObject )
+bool jsonMod_verificarJson(char* charjson, JsonDocument &JSONObject )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
     
@@ -35,10 +35,7 @@ bool verificarJson(char* charjson, JsonDocument &JSONObject )
     return true;
 }
 
-
-
-
-bool verificarJson(String Str )
+bool jsonMod_verificarJson(String Str )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
     char StrProvp[Str.length() + 1];
@@ -55,7 +52,7 @@ bool verificarJson(String Str )
     return true;
 }
 
-bool verificarJson(char* charjson )
+bool jsonMod_verificarJson(char* charjson )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
     DynamicJsonDocument JSONObject(JSON_Buffer);
@@ -70,12 +67,12 @@ bool verificarJson(char* charjson )
     return true;
 }
 
-void liberarDinMemJsonDoc(DynamicJsonDocument &JsonObject)
+void jsonMod_liberarDinMemJsonDoc(DynamicJsonDocument &JsonObject)
 {
     JsonObject.~BasicJsonDocument();
 }
 
-void limpiarJsonDoc(JsonDocument &JsonObject)
+void jsonMod_limpiarJsonDoc(JsonDocument &JsonObject)
 {
     JsonObject.clear();
 }

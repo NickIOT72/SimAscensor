@@ -11,7 +11,10 @@
 #include "Ascensor/Banderas/Banderas.h"
 #include "Protocols/SoftSerial/SoftSerial.h"
 #include "modules/OLEDMod/OLEDMod.h"
-
+#if defined(ESP8266)
+  #include "modules/WebServer/WebServer.h"
+  #include "Ascensor/AscWebServer/AscWebServer.h"
+#endif
 #include <Wire.h>
 
 SoftwareSerial ESP_SERIAL(ESP_RX, ESP_TX);
@@ -64,6 +67,22 @@ void setup() {
   OLED_MensajeInicial();
   MOD74HC595_Init();
   MUX74HC4067_Init();
+
+  #if defined(ESP8266)
+    WebServer_InitWiFiManager( AscensorWebServer_InitServer );
+    while(true)
+    {
+      AscWebServer_handleClient();
+      delay(5);
+    }
+  #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
+    while(true)
+    {
+      delay(5);
+    }
+  #endif
+
+
   //MUX74HC4067_test();
   //PCF_Init();
   //getI2Caddress();
@@ -102,8 +121,8 @@ void setup() {
   strConfInit += "}";
 
   DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
-  if (!verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
-  liberarDinMemJsonDoc(JSONObjectConfg);
+  if (!jsonMod_verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
+  jsonMod_liberarDinMemJsonDoc(JSONObjectConfg);
   ESP_SERIAL.println("Init Asc:");
   Ascensor_Init(strConfInit);
   Banderas_resetContadorBanderas();

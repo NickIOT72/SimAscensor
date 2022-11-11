@@ -64,7 +64,7 @@ void Ascensor_Init(String StrJSONObject)
 void ActualizarModulos(String StrJSONObject)
 {
   DynamicJsonDocument JSONObject(JSON_Buffer);
-  if (!verificarJson(StrJSONObject, JSONObject))
+  if (!jsonMod_verificarJson(StrJSONObject, JSONObject))
   {
     ESP_SERIAL_ASC.println("Eror1");
     while (true)
@@ -178,7 +178,7 @@ void ActualizarModulos(String StrJSONObject)
   Alertas_Init(data_mod_Alertas, 8);
   Puertas_Init(data_mod_Puertas, 2);
   Cabinas_Init(data_mod_Cabinas, 4);
-  liberarDinMemJsonDoc(JSONObject);
+  jsonMod_liberarDinMemJsonDoc(JSONObject);
 }
 
 void Ascensor_VerificarPosicion()
