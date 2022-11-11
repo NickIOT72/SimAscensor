@@ -14,6 +14,7 @@
 #if defined(ESP8266)
   #include "modules/WebServer/WebServer.h"
   #include "Ascensor/AscWebServer/AscWebServer.h"
+  #include "Protocols/SPIFFS/SPIFFS.h"
 #endif
 #include <Wire.h>
 
@@ -61,6 +62,27 @@ void getI2Caddress()
 
 }
 
+void VerificarArchivos( String strConfInit , String path )
+{
+  if (!SPIFFS.exists(path))
+  {
+    SPIFFS_UpdateFile(path, strConfInit);
+  }
+  else
+  {
+    String FileToSend = SPIFFS_ReadFile("/ConfgPlaca.text");
+    char StrProvp[ FileToSend.length() + 1 ] ;
+    FileToSend.toCharArray(StrProvp , FileToSend.length() + 1   );
+    DynamicJsonDocument JSONObject(10000);
+    DeserializationError error = deserializeJson(JSONObject, StrProvp);
+    if (error)
+    {
+      ESP_SERIAL.println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
+      SPIFFS_UpdateFile("/ConfgPlaca.text", strConfInit);
+    }
+  }
+}
+
 void setup() {
   ESP_SERIAL.begin(9600);
   OLED_Init();
@@ -70,27 +92,10 @@ void setup() {
 
   #if defined(ESP8266)
     WebServer_InitWiFiManager( AscensorWebServer_InitServer );
-    while(true)
-    {
-      AscWebServer_handleClient();
-      delay(5);
-    }
   #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
-    while(true)
-    {
-      delay(5);
-    }
+    delay(1);
   #endif
 
-
-  //MUX74HC4067_test();
-  //PCF_Init();
-  //getI2Caddress();
-  //while (true)
-  //{
-  //  MUX74HC4067_test();
-  //}
-  
   String strConfInit = "{";
   strConfInit += "\"NombrePlaca\": \"\",";
   strConfInit += "\"Modelo\": \"V1\",";
@@ -120,13 +125,13 @@ void setup() {
   strConfInit += "\"TOTAL_PISOS\": 8";
   strConfInit += "}";
 
-  DynamicJsonDocument JSONObjectConfg(JSON_Buffer);
-  if (!jsonMod_verificarJson( strConfInit,  JSONObjectConfg)) { ESP_SERIAL.println("Eror1");  while (true){delay(1);}}
-  jsonMod_liberarDinMemJsonDoc(JSONObjectConfg);
+  VerificarArchivos( strConfInit ,  "ConfgFile.json" );
+  strConfInit = SPIFFS_ReadFile( "ConfgFile.json"  );
+  SPIFFS_printFiles();
+  AscensorWebServer_InitServer();
   ESP_SERIAL.println("Init Asc:");
   Ascensor_Init(strConfInit);
   Banderas_resetContadorBanderas();
-  ESP_SERIAL.println("Probar Puerta");
   delay(3000);
 
   ESP_SERIAL.println("Starting firmware");
@@ -134,23 +139,20 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
- 
+  static unsigned long tstart = millis();
+  static unsigned long tstartWiFi = millis();
+  bool WifiDesconectado = false;
+
+  if( !WifiDesconectado ) AscWebServer_handleClient();
 
   uint16_t lecturaPuerta = Puertas_leerEstadoPuerta();
   uint16_t lecturaSeg = Seguridades_leerEstadoPuerta();
-
-  //ESP_SERIAL.print("Puerta: ");
-  //ESP_SERIAL.print(lecturaPuerta , BIN);
-  //ESP_SERIAL.print("Banderas: ");
-  //ESP_SERIAL.println(lecturaSeg , BIN);
-  //delay(250);
 
   static bool PuertaAbiertaEsperandoStop = false;
   static bool PuertaCerradaEsperandoStop = false;
   static bool PuertaStop = false;
   bool CabinaEnMovimiento = false;
 
-  
   switch (lecturaPuerta)
   {
   case puertaAbriendo:
@@ -213,43 +215,29 @@ void loop() {
   default:
     break;
   }
-  
-  
-  
-  
-  
-  if ( !CabinaEnMovimiento )delay(40);
-  
-  
-  
-  
-  //while ( Puertas_leerEstadoPuerta() != puertaAbriendo )
-  //{
-  //  delay(1);
-  //}
-  //ESP_SERIAL.println("Abriendo Puerta");
-  //while ( Seguridades_leerEstadoPuerta() != abiertaPuerta )
-  //{
-  //  delay(100);
-  //  Puertas_AbriendoPuerta();
-  //}
-  //ESP_SERIAL.println("Puerta Abierta. Esperando por rele stop");
-  //while ( Puertas_leerEstadoPuerta() != puertoStop )
-  //{
-  //  delay(1);
-  //}
-  //ESP_SERIAL.println("Puerta Stop. Esperando por rele de cerrar");
-  //while ( Puertas_leerEstadoPuerta() != puertaCerrando )
-  //{
-  //  delay(1);
-  //}
-  //ESP_SERIAL.println("Cerrando Puerta");
-  //while ( Seguridades_leerEstadoPuerta() != cerradoPuerta )
-  //{
-  //  delay(100);
-  //  Puertas_CerrandoPuerta();
-  //}
-  //ESP_SERIAL.println("Puerta Cerrada. Subiendo ascensor");
-  //Ascensor_VerificarPosicion();
-  //ESP_SERIAL.println("Llego a piso");
+  if( !CabinaEnMovimiento ){
+    while(millis() - tstart  <= 40 )
+    {
+      if( !WifiDesconectado  ) AscWebServer_handleClient();
+    }
+  }
+  if( millis() - tstartWiFi >= 10000 && !WifiDesconectado  )
+  {
+    if (WiFi.status() != WL_CONNECTED && !WifiDesconectado )
+    {
+      ESP_SERIAL.println("ESP desconectado de la red. Por favor Reseteelo y vuelva a conectar");
+      WifiDesconectado = true;
+    }
+    tstartWiFi = millis();
+  }
+  else if( millis() - tstartWiFi >= 1000 && WifiDesconectado  )
+  {
+    if( WiFi.status() == WL_CONNECTED && WifiDesconectado  )
+    {
+      ESP_SERIAL.println("ESP conectado nuevamente la red");
+      WifiDesconectado = false;
+    }
+    tstartWiFi = millis();
+  }
+
 }

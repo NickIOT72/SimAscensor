@@ -31,9 +31,9 @@ void AscensorWebServer_InitServer(  )
 
     ESP_SERIAL_ASCWEBSERVER.begin(BAUD_SERIAL);
 
-    AscServer->on("/helloWorld", HTTP_POST, AscWebServer_callHandleHelloWorld);
+    //AscServer->on("/helloWorld", HTTP_GET, AscWebServer_callHandleHelloWorld);
     AscServer->on("/setPin", HTTP_POST, AscWebServer_callHandleSetPin);
-    AscServer->on("/ReqConfgFile", HTTP_GET, AscWebServer_callHandleReqConfFile); // Associate the handler function to the path
+    AscServer->on("/ReqConfgFile", HTTP_POST, AscWebServer_callHandleReqConfFile); // Associate the handler function to the path
     AscServer->on("/sendConfg", HTTP_POST, AscWebServer_callHandleSendConfg);     // Associate the handler function to the path
     AscServer->on("/", HTTP_GET, AscWebServer_callHandleDashboardRedirect);
 

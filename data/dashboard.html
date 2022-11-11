@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./fontawesome.css">
+    <link rel="stylesheet" href="./wifimanager.css">
+    <link rel="stylesheet" href="./loaderpage.css">
+    <link rel="stylesheet" href="./form.css">
+    <script src="./jquery.min.js"></script>
+    <style>
+        img {
+            src: url('./Red_Light_Icon.svg.png');
+            width: 95%;
+            max-width: 95%;
+            height: auto;
+        }
+
+
+        .button {
+            /* 	design the outer circle */
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0 0 5px 0px #888;
+
+            /* 	required to position children elements */
+            position: relative;
+
+            /* 	required to center elements*/
+            display: grid;
+            place-items: center;
+            background-color: red;
+        }
+
+        .buttonpw {
+            /* 	design the outer circle */
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0 0 5px 0px #888;
+
+            /* 	required to position children elements */
+            position: relative;
+
+            /* 	required to center elements*/
+            display: grid;
+            place-items: center;
+            background-color: red;
+        }
+
+        .buttonpw::before {
+            /* 	pseudo-elements don't display if content property is not declared */
+            content: "";
+
+            /* 	design the inner-ring */
+            width: 50%;
+            height: 50%;
+            border: 10px solid white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .buttonpw:hover {
+            cursor: none
+        }
+
+        .light {
+            /* 	design the vertical light */
+            height: 30%;
+            width: 10px;
+            background: red;
+            border-radius: 10px;
+
+            /* 	position the light correctly */
+            position: absolute;
+            top: 20px;
+
+            /* 	required to give white-space to inner-ring */
+            box-shadow: 0 0 0 10px #fff;
+        }
+
+        .buttonpw:hover {
+            cursor: pointer;
+        }
+
+        .buttonpw:active {
+            box-shadow: 0 0 10px 0px #888 inset;
+        }
+
+        .lightpressed {
+            background: lightgreen;
+        }
+
+        .buttonlightpressed {
+            background: lightgreen;
+            box-shadow: 0 0 10px 0px #888 inset;
+            border-color: lightgreen;
+        }
+
+        h1 center {
+            background-color: lightgray;
+        }
+    </style>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="loader-page"></div>
+    <div class="header">
+
+        <!--Content before waves-->
+        <div class="inner-header flex">
+            <!--Just the logo.. Don't mind this
+        <svg version="1.1" class="logo" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" xml:space="preserve">
+        <path fill="#FFFFFF" stroke="#000000" stroke-width="10" stroke-miterlimit="10" d="M57,283" />
+        <g><path fill="#fff"
+        d="M250.4,0.8C112.7,0.8,1,112.4,1,250.2c0,137.7,111.7,249.4,249.4,249.4c137.7,0,249.4-111.7,249.4-249.4
+        C499.8,112.4,388.1,0.8,250.4,0.8z M383.8,326.3c-62,0-101.4-14.1-117.6-46.3c-17.1-34.1-2.3-75.4,13.2-104.1
+        c-22.4,3-38.4,9.2-47.8,18.3c-11.2,10.9-13.6,26.7-16.3,45c-3.1,20.8-6.6,44.4-25.3,62.4c-19.8,19.1-51.6,26.9-100.2,24.6l1.8-39.7    c35.9,1.6,59.7-2.9,70.8-13.6c8.9-8.6,11.1-22.9,13.5-39.6c6.3-42,14.8-99.4,141.4-99.4h41L333,166c-12.6,16-45.4,68.2-31.2,96.2  c9.2,18.3,41.5,25.6,91.2,24.2l1.1,39.8C390.5,326.2,387.1,326.3,383.8,326.3z" />
+        </g>
+        </svg>-->
+            <h1 style="color:white;font-size: xxx-large;">Dashboard</h1>
+        </div>
+
+        <!--Waves Container-->
+        <div>
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                </g>
+            </svg>
+        </div>
+        <!--Waves end-->
+
+    </div>
+    <div class="container" style="max-width: 95%;">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="testbox">
+                    <form id="myForm">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h1>
+                                    <center><strong>Panel de Seguridades Principales</strong></center>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row mt-2" id="SeguridadesPrincipalesPanel">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">SM</h1>
+
+                                                <div class="buttonpw" id="SM">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">SA</h1>
+
+                                                <div class="buttonpw" id="SA">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">SPC</h1>
+
+                                                <div class="buttonpw" id="SPC">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">FPA</h1>
+
+                                                <div class="buttonpw" id="FPA">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mt-5">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h1>
+                                    <center><strong>Panel de banderas</strong></center>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row mt-2" id="BanderasPanel">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">EXD</h1>
+
+                                                <div class="button" id="EXD">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">PAD</h1>
+
+                                                <div class="button" id="PAD_PN">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">PAS</h1>
+
+                                                <div class="button" id="PAS">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">EXS</h1>
+
+                                                <div class="button" id="EXS">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mt-5">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h1>
+                                    <center><strong>Panel de Alertas</strong></center>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row mt-2" id="AlertasPanel">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">BOMBERO</h1>
+
+                                                <div class="buttonpw" id="BOMB">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">EMERGENCIA</h1>
+
+                                                <div class="buttonpw" id="EMER">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">CARGA 1</h1>
+
+                                                <div class="buttonpw" id="Q1">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">CARGA 2</h1>
+
+                                                <div class="buttonpw" id="Q2">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2" id="AlertasPanel2">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">FOTOCELDA</h1>
+
+                                                <div class="buttonpw" id="FOTO">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">MANTENIMIENTO</h1>
+
+                                                <div class="buttonpw" id="MANT">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">PTC</h1>
+
+                                                <div class="buttonpw" id="PTC">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">AUTAR</h1>
+
+                                                <div class="buttonpw" id="AUTAR">
+                                                    <div class="light"></div>
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mt-5">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h1>
+                                    <center><strong>Panel de Reles</strong></center>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row mt-2" id="RelesPanel">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Subir</h1>
+
+                                                <div class="button" id="RSUB">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Bajar</h1>
+
+                                                <div class="button" id="RBAJ">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Alta</h1>
+
+                                                <div class="button" id="RAV">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Baja</h1>
+
+                                                <div class="button" id="RBV">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2" id="RelesPanel2">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Abrir</h1>
+
+                                                <div class="button" id="RABR">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Rele Cerrar</h1>
+
+                                                <div class="button" id="RCER">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">Ventilador</h1>
+
+                                                <div class="button" id="VENT">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <center>
+                                    <div class="card" style="width: 95%; border: 0px;">
+
+                                        <div class="card-body">
+                                            <center>
+                                                <h1 class="card-title">PATIN</h1>
+
+                                                <div class="button" id="PATIN">
+
+                                                </div>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <center><button type="button" onclick="IrAConfPlaca()"
+                                        class="btn btn-lg btn-outline-primary btn-block">Configurar Placa</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+
+        function handleForm(event) { event.preventDefault(); }
+
+        var ConfFile = {
+            "NombrePlaca":"",
+            "Modelo":"V1",
+            "ARCH":{
+                "MS1":{
+                     "PINNAME":["EXD","PAD_PN","PAS","EXS", "FPA","SPC","SA","SM"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MS2":{
+                     "PINNAME":["BOMB", "EMER","Q1","Q2","FOTO","MANT","PTC","AUTAR"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MSA":{
+                     "PINNAME":["","","","","","","",""],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "ME1":{
+                    "PINNAME":["RSUB","RBAJ","RAV","RBV", "RABR","RCER","VENT","PATIN"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MEA":{
+                    "PINNAME":["","","","","","","",""],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                }
+            },
+            "TIPO_CONTEO":"PADPAS"
+        }
+
+        //SETPIN:{
+        //            "PINNAME":["RSUB","RBAJ","RAV","RBV", "RABR","RCER","VENT","PATIN"],
+        //             "VAL":["0","0","0","0","0","0","0","0"]
+        //        }
+        
+        var BotonPulsado = true;
+        var intervalPendiente = false;
+
+        $(document).ready(function () {
+//InitiPage();
+
+            setTimeout(function () { loadjscssfile("toastr.min.css", "css"); }, 100);
+            setTimeout(function () { loadjscssfile("toastr.min.js", "js"); }, 250);
+            setTimeout(function () { loadjscssfile("verificador.js", "js"); }, 500);
+            setTimeout(function () { InitiPage(); }, 1000);
+
+            /*setTimeout(function () {
+                let url = 'http://' + location.hostname + '/ReqConfgFile';
+
+                fetch(url, {
+                    method: 'GET' // or 'PUT'
+                })
+                    .then(response =>
+                        response.json()
+
+                    )
+                    .then(data => {
+                        console.log('Success:', data);
+                        ConfFile = data;
+                        //console.log('ggggggg: ', ggggggg , ggggggg.Estructura);
+                        InitiPage();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        InitiPage();
+                    })
+
+            }, 1000);*/
+        })
+
+        function InitiPage() {
+
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-bottom-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $("#myForm").on('submit', handleForm);
+
+            $(".buttonpw").on("click", function () {
+                if (intervalPendiente) return false;
+                BotonPulsado = true;
+                let newVAL = 0;
+                let idMSE = $(this).attr("id")
+                $(".buttonpw *").prop("disabled", true).off('click');
+                $(".button *").prop("disabled", true).off('click');
+
+                if ($(this).hasClass("buttonlightpressed")) {
+                    //$(this).removeClass("buttonlightpressed")
+                    newVAL = 0;
+                } else {
+                    //$(this).addClass("buttonlightpressed");
+                    newVAL = 1;
+                }
+                setTimeout(function () {
+                    let ConfFile2 = ConfFile;
+                    
+                    /*{
+                        "NombrePlaca":"",
+                        "Modelo":"V1",
+                        "Estructura":{
+                            "MS1":{
+                                 "PINNAME":["EXD","PAD_PN","PAS","EXS", "FPA","SPC","SA","SM"],
+                                 "VAL":["0","0","0","0","0","0","0","0"]
+                            },
+                            "MS2":{
+                                 "PINNAME":["BOMB", "EMER","Q1","Q2","FOTO","MANT","PTC","AUTAR"],
+                                 "VAL":["0","0","0","0","0","0","0","0"]
+                            },
+                            "MSA":{
+                                 "PINNAME":["","","","","","","",""],
+                                 "VAL":["0","0","0","0","0","0","0","0"]
+                            },
+                            "ME1":{
+                                "PINNAME":["RSUB","RBAJ","RAV","RBV", "RABR","RCER","VENT","PATIN"],
+                                 "VAL":["0","0","0","0","0","0","0","0"]
+                            },
+                            "MEA":{
+                                "PINNAME":["","","","","","","",""],
+                                 "VAL":["0","0","0","0","0","0","0","0"]
+                            }
+                        },
+                        "TIPO_CONTEO":"PADPAS"//PADPAS O PNAjustar
+                    }
+                    */
+
+                    let modulosMES = ["MS1", "MS2", "MSA", "ME1", "MEA"];
+                    //Object.keys(myObject).indexOf('banana');
+                    let ConfgEstrucutra = ConfFile2.ARCH;
+                    modulosMES.forEach((mse, i) => {
+                        let ConfgEstrucutraMSE = ConfFile2.ARCH[mse].PINNAME;
+                        let indexOfMod = ConfgEstrucutraMSE.indexOf(idMSE);
+                        if (indexOfMod !== -1) {
+                            ConfFile2.ARCH[mse].VAL[indexOfMod] = newVAL.toString();
+                            return false;
+                        }
+
+                    })
+                    let provConfFile = ConfFile2;
+                    let newConfg = {}
+                    newConfg.SETPIN = {
+                        "PINNAME": [idMSE],
+                        "VAL": [newVAL.toString()],
+                    }
+                    $(".buttonpw *").prop("disabled", false).on('click');
+                            $(".button *").prop("disabled", false).on('click');
+                            ConfigurarIndicadoresYBotones();
+                            BotonPulsado = false;
+
+                    
+/*
+                    let data2 = newConfg;
+                    let url2 = 'http://' + location.hostname + '/setPin';
+
+                    postData(url2, data2)
+                        .then(data => {
+                            
+
+                        ConfFile = provConfFile;
+                            //console.log(data); // JSON data parsed by `data.json()` call
+                            //let result = data.resp;
+                            if (result == "OK") {
+                                toastr.success("Pin configurado");
+
+                            } else if (result == "NOK") {
+                                toastr.error("error al configurar boton");
+                            }
+                            $(".buttonpw *").prop("disabled", false).on('click');
+                            $(".button *").prop("disabled", false).on('click');
+                            ConfigurarIndicadoresYBotones();
+                            BotonPulsado = false;
+
+
+                        }).catch(
+                            error => {
+                                console.log("Error: ", error)
+                                $(".buttonpw *").prop("disabled", false).on('click');
+                                $(".button *").prop("disabled", false).on('click');
+
+                                BotonPulsado = false;
+                            }
+                        );*/
+                }, 50)
+
+
+
+            })
+            $(".loader-page").hide();
+
+            // VerificarEl modo
+            let modPlaca = ConfFile.TIPO_CONTEO;
+            if (modPlaca == "PN") {
+                let PanelPn = `
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <center>
+                    <div class="card" style="width: 95%; border: 0px;">
+                        
+                        <div class="card-body">
+                            <center><h1 class="card-title">EXD</h1>
+                            
+                            <div class="button" id="EXD">
+                                
+                            </div></center>
+                        </div>
+                    </div>    
+                    </center>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <center>
+                    <div class="card" style="width: 95%; border: 0px;">
+                        
+                        <div class="card-body">
+                            <center><h1 class="card-title">PN</h1>
+                            
+                            <div class="button" id="PAD_PN">
+                                
+                            </div></center>
+                        </div>
+                    </div>    
+                    </center>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <center>
+                    <div class="card" style="width: 95%; border: 0px;">
+                        
+                        <div class="card-body">
+                            <center><h1 class="card-title">EXS</h1>
+                            
+                            <div class="button" id="EXS">
+                                
+                            </div></center>
+                        </div>
+                    </div>    
+                    </center>
+                </div>
+                `
+
+                $("#BanderasPanel").html('');
+                $("#BanderasPanel").append(PanelPn);
+            }
+
+            ConfigurarIndicadoresYBotones();
+            
+            /*setInterval(function () {
+                if (!BotonPulsado) {
+                    intervalPendiente = true;
+                    $(".buttonpw *").prop("disabled", true).off('click');
+                    $(".button *").prop("disabled", true).off('click');
+                    intervalPendiente = false;
+                    let url = 'http://' + location.hostname + '/ReqConfgFile';
+
+                    fetch(url, {
+                        method: 'GET' // or 'PUT'
+                    })
+                        .then(response =>
+                            response.json()
+
+                        )
+                        .then(data => {
+                            console.log('Success:', data);
+                            ConfFile = data;
+                            ConfigurarIndicadoresYBotones();
+                          
+                            intervalPendiente = false;
+                        })
+                        .catch(error => {
+                            console.log("Error: ", error)
+                            $(".buttonpw *").prop("disabled", false).on('click');
+                            $(".button *").prop("disabled", false).on('click');
+                            intervalPendiente = false;
+                        })
+                }
+            }, 2000)*/
+        
+                /**/
+        }
+
+        function ConfigurarIndicadoresYBotones() {
+            let modulosMES = ["MS1", "MS2", "MSA", "ME1", "MEA"];
+            let strct = ConfFile.ARCH;
+
+            array8fe = ["", "", "", "", "", "", "", ""];
+            //debugger;
+            modulosMES.map((mes, i) => {
+                let objectMSE = strct[mes];
+                array8fe.map((opt, j) => {
+                    let idMse = objectMSE.PINNAME[j];
+                    let valMSE = objectMSE.VAL[j];
+                    if ($("#" + idMse).hasClass("buttonpw")) {
+
+
+                        $("#" + idMse).each(function () {
+                            if ($(this).children("div").hasClass("lightpressed") && valMSE == "0") {
+                                $(this).children("div").removeClass("lightpressed")
+                            } else if( !$(this).children("div").hasClass("lightpressed")  && valMSE == "1" ){
+                                $(this).children("div").addClass("lightpressed")
+                            }
+
+                            if ($(this).hasClass("buttonlightpressed")  && valMSE == "0") {
+                                $(this).removeClass("buttonlightpressed")
+                            } else if ( !$(this).hasClass("buttonlightpressed") && valMSE == "1"  ) {
+                                $(this).addClass("buttonlightpressed");
+                            }
+                        })
+                    }
+                    else if ($("#" + idMse).hasClass("button") ) {
+                        $("#" + idMse).each(function () {
+
+                            if ($(this).hasClass("buttonlightpressed")  && valMSE == "0") {
+                                $(this).removeClass("buttonlightpressed")
+                            } else if ( !$(this).hasClass("buttonlightpressed") && valMSE == "1"  ) {
+                                $(this).addClass("buttonlightpressed");
+                            }
+                        })
+
+                        
+                    }
+                })
+            })
+        }
+
+        function IrAConfPlaca() {
+            toastr.success("Ir a Configuracion de Placa");
+            $(".buttonpw *").prop("disabled", true).off('click');
+            $(".button *").prop("disabled", true).off('click');
+            setTimeout(function () {
+                console.log("Ir a Configuracion de Placa")
+                //window.location = "http://" + location.hostname + "/confplaca.html"
+                window.location = "http://" + location.hostname + ":5500/data/confplaca.html"
+            }, 3000)
+
+        }
+
+        function loadjscssfile(filename, filetype) {
+            console.log("New File: ", filename)
+            if (filetype == "js") { //if filename is a external JavaScript file
+                var fileref = document.createElement('script')
+                fileref.setAttribute("type", "text/javascript")
+                fileref.setAttribute("src", filename)
+            }
+            else if (filetype == "css") { //if filename is an external CSS file
+                var fileref = document.createElement("link")
+                fileref.setAttribute("rel", "stylesheet")
+                fileref.setAttribute("type", "text/css")
+                fileref.setAttribute("href", filename)
+            }
+            if (typeof fileref != "undefined")
+                document.getElementsByTagName("head")[0].appendChild(fileref)
+        }
+
+        // Ejemplo implementando el metodo POST:
+        async function postData(url = '', data = {}) {
+            // Opciones por defecto estan marcadas con un *
+            const response = await fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+            return response.json(); // parses JSON response into native JavaScript objects
+        }
+
+    </script>
+</body>
+
+</html>

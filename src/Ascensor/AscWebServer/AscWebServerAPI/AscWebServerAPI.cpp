@@ -43,13 +43,7 @@ void AscWebServerAPI_handleDashboardRedirect(std::unique_ptr<ESP8266WebServer> &
 
 void AscWebServerAPI_handleHelloWorld( std::unique_ptr<ESP8266WebServer> & server )
 {
-   ESP_SERIAL_ASCWEBSERVERAPI.println("handleHelloWorld");
-   ESP_SERIAL_ASCWEBSERVERAPI.println("");
-
-   String jsonConfg = WebServerAPI_returnReqData(server);
-   if( !jsonConfg )return;
-
-   server->send(200, "text/plain", "{\"resp\":\"OK\"}" );
+   WebServer_redirectClient( server,"/index.html" );
 }
 
 void AscWebServerAPI_handleSetPin(std::unique_ptr<ESP8266WebServer> & server)

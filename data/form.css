@@ -1,0 +1,37 @@
+.redSet {
+    border-color: #f17474;
+}
+.redSet::placeholder {
+    color: red;
+    opacity: 1;
+    /* Firefox */
+}
+.redSet:focus {
+    border-color: #f17474;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 15px rgba(245, 47, 47, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 15px rgba(245, 47, 47, 0.6);
+    transition: 0.5s;
+}
+.greenSet {
+    border-color: #7ef7b1;
+}
+.greenSet::placeholder {
+    color: rgb(0, 255, 0);
+    opacity: 1;
+    /* Firefox */
+}
+.greenSet:focus {
+    border-color: #7ef7b1;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 15px rgba(123, 243, 143, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 15px rgba(123, 243, 143, 0.6);
+    transition: 0.5s;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}

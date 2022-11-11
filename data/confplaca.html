@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./fontawesome.css">
+    <link rel="stylesheet" href="./wifimanager.css">
+    <link rel="stylesheet" href="./loaderpage.css">
+    <link rel="stylesheet" href="./form.css">
+    <script src="./jquery.min.js"></script>
+
+    <title>Configuracio de la placa</title>
+
+    <style>
+        .MSselect {
+            background-color: aliceblue;
+        }
+
+        .MEselect {
+            background-color: aliceblue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="loader-page"></div>
+    <div class="header">
+
+        <!--Content before waves-->
+        <div class="inner-header flex">
+            <!--Just the logo.. Don't mind this
+        <svg version="1.1" class="logo" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" xml:space="preserve">
+        <path fill="#FFFFFF" stroke="#000000" stroke-width="10" stroke-miterlimit="10" d="M57,283" />
+        <g><path fill="#fff"
+        d="M250.4,0.8C112.7,0.8,1,112.4,1,250.2c0,137.7,111.7,249.4,249.4,249.4c137.7,0,249.4-111.7,249.4-249.4
+        C499.8,112.4,388.1,0.8,250.4,0.8z M383.8,326.3c-62,0-101.4-14.1-117.6-46.3c-17.1-34.1-2.3-75.4,13.2-104.1
+        c-22.4,3-38.4,9.2-47.8,18.3c-11.2,10.9-13.6,26.7-16.3,45c-3.1,20.8-6.6,44.4-25.3,62.4c-19.8,19.1-51.6,26.9-100.2,24.6l1.8-39.7    c35.9,1.6,59.7-2.9,70.8-13.6c8.9-8.6,11.1-22.9,13.5-39.6c6.3-42,14.8-99.4,141.4-99.4h41L333,166c-12.6,16-45.4,68.2-31.2,96.2  c9.2,18.3,41.5,25.6,91.2,24.2l1.1,39.8C390.5,326.2,387.1,326.3,383.8,326.3z" />
+        </g>
+        </svg>-->
+            <h1 style="color:white;font-size: xxx-large;">Configuracion de la placa</h1>
+        </div>
+
+        <!--Waves Container-->
+        <div>
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                </g>
+            </svg>
+        </div>
+        <!--Waves end-->
+
+    </div>
+    <!--Header ends-->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="testbox">
+                    <form id="myForm">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h1>
+                                    <center><strong>Configuracion de la placa</strong></center>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <input type="text" id="inputNombre" placeholder="Coloque nombre a la placa">
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <input class="form-check-input" type="checkbox" value="" id="ModoPASPAD">
+                                <label class="form-check-label" for="ModoPASPAD">
+                                    PAS-PAD
+                                </label>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <input class="form-check-input" type="checkbox" value="" id="ModoPN">
+                                <label class="form-check-label" for="ModoPN">
+                                    PN
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                                <div class="form-group">
+                                    <div class="accordion" id="accordionPlaca">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="ModuloMS1">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseModuloMS1" aria-expanded="true"
+                                                    aria-controls="collapseModuloMS1">
+                                                    Configuracion Modulo MS1
+                                                </button>
+                                            </h2>
+                                            <div id="collapseModuloMS1" class="accordion-collapse collapse show"
+                                                aria-labelledby="ModuloMS1" data-bs-parent="#accordionPlaca">
+                                                <div class="accordion-body bg-light">
+                                                    <div class="row">
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_1"
+                                                                class="col-xs-2 col-form-label">MS1-1</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_1"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_2"
+                                                                class="col-xs-2 col-form-label">MS1-2</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_2"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_3"
+                                                                class="col-xs-2 col-form-label">MS1-3</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_3"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_4"
+                                                                class="col-xs-2 col-form-label">MS1-4</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_4"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_5"
+                                                                class="col-xs-2 col-form-label">MS1-5</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_5"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_6"
+                                                                class="col-xs-2 col-form-label">MS1-6</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_6"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_7"
+                                                                class="col-xs-2 col-form-label">MS1-7</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_7"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS1_8"
+                                                                class="col-xs-2 col-form-label">MS1-8</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS1_8"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="ModuloMS2">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseModuloMS2"
+                                                    aria-expanded="false" aria-controls="collapseModuloMS2">
+                                                    Configuracion Modulo MS2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseModuloMS2" class="accordion-collapse collapse"
+                                                aria-labelledby="ModuloMS2" data-bs-parent="#accordionPlaca">
+                                                <div class="accordion-body bg-light">
+                                                    <div class="row">
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_1"
+                                                                class="col-xs-2 col-form-label">MS2-1</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_1"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_2"
+                                                                class="col-xs-2 col-form-label">MS2-2</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_2"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_3"
+                                                                class="col-xs-2 col-form-label">MS2-3</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_3"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_4"
+                                                                class="col-xs-2 col-form-label">MS2-4</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_4"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_5"
+                                                                class="col-xs-2 col-form-label">MS2-5</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_5"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_6"
+                                                                class="col-xs-2 col-form-label">MS2-6</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_6"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_7"
+                                                                class="col-xs-2 col-form-label">MS2-7</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_7"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                                            <label for="ModuloMS2_8"
+                                                                class="col-xs-2 col-form-label">MS2-8</label>
+                                                            <div class="col-xs-10">
+                                                                <select class="MSselect" id="ModuloMS2_8"
+                                                                    class="form-control">
+                                                                    <option selected>Choose...</option>
+                                                                    <option>...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="ModuloMSA">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseModuloMSA"
+                                                        aria-expanded="false" aria-controls="collapseModuloMSA">
+                                                        Configuracion Modulo MSA
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseModuloMSA" class="accordion-collapse collapse"
+                                                    aria-labelledby="ModuloMSA" data-bs-parent="#accordionPlaca">
+                                                    <div class="accordion-body bg-light">
+                                                        <div class="row">
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_1"
+                                                                    class="col-xs-2 col-form-label">MSA-1</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_1"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_2"
+                                                                    class="col-xs-2 col-form-label">MSA-2</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_2"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_3"
+                                                                    class="col-xs-2 col-form-label">MSA-3</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_3"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_4"
+                                                                    class="col-xs-2 col-form-label">MSA-4</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_4"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_5"
+                                                                    class="col-xs-2 col-form-label">MSA-5</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_5"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_6"
+                                                                    class="col-xs-2 col-form-label">MSA-6</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_6"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_7"
+                                                                    class="col-xs-2 col-form-label">MSA-7</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_7"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloMSA_8"
+                                                                    class="col-xs-2 col-form-label">MSA-8</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MSselect" id="ModuloMSA_8"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="ModuloME1">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseModuloME1"
+                                                        aria-expanded="false" aria-controls="collapseModuloME1">
+                                                        Configuracion Modulo ME1
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseModuloME1" class="accordion-collapse collapse"
+                                                    aria-labelledby="ModuloME1" data-bs-parent="#accordionPlaca">
+                                                    <div class="accordion-body bg-light">
+                                                        <div class="row">
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_1"
+                                                                    class="col-xs-2 col-form-label">ME1-1</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_1"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_2"
+                                                                    class="col-xs-2 col-form-label">ME1-2</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_2"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_3"
+                                                                    class="col-xs-2 col-form-label">ME1-3</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_3"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_4"
+                                                                    class="col-xs-2 col-form-label">ME1-4</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_4"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_5"
+                                                                    class="col-xs-2 col-form-label">ME1-5</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_5"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_6"
+                                                                    class="col-xs-2 col-form-label">ME1-6</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_6"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_7"
+                                                                    class="col-xs-2 col-form-label">ME1-7</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_7"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                <label for="ModuloME1_8"
+                                                                    class="col-xs-2 col-form-label">ME1-8</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="MEselect" id="ModuloME1_8"
+                                                                        class="form-control">
+                                                                        <option selected>Choose...</option>
+                                                                        <option>...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="ModuloMEA">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseModuloMEA" aria-expanded="false"
+                                                            aria-controls="collapseModuloMEA">
+                                                            Configuracion Modulo MEA
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseModuloMEA" class="accordion-collapse collapse"
+                                                        aria-labelledby="ModuloMEA" data-bs-parent="#accordionPlaca">
+                                                        <div class="accordion-body bg-light">
+                                                            <div class="row">
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_1"
+                                                                        class="col-xs-2 col-form-label">MEA-1</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_1"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_2"
+                                                                        class="col-xs-2 col-form-label">MEA-2</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_2"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_3"
+                                                                        class="col-xs-2 col-form-label">MEA-3</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_3"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_4"
+                                                                        class="col-xs-2 col-form-label">MEA-4</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_4"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_5"
+                                                                        class="col-xs-2 col-form-label">MEA-5</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_5"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_6"
+                                                                        class="col-xs-2 col-form-label">MEA-6</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_6"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_7"
+                                                                        class="col-xs-2 col-form-label">MEA-7</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_7"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                                                    <label for="ModuloMEA_8"
+                                                                        class="col-xs-2 col-form-label">MEA-8</label>
+                                                                    <div class="col-xs-10">
+                                                                        <select class="MEselect" id="ModuloMEA_8"
+                                                                            class="form-control">
+                                                                            <option selected>Choose...</option>
+                                                                            <option>...</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <center><button type="button" onclick="EnviarConfForm()"
+                                        class="btn btn-outline-success btn-block">Guardar
+                                        Confg</button></center>
+
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <center><button type="button" onclick="IrADashboard()" class="btn btn-outline-danger btn-block">Ir al
+                                        Dashboard</button></center>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function handleForm(event) { event.preventDefault(); }
+
+        var ConfFile = {
+            "NombrePlaca":"",
+            "Modelo":"V1",
+            "ARCH":{
+                "MS1":{
+                     "PINNAME":["EXD","PAD_PN","PAS","EXS", "FPA","SPC","SA","SM"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MS2":{
+                     "PINNAME":["BOMB", "EMER","Q1","Q2","FOTO","MANT","PTC","AUTAR"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MSA":{
+                     "PINNAME":["","","","","","","",""],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "ME1":{
+                    "PINNAME":["RSUB","RBAJ","RAV","RBV", "RABR","RCER","VENT","PATIN"],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                },
+                "MEA":{
+                    "PINNAME":["","","","","","","",""],
+                     "VAL":["0","0","0","0","0","0","0","0"]
+                }
+            },
+            "TIPO_CONTEO":"PADPAS"
+        }
+
+
+        var ConfigMod = {
+            "MS": ["EXD", "PAD_PN", "PAS", "EXS", "FPA", "SPC", "SA", "SM", "BOMB", "EMER", "Q1", "Q2", "FOTO", "MANT", "PTC", "AUTAR"],
+            "ME": ["RSUB", "RBAJ", "RAV", "RBV", "RABR", "RCER", "VENT", "PATIN"]
+        }
+
+        $(document).ready(function () {
+
+            setTimeout(function () { loadjscssfile("toastr.min.css", "css"); }, 100);
+            setTimeout(function () { loadjscssfile("toastr.min.js", "js"); }, 250);
+            setTimeout(function () { loadjscssfile("verificador.js", "js"); }, 500);
+
+            setTimeout( function(){  InitiPage(); } , 1000  );
+            /*
+            setTimeout(function () {
+                let url = 'http://' + location.hostname + '/ReqConfgFile';
+
+                fetch(url, {
+                    method: 'GET' // or 'PUT'
+                })
+                    .then(response =>
+                        response.json()
+
+                    )
+                    .then(data => {
+                        console.log('Success:', data);
+                        ConfFile = data;
+                        //console.log('ggggggg: ', ggggggg , ggggggg.ARCH);
+                        InitiPage();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        InitiPage();
+                    })
+
+            }, 1000);
+            */
+        })
+
+
+
+        function InitiPage() {
+
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-bottom-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+
+
+            $("#myForm").on('submit', handleForm);
+
+            $("#inputNombre").on('change', function () {
+
+                let optionvalsel = $(this).val();
+                if (!verificarNulidadDeValor(optionvalsel)) {
+                    if ($(this).hasClass("redSet")) $(this).removeClass("redSet");
+                    if (!$(this).hasClass("greenSet")) $(this).addClass("greenSet");
+                } else {
+                    if ($(this).hasClass("greenSet")) $(this).removeClass("greenSet");
+                    if (!$(this).hasClass("redSet")) $(this).addClass("redSet");
+                    toastr.error("El nombre no puede ser nulo");
+
+                }
+            });
+
+            $("select")
+                .map(function () {
+                    $(this).find('option').remove();
+                    $(this).append('<option value="ND">ND</option>')
+
+                    //ModuloMS1_1
+                    let IdSel = $(this).attr("id");
+                    let ModEstr = IdSel.split("_")
+                    //console.log("Select id ", IdSel)
+                    ModEstr = ModEstr[0];
+                    ModEstr = ModEstr.replace("Modulo", "");
+                    let ModEstrIndex = IdSel.split("_");
+                    //debugger;
+                    ModEstrIndex = parseInt(ModEstrIndex[1]) - 1;
+                    // Colocar todos los Selects
+                    let htmlSelectOpt = htmlOptSel(ModEstr);
+                    $(this).append(htmlSelectOpt)
+                    let SelP = ConfFile.ARCH;
+                    SelP = SelP[ModEstr]["PINNAME"];
+                    SelP = SelP[ModEstrIndex];
+                    if (!verificarNulidadDeValor(SelP)) {
+                        $(this).find('option[value="' + SelP + '"]').prop('selected', true)
+                    }
+                })
+            $("select").on('change', function () {
+                let hasClassMS = $(this).hasClass("MSselect");
+                //let hasClassME = $(this).hasClass("MEselect");
+                let classVal = hasClassMS ? ".MSselect" : ".MEselect"
+                ActualizarOpcionesSelect(classVal);
+
+            })
+
+
+            $("#ModoPASPAD").on("change", () => {
+                console.log("ModoPASPAD")
+                let checkStatu = $(this).attr("checked")
+                $("#ModoPN").prop("checked", !checkStatu)
+                ConfFile.TIPO_CONTEO = checkStatu ? "PADPAS" : "PN";
+            })
+
+            $("#ModoPN").on("change", () => {
+                console.log("ModoPN")
+                let checkStatu = $(this).attr("checked")
+                $("#ModoPASPAD").prop("checked", !checkStatu)
+                ConfFile.TIPO_CONTEO = !checkStatu ? "PADPAS" : "PN";
+            })
+
+            let modoPlaca = ConfFile.TIPO_CONTEO;
+            if (modoPlaca == "PADPAS") {
+                $("#ModoPASPAD").prop("checked", true);
+                $("#ModoPN").prop("checked", false);
+            } else if (modoPlaca == "PN") {
+                $("#ModoPN").prop("checked", true);
+                $("#ModoPASPAD").prop("checked", false);
+            }
+
+            $("#inputNombre").val(ConfFile.NombrePlaca);
+            $("#inputNombre").trigger("change");
+
+            ActualizarOpcionesSelect(".MSselect");
+            ActualizarOpcionesSelect(".MEselect");
+
+
+
+            $(".loader-page").hide();
+        }
+
+        function ActualizarOpcionesSelect(clsSel) {
+            let ArraySelectOpt = $(clsSel).map(function () {
+                let selectedOpt = $(this).find("option:selected").val();
+                if (selectedOpt != "ND") {
+                    if ($(this).hasClass("redSet")) $(this).removeClass("redSet");
+                    if (!$(this).hasClass("greenSet")) $(this).addClass("greenSet");
+                    return selectedOpt;
+                }
+                else {
+                    if ($(this).hasClass("greenSet")) $(this).removeClass("greenSet");
+                }
+            })
+            $(clsSel)
+                .each(function () {
+                    $(this).prop('disabled', true);
+                    $(this).find("option").filter(function (i, e) { $(e).show() })/**/
+                    ArraySelectOpt.map((i, e) => {
+                        //console.log("opt", i, e, $(this).find('option[value="' + e +'"]') )
+                        $(this).find('option[value="' + e + '"]').hide();
+                    })
+                    $(this).find('option[value="ND"]').show()
+                    $(this).prop('disabled', false);
+                })
+        }
+
+        function htmlOptSel(mod) {
+            let arrayMod = [];
+            if (mod == "MS1" || mod == "MS2" || mod == "MSA") {
+                arrayMod = ConfigMod.MS;
+            }
+            else if (mod == "ME1" || mod == "MEA") {
+                arrayMod = ConfigMod.ME;
+            }
+            else {
+                return '';
+            }
+            let htmlparapopupdescriptivo = '';
+            for (let i = 0; i < arrayMod.length; i++) {
+                htmlparapopupdescriptivo += '<option value="' + arrayMod[i] + '" >' + arrayMod[i] + '</option>'
+            }
+            return htmlparapopupdescriptivo;
+        }
+
+        function IrADashboard()
+        {
+            toastr.success("Ir a Configuracion de Placa");
+            $("#myForm select").prop("disabled", true);
+            $("#myForm :input").prop("disabled", true);
+            setTimeout(function () {
+                console.log("Ir a Configuracion de Placa")
+                //window.location = "http://" + location.hostname + "/dashboard.html"
+                window.location = "http://" + location.hostname + ":5500/data/dashboard.html"
+                
+            }, 3000)
+        }
+
+        function EnviarConfForm() {
+            if (!$("#inputNombre").hasClass("greenSet")) {
+                $("#inputNombre").trigger("change");
+                return;
+            }
+            let nombrePlaca = $("#inputNombre").val();
+            ConfFile.NombrePlaca = nombrePlaca;
+            let arraySelectMSDisp = $("#ModuloMS1_1").find("option").map((i, e) => {
+                if ($(e).css('display') !== 'none') { return $(e).val() }
+            })
+            let arraySelectMEDisp = $("#ModuloME1_1").find("option").map((i, e) => {
+                if ($(e).css('display') !== 'none') { return $(e).val() }
+            })
+            console.log("arraySelectMSDisp", arraySelectMSDisp, "arraySelectMEDisp", arraySelectMEDisp)
+            if (arraySelectMSDisp.length == 1 && arraySelectMSDisp[0] == "ND" && arraySelectMEDisp.length == 1 && arraySelectMEDisp[0] == "ND") {
+                let url = 'http://' + location.hostname + '/profile';
+
+                let array8h = ["", "", "", "", "", "", "", ""]
+                let arrayMSE = ["MS1", "MS2", "MSA", "ME1", "MEA"]
+
+
+
+                arrayMSE.forEach((mse, i) => {
+                    let idSel = "#Modulo" + mse + "_";
+                    let arrayBand = array8h.map((opt, j) => {
+                        //console.log("i,j ",j, idSel + (j+1).toString(), $(idSel + (opt+1).toString() ).find("option:selected").val())
+                        let valSel = $(idSel + (j + 1).toString()).find("option:selected").val();
+                        return valSel != "ND" ? valSel : ""
+
+                    })
+                    let arrayBand2 = array8h.map((opt, j) => {
+                        //console.log("i,j ",j, idSel + (j+1).toString(), $(idSel + (opt+1).toString() ).find("option:selected").val())
+                        let valSel = $(idSel + (j + 1).toString()).find("option:selected").val();
+                        return ( valSel == "SPC" || valSel ==  "SA" ||  valSel == "SM" ) ? "1" : "0"
+
+                    })
+                    ConfFile.ARCH[mse].PINNAME = arrayBand;
+                    ConfFile.ARCH[mse].VAL = arrayBand2;
+                })
+                toastr.success("Placa configurada");
+                /*let data = ConfFile;
+                let url2 = 'http://' + location.hostname + '/sendConfg';
+
+                postData(url2, ConfFile)
+                    .then(data => {
+                        console.log(data); // JSON data parsed by `data.json()` call
+                        toastr.success("Placa configurada");
+                    }).catch(
+                        error => {
+                            console.log("Error: ", error)
+                            toastr.error("Error  enviando configuracion")
+                        }
+                    );
+                
+               */
+            }
+        }
+
+        // Ejemplo implementando el metodo POST:
+        async function postData(url = '', data = {}) {
+            // Opciones por defecto estan marcadas con un *
+            const response = await fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+            return response.json(); // parses JSON response into native JavaScript objects
+        }
+
+        function loadjscssfile(filename, filetype) {
+            console.log("New File: ", filename)
+            if (filetype == "js") { //if filename is a external JavaScript file
+                var fileref = document.createElement('script')
+                fileref.setAttribute("type", "text/javascript")
+                fileref.setAttribute("src", filename)
+            }
+            else if (filetype == "css") { //if filename is an external CSS file
+                var fileref = document.createElement("link")
+                fileref.setAttribute("rel", "stylesheet")
+                fileref.setAttribute("type", "text/css")
+                fileref.setAttribute("href", filename)
+            }
+            if (typeof fileref != "undefined")
+                document.getElementsByTagName("head")[0].appendChild(fileref)
+        }
+
+
+    </script>
+</body>
+
+</html>
