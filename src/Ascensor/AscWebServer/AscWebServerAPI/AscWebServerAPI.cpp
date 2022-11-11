@@ -105,7 +105,7 @@ bool ActulizarConfgPlaca(String jsonConfg)
       return false;
    }
    ESP_SERIAL_ASCWEBSERVERAPI.println(F("Json received: "));
-   serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+   serializeJsonPretty(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
    EscribirConfPlaca(JSONObject);
    
@@ -166,7 +166,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
    else
    {
       ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
-      serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+      serializeJsonPretty(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
       String ConfgFile = SPIFFS_ReadFile("/ConfgPlaca.text");
 
@@ -182,7 +182,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
       else
       {
          ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
-         serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+         serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
          if (mod == MOD_IN)
          {
@@ -212,7 +212,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                      ESP_SERIAL_ASCWEBSERVERAPI.println("OK MIN1");
                      JSONObjectConfg["ARCH"]["ME1"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["ME1"]["VAL"][i] = valStrNew;
-                     serializeJson(JSONObjectConfg["ARCH"]["MIN1"], ESP_SERIAL_ASCWEBSERVERAPI); 
+                     serializeJsonPretty(JSONObjectConfg["ARCH"]["MIN1"], ESP_SERIAL_ASCWEBSERVERAPI); 
                      break;
                   }
                }
@@ -233,14 +233,14 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                      JSONObjectConfg["ARCH"]["MEA"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MEA"]["VAL"][i] = valStrNew;
                      ESP_SERIAL_ASCWEBSERVERAPI.print(F("  NEW Json received: "));
-                     serializeJson(JSONObjectConfg["ARCH"]["MIN2"], ESP_SERIAL_ASCWEBSERVERAPI); 
+                     serializeJsonPretty(JSONObjectConfg["ARCH"]["MIN2"], ESP_SERIAL_ASCWEBSERVERAPI); 
                      break;
                   }
                }
             }
 
             EscribirConfPlaca(JSONObjectConfg);
-            serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
+            serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
 
             return true;
          }
@@ -318,7 +318,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                }
             }
             EscribirConfPlaca(JSONObjectConfg);
-            serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
+            serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
             
             return true;
          }

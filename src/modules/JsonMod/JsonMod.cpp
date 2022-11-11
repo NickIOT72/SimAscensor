@@ -12,11 +12,11 @@ bool jsonMod_verificarJson(String Str, JsonDocument &JSONObject )
     DeserializationError error2 = deserializeJson(JSONObject, StrProvp);
     if (error2)
     {
-        //ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
+        ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -27,11 +27,11 @@ bool jsonMod_verificarJson(char* charjson, JsonDocument &JSONObject )
     DeserializationError error2 = deserializeJson(JSONObject, charjson);
     if (error2)
     {
-        //ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
+        ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -44,11 +44,11 @@ bool jsonMod_verificarJson(String Str )
     DeserializationError error2 = deserializeJson(JSONObject, StrProvp);
     if (error2)
     {
-        //ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
+        ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
@@ -59,11 +59,11 @@ bool jsonMod_verificarJson(char* charjson )
     DeserializationError error2 = deserializeJson(JSONObject, charjson);
     if (error2)
     {
-        //ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
+        ESP_SERIAL_JSON.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
         return false;
     }
-    //ESP_SERIAL_JSON.println("Data json: ");
-    //serializeJson(JSONObject, ESP_SERIAL_JSON);
+    ESP_SERIAL_JSON.println("Data json: ");
+    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
