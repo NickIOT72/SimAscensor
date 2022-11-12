@@ -10,6 +10,7 @@
     void SPIFFS_CreateFile(String path);
     void SPIFFS_AppendFile(String path, String data);
     void SPIFFS_UpdateFile(String path, String data);
+    bool SPIFFS_ExistFile(String path );
     String SPIFFS_ReadFile(String path);
 
 

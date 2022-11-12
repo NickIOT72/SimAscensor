@@ -9,6 +9,7 @@ SoftwareSerial ESP_SERIAL_ASCWEBSERVERAPI(ESP_RX, ESP_TX);
 #include "../../../modules/WebServer/WebServerAPI/WebServerAPI.h"
 #include "../../../modules/WebServer/WebServer.h"
 #include "../../../Protocols/SPIFFS/SPIFFS.h"
+#include "../../AscSPIFFS/AscSPIFFS.h"
 
 void AscWebServerAPI_handleReqConfFile( std::unique_ptr<ESP8266WebServer> & server )
 {
@@ -89,7 +90,7 @@ void EscribirConfPlaca(JsonDocument &JSONObject)
       strG += "}";
    ESP_SERIAL_ASCWEBSERVERAPI.println("Datos a ver: " + strG );
 
-   SPIFFS_UpdateFile("/ConfgPlaca.text", strG);
+   SPIFFS_UpdateFile(CONFG_FILE, strG);
    
 }
 
@@ -105,7 +106,7 @@ bool ActulizarConfgPlaca(String jsonConfg)
       return false;
    }
    ESP_SERIAL_ASCWEBSERVERAPI.println(F("Json received: "));
-   serializeJsonPretty(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+   serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
    EscribirConfPlaca(JSONObject);
    
@@ -166,7 +167,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
    else
    {
       ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
-      serializeJsonPretty(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+      serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
       String ConfgFile = SPIFFS_ReadFile("/ConfgPlaca.text");
 
@@ -182,7 +183,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
       else
       {
          ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
-         serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI); /**/
+         serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
          if (mod == MOD_IN)
          {
@@ -212,7 +213,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                      ESP_SERIAL_ASCWEBSERVERAPI.println("OK MIN1");
                      JSONObjectConfg["ARCH"]["ME1"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["ME1"]["VAL"][i] = valStrNew;
-                     serializeJsonPretty(JSONObjectConfg["ARCH"]["MIN1"], ESP_SERIAL_ASCWEBSERVERAPI); 
+                     serializeJson(JSONObjectConfg["ARCH"]["MIN1"], ESP_SERIAL_ASCWEBSERVERAPI); 
                      break;
                   }
                }
@@ -233,14 +234,14 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                      JSONObjectConfg["ARCH"]["MEA"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MEA"]["VAL"][i] = valStrNew;
                      ESP_SERIAL_ASCWEBSERVERAPI.print(F("  NEW Json received: "));
-                     serializeJsonPretty(JSONObjectConfg["ARCH"]["MIN2"], ESP_SERIAL_ASCWEBSERVERAPI); 
+                     serializeJson(JSONObjectConfg["ARCH"]["MIN2"], ESP_SERIAL_ASCWEBSERVERAPI); 
                      break;
                   }
                }
             }
 
             EscribirConfPlaca(JSONObjectConfg);
-            serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
+            serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
 
             return true;
          }
@@ -318,7 +319,7 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                }
             }
             EscribirConfPlaca(JSONObjectConfg);
-            serializeJsonPretty(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
+            serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI);
             
             return true;
          }

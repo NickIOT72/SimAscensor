@@ -38,7 +38,8 @@ uint8_t Ascensor_VerificarModuloSegunPosicion(uint8_t PosicionEnPlaca)
 
 void Ascensor_Init(String StrJSONObject)
 {
-  ESP_SERIAL_ASC.begin(9600);
+  ESP_SERIAL_ASC.begin(BAUD_SERIAL);
+  //ESP_SERIAL_ASC.println("STR 2:" + StrJSONObject );
   ActualizarModulos(StrJSONObject);
 }
 
@@ -64,6 +65,7 @@ void Ascensor_Init(String StrJSONObject)
 void ActualizarModulos(String StrJSONObject)
 {
   DynamicJsonDocument JSONObject(JSON_Buffer);
+  //ESP_SERIAL_ASC.println("STR 3:" + StrJSONObject );
   if (!jsonMod_verificarJson(StrJSONObject, JSONObject))
   {
     ESP_SERIAL_ASC.println("Eror1");

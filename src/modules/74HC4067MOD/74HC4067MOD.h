@@ -26,9 +26,9 @@ void MUX74HC4067_test();
 void MUX74HC4067_Init();
 //uint16_t PCF_readBuffer();
 //bool PCF_verifyInt();
-uint16_t MUX74HC4067_Configuration(const struct data_ModBackend *config, uint8_t elements);
+void MUX74HC4067_Configuration(const struct data_ModBackend *config, uint8_t elements);
 uint16_t MUX74HC4067_readPinsAll();
-uint16_t MUX74HC4067_readPin( uint8_t pin  );
+uint16_t MUX74HC4067_readPin(  struct data_ModBackend *config, uint8_t elements);
 //void PCF_setOutput( const struct data_ModBackend *config, uint8_t elements );
 
 #endif // !_74HC4067MOD_H

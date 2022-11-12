@@ -9,6 +9,11 @@ SoftwareSerial ESP_SERIAL_SPIFFS(ESP_RX, ESP_TX);
 
 #if defined(ESP8266)
 
+    bool SPIFFS_ExistFile(String path )
+    {
+        return SPIFFS.exists(path);
+    }
+
     void SPIFFS_InitSPIFFS()
     {
         if (!SPIFFS.begin())

@@ -5,6 +5,10 @@
         "pcf8575.h": "c",
         "modbackend.h": "c",
         "mod74hc595.h": "c",
-        "arduino.h": "c"
+        "arduino.h": "c",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp"
     }
 }

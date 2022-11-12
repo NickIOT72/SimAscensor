@@ -39,14 +39,6 @@ void PCF_Configuration(const struct data_ModBackend *config, uint8_t elements){
     for( int i = 0; i < elements; i++ ){
         if ( config[i].modIO == OUTPUT )
         {
-            //ESP_SERIAL_PCF.println("PCF cnfg:");
-            //String deviceName = (config[i].device == dev595)?"595":"PCF";
-            //ESP_SERIAL_PCF.print("Device:" + deviceName );
-            //ESP_SERIAL_PCF.print(", Pos:" + String( config[i].posPin ) );
-            //deviceName = (config[i].estadoPin)?"ON":"OFF";
-            //ESP_SERIAL_PCF.print(", Estado:" + deviceName  );
-            //deviceName = (config[i].modIO == INPUT)?"IN":"OUT";
-            //ESP_SERIAL_PCF.println(", IO:" + deviceName  );
             uint8_t posPlaca = config[i].posPin - 24;
             uint8_t modIOplaca = config[i].modIO;
             pcf8575.pinMode( 3 , modIOplaca   );

@@ -1,6 +1,5 @@
 
 #include "../../Protocols/SoftSerial/SoftSerial.h"
-#include <ArduinoJson.h>
 
 SoftwareSerial ESP_SERIAL_WEBSERVER(ESP_RX, ESP_TX);
 

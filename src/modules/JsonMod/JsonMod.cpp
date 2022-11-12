@@ -6,6 +6,8 @@ SoftwareSerial ESP_SERIAL_JSON(ESP_RX, ESP_TX);
 bool jsonMod_verificarJson(String Str, JsonDocument &JSONObject )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
+    ESP_SERIAL_JSON.println("J1:");
+    ESP_SERIAL_JSON.println(Str.length() + 1);
     char StrProvp[Str.length() + 1];
     Str.toCharArray(StrProvp, Str.length() + 1);
 
@@ -16,14 +18,14 @@ bool jsonMod_verificarJson(String Str, JsonDocument &JSONObject )
         return false;
     }
     ESP_SERIAL_JSON.println("Data json: ");
-    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
 bool jsonMod_verificarJson(char* charjson, JsonDocument &JSONObject )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
-    
+    ESP_SERIAL_JSON.println("J2:");
     DeserializationError error2 = deserializeJson(JSONObject, charjson);
     if (error2)
     {
@@ -31,13 +33,14 @@ bool jsonMod_verificarJson(char* charjson, JsonDocument &JSONObject )
         return false;
     }
     ESP_SERIAL_JSON.println("Data json: ");
-    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
 bool jsonMod_verificarJson(String Str )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
+    ESP_SERIAL_JSON.println("J3:");
     char StrProvp[Str.length() + 1];
     Str.toCharArray(StrProvp, Str.length() + 1);
     DynamicJsonDocument JSONObject(JSON_Buffer);
@@ -48,13 +51,14 @@ bool jsonMod_verificarJson(String Str )
         return false;
     }
     ESP_SERIAL_JSON.println("Data json: ");
-    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 
 bool jsonMod_verificarJson(char* charjson )
 {
     ESP_SERIAL_JSON.begin(BAUD_SERIAL);
+    ESP_SERIAL_JSON.println("J4:");
     DynamicJsonDocument JSONObject(JSON_Buffer);
     DeserializationError error2 = deserializeJson(JSONObject, charjson);
     if (error2)
@@ -63,7 +67,7 @@ bool jsonMod_verificarJson(char* charjson )
         return false;
     }
     ESP_SERIAL_JSON.println("Data json: ");
-    serializeJsonPretty(JSONObject, ESP_SERIAL_JSON);
+    serializeJson(JSONObject, ESP_SERIAL_JSON);
     return true;
 }
 

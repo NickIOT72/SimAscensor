@@ -31,7 +31,7 @@ void Puertas_Init( const struct data_ModBackend *confg, uint8_t elements)
     {
         data_mod_Puertas[i].device = confg[i].device;
         data_mod_Puertas[i].modIO = confg[i].modIO;
-        data_mod_Puertas[i].posPin = confg[i].posPin;
+        data_mod_Puertas[i].posPin = confg[i].posPin- 24;
         data_mod_Puertas[i].estadoPin = confg[i].estadoPin;
     }
     EstadoPuerta = Seguridades_leerEstadoPuerta();
@@ -39,11 +39,8 @@ void Puertas_Init( const struct data_ModBackend *confg, uint8_t elements)
 
 uint16_t Puertas_leerEstadoPuerta()
 {
-    uint8_t lecturaRAB =  !MUX74HC4067_readPin( data_mod_Puertas[bitRAB].posPin - 24 );
-    uint8_t lecturaRCR =  !MUX74HC4067_readPin( data_mod_Puertas[bitRCR].posPin - 24  );
-    uint16_t lecturaPuerta = lecturaRCR << 1 | lecturaRAB;
-    //ESP_SERIAL_PUERTA.print( "lectura puertas: " );
-    //ESP_SERIAL_PUERTA.println(  lecturaPuerta, BIN   );
+    uint16_t lecturaPuerta =  MUX74HC4067_readPin( data_mod_Puertas , 2);
+    lecturaPuerta = (~lecturaPuerta)&(0x0003);
     return lecturaPuerta;
 }
 
