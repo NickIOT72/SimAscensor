@@ -183,65 +183,6 @@ void ActualizarModulos(String StrJSONObject)
   jsonMod_liberarDinMemJsonDoc(JSONObject);
 }
 
-void Ascensor_VerificarPosicion()
-{
-  uint8_t lecturaPuertaAct = 0;
-  bool reateardoBaja = true;
-  while (!(lecturaPuertaAct == cabinaSubiendoEnAlta || lecturaPuertaAct == cabinaSubiendoEnBaja || lecturaPuertaAct == cabinaBajandoEnAlta || lecturaPuertaAct == cabinaBajandoEnBaja) && Puertas_leerEstadoPuerta() == puertaCerrando)
-  {
-    lecturaPuertaAct = Cabina_leerEstadoCabina();
-    delay(1);
-  }
-  if (Puertas_leerEstadoPuerta() != puertaCerrando)
-    return;
-  ESP_SERIAL_ASC.println("Cabina en MOviemiento");
-  lecturaPuertaAct = Cabina_leerEstadoCabina();
-  reateardoBaja = lecturaPuertaAct == cabinaSubiendoEnBaja || lecturaPuertaAct == cabinaBajandoEnBaja;
-
-  while (Puertas_leerEstadoPuerta() == puertaCerrando)
-  {
-    while (Cabina_leerEstadoCabina() != cabinaDetenida)
-    {
-      if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta || Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja || Cabina_leerEstadoCabina() == cabinaBajandoEnAlta || Cabina_leerEstadoCabina() == cabinaBajandoEnBaja)
-      {
-        if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta || Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja)
-        {
-          IncrementarBandera(&pisoActual, &TotalPisos);
-          if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta && lecturaPuertaAct != cabinaSubiendoEnAlta)
-          {
-            lecturaPuertaAct = cabinaSubiendoEnAlta;
-            ESP_SERIAL_ASC.println("Cabina Subiendo en Alta");
-            reateardoBaja = false;
-          }
-          else if (Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja && lecturaPuertaAct != cabinaSubiendoEnBaja)
-          {
-            lecturaPuertaAct = cabinaSubiendoEnBaja;
-            ESP_SERIAL_ASC.println("Cabina Subiendo en baja");
-            reateardoBaja = true;
-          }
-        }
-        else if (Cabina_leerEstadoCabina() == cabinaBajandoEnAlta || Cabina_leerEstadoCabina() == cabinaBajandoEnBaja)
-        {
-          DecrementarBandera(&pisoActual);
-          if (Cabina_leerEstadoCabina() == cabinaBajandoEnAlta && lecturaPuertaAct != cabinaBajandoEnAlta)
-          {
-            lecturaPuertaAct = cabinaBajandoEnAlta;
-            ESP_SERIAL_ASC.println("Cabina Bajando en Alta");
-            reateardoBaja = false;
-          }
-          else if (Cabina_leerEstadoCabina() == cabinaBajandoEnBaja && lecturaPuertaAct != cabinaBajandoEnBaja)
-          {
-            lecturaPuertaAct = cabinaBajandoEnBaja;
-            ESP_SERIAL_ASC.println("Cabina Bajando en baja");
-            reateardoBaja = true;
-          }
-        }
-        reateardoBaja ? delay(DELAY_BV) : delay(DELAY_AV);
-      }
-    }
-  }
-}
-
 bool VerificarCabina()
 {
   static uint8_t lecturaPuertaAct = 0;

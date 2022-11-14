@@ -21,7 +21,8 @@
 
 SoftwareSerial ESP_SERIAL(ESP_RX, ESP_TX);
 
-//#define MOD_WIFI
+//#define ESP_MOD_WIFI
+#define ARD_MOD_SER
 
 void getI2Caddress()
 {
@@ -64,7 +65,7 @@ void getI2Caddress()
     ESP_SERIAL.println("done\n");
 }
 
-#ifndef MOD_WIFI
+#ifndef ESP_MOD_WIFI
 void setup()
 {
   ESP_SERIAL.begin(9600);
@@ -105,6 +106,10 @@ void setup()
   strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
   strConfInit += "\"TOTAL_PISOS\": 8";
   strConfInit += "}";
+  #ifdef ARD_MOD_SER
+  
+  #endif
+  
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
