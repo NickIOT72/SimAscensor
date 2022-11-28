@@ -1,14 +1,14 @@
 #include "SerialInfo.h"
 #include "../../Protocols/SoftSerial/SoftSerial.h"
 
-SoftwareSerial ESP_SERIAL_SI(ESP_RX_SI, ESP_RX_SI);
+SoftwareSerial ESP_SERIAL_SI(ESP_RX_SI, ESP_TX_SI);
 SoftwareSerial ESP_SERIAL_SI2(ESP_RX, ESP_TX);
 
 void SerialInfo_Init()
 {
     #if defined(ESP8266)
         #if defined(ESP_HARDWARE_SERIAL)
-            Serial.begin(BAUDRATE_SERIALINFO)
+            Serial.begin(BAUDRATE_SERIALINFO);
         #else
             ESP_SERIAL_SI.begin(BAUDRATE_SERIALINFO);
         #endif // ESP_HARDWARE_SERIAL

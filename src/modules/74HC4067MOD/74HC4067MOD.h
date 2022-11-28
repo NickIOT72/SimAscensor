@@ -1,6 +1,7 @@
 #ifndef _74HC4067MOD_H
 #define _74HC4067MOD_H
 
+#include <Arduino.h>
 #include "../ModBackend.h"
 
 #define POS_INIT_PLACA 24
