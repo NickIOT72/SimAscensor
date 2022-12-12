@@ -18,6 +18,7 @@ void JsonMod_SerialInit();
 
 void JsonMod_FilterCharArray(String NewJsonInit, char* variableStore[], char* titleDta[], uint8_t elements );
 void JsonMod_FilterChar(String NewJsonInit, char* variableStore, char* titleDta[], uint8_t elements);
+void JsonMod_FilterCharArray(String NewJsonInit, char *variableStore, uint8_t n_size, char *titleDta[], uint8_t elements);
 void JsonMod_FilterInt(String NewJsonInit, int* valor, char* titleDta[], uint8_t elements);
 
 void JsonMod_FilterIntArray(String NewJsonInit, uint8_t* variableStore, char* titleDta[], uint8_t elements );

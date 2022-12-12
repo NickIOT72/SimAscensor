@@ -88,9 +88,8 @@ void ActualizarModulos(String StrJSONObject)
   char TIPO_CONTEO_C[20];
   char *titlePart[1] = { "TIPO_CONTEO" };
   JsonMod_FilterChar( StrJSONObject, TIPO_CONTEO_C , titlePart, 1 );
- 
   String TIPO_CONTEO = String(TIPO_CONTEO_C);
-
+  ESP_SERIAL_ASC.println("TIPO_CONTEO: " + TIPO_CONTEO);
   int TOTAL_PISOS;
   char *titlePart2[1] = { "TOTAL_PISOS" };
   JsonMod_FilterInt( StrJSONObject, &TOTAL_PISOS, titlePart2, 1 );
@@ -122,9 +121,9 @@ void ActualizarModulos(String StrJSONObject)
     
     
     char *titlePart4[3] = { "ARCH",Modff[i], "PINNAME" };
-    char *PINNAME[8];
-    JsonMod_FilterCharArray( StrJSONObject,  PINNAME, titlePart4, 3 );
-    ESP_SERIAL_ASC.println(F("ARCH MB1 PINNAME: "));
+    char PINNAME[8][10];
+    JsonMod_FilterCharArray( StrJSONObject,  &PINNAME[0][0], 10, titlePart4, 3 );
+    //ESP_SERIAL_ASC.println("ARCH" +  String(Modff[i]) +"PINNAME: ");
     //for (size_t i = 0; i < 8; i++)
     //{
     //  ESP_SERIAL_ASC.println(PINNAME[i]);
@@ -133,7 +132,7 @@ void ActualizarModulos(String StrJSONObject)
     char *titlePart5[3] = { "ARCH", Modff[i], "VAL" };
     uint8_t Values[8];
     JsonMod_FilterIntArray( StrJSONObject,  Values, titlePart5, 3 );
-    //ESP_SERIAL_ASC.println(F("ARCH MB1 PINNAME: "));
+    //ESP_SERIAL_ASC.println("ARCH" +  String(Modff[i]) +"PINNAME: ");
     //for (size_t i = 0; i < 8; i++)
     //{
     //  ESP_SERIAL_ASC.println(Values[i]);
@@ -143,7 +142,7 @@ void ActualizarModulos(String StrJSONObject)
     {
       char* pinameStr = PINNAME[j] ;
       //strcpy( pinameStr, PINNAME[j] );
-      ESP_SERIAL_ASC.println("pinameStr:" + String(pinameStr)  );
+      //ESP_SERIAL_ASC.println("pinameStr:" + String(pinameStr)  );
       if (strcmp(pinameStr , "" ) != 0)
       {
         for (uint8_t k = 0; k < TOTAL_PINS_BOARD_CONFIG ; k++)
@@ -153,7 +152,7 @@ void ActualizarModulos(String StrJSONObject)
             &&  String(CongfPinsStr[k]) != "PATIN" /*strcmp( CongfPinsStr[k] ,pinameStr ) == 0*/ )
           {
             uint8_t pinameVal = Values[j];
-            ESP_SERIAL_ASC.println("pinameVal:" + String(pinameVal)  );
+            //ESP_SERIAL_ASC.println("pinameVal:" + String(pinameVal)  );
             uint8_t PosicionEnPlaca = counterPos;
             struct data_ModBackend prov_data_mod;
             
@@ -210,15 +209,15 @@ void ActualizarModulos(String StrJSONObject)
             //ESP_SERIAL_ASC.print( k);
             //ESP_SERIAL_ASC.print( F(" , "));
             //ESP_SERIAL_ASC.print( F("PosicionPlaca: "));
-            //ESP_SERIAL_ASC.print(String( prov_data_mod.PosicionPlaca ));
+            //ESP_SERIAL_ASC.print(String( prov_data_mod.posPin ));
             //ESP_SERIAL_ASC.print(F(" , NombrePin: "));
-            //ESP_SERIAL_ASC.print( prov_data_mod.nombrePin );
-            //String deviceName = ( prov_data_mod.ModuloDevice == RELE595_MOD)?"595":( prov_data_mod.ModuloDevice == MUXINP_MOD)?"MUCINP":"MUXBID";
+            //ESP_SERIAL_ASC.print( pinameStr   );
+            //String deviceName = ( prov_data_mod.device == dev595 )?"595":"MUXBID";
             //ESP_SERIAL_ASC.print( F("Device:") );
             //ESP_SERIAL_ASC.print( deviceName );
             //ESP_SERIAL_ASC.print(F(", Pos:") );
-            //ESP_SERIAL_ASC.print(String(  prov_data_mod.PosicionPlaca) );
-            //deviceName = ( prov_data_mod.EstadoPin )?"ON":"OFF";
+            //ESP_SERIAL_ASC.print(String(  prov_data_mod.posPin) );
+            //deviceName = ( prov_data_mod.estadoPin )?"ON":"OFF";
             //ESP_SERIAL_ASC.print(F(", Estado:"));
             //ESP_SERIAL_ASC.println( deviceName  );
 
@@ -235,6 +234,8 @@ void ActualizarModulos(String StrJSONObject)
   }
   Backend_ResetModules();
   // PCF_Configuration( data_mod_PCF , countPCF );
+  Seguridades_ApagarSM();
+  delay(100);
   Banderas_Init(data_mod_Band, 4, modoConteoBandera);
   Seguridades_Init(data_mod_Seguridades, 4);
   Alertas_Init(data_mod_Alertas, 8);

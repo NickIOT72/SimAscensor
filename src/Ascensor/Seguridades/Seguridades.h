@@ -13,7 +13,27 @@ enum bitOrder_Seguridades {
     bitSM
 };
 
-enum puertaEstado { entrePuerta , CierreEsperandoSPC, CierreEsperandoSA, cerradoPuerta , abiertaPuerta, FallaFPA_SA, FALLA_FPA_SPC, FALLA_FPA_SPC_SA };
+/*enum puertaEstado { abiertaPuerta , 
+FALLA_FPA_SPC, 
+FALLA_FPA_SPC_SA, 
+FallaFPA_SA, 
+entrePuerta, 
+CierreEsperandoSPC, 
+CierreEsperandoSA, 
+cerradoPuerta };
+*/
+
+
+enum puertaEstado { 
+cerradoPuerta ,
+CierreEsperandoSA,
+CierreEsperandoSPC, 
+entrePuerta, 
+FallaFPA_SA, 
+FALLA_FPA_SPC_SA, 
+FALLA_FPA_SPC, 
+abiertaPuerta
+};
 
 void Seguridades_Init(  const struct data_ModBackend *confg, uint8_t elements);
 

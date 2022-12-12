@@ -151,7 +151,7 @@ void IncrementarBandera(int *PisoActual, int *TotalPisos)
       else{
         if (  contadorSecuenciaPiso < CANT_POS_ASC -1) contadorSecuenciaPiso++;
       }
-      if( pisodelay )delay(5000);
+      //if( pisodelay )delay(5000);
       
       
     }
@@ -210,7 +210,7 @@ void DecrementarBandera(int *PisoActual)
       else{
         if (  contadorSecuenciaPiso > 0 ) contadorSecuenciaPiso--;
       }
-      if( pisodelay )delay(5000);
+      //if( pisodelay )delay(5000);
       
       
     }

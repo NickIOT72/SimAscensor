@@ -35,6 +35,7 @@ void Puertas_Init( const struct data_ModBackend *confg, uint8_t elements)
         data_mod_Puertas[i].estadoPin = confg[i].estadoPin;
     }
     EstadoPuerta = Seguridades_leerEstadoPuerta();
+    if( EstadoPuerta == abiertaPuerta ) contadorPuertas = limiteConteoPuertas;
 }
 
 uint16_t Puertas_leerEstadoPuerta()

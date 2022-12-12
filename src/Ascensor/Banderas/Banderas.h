@@ -26,7 +26,7 @@ enum limitesConteoPADPAS {
     piso_base_y = 2,
     piso_ascensor_x,
     piso_ascensor_cambio = 7,
-    piso_ascensor_y = 8,
+    piso_ascensor_y = 10,
     piso_final_x = 12,
     piso_final_y = 14
 };

@@ -34,7 +34,7 @@ void MOD74HC595_Reset( )
 void MOD74HC595_Init( )
 {
     ESP_SERIAL_595.begin(9600);
-    sr.setAllLow();
+    sr.setAllHigh();
 }
 
 uint32_t MOD74HC595_Configuration()
@@ -51,7 +51,7 @@ void MOD74HC595_Configuration( const struct data_ModBackend *config, uint8_t ele
 {
     for( int i = 0; i < elements; i++ ){
         uint8_t posPlaca = config[i].posPin;
-        sr.setNoUpdate(posPlaca, config[i].estadoPin);
+        sr.setNoUpdate(posPlaca, config[i].estadoPin > 0);
     }
     sr.updateRegisters();
 }
@@ -59,7 +59,7 @@ void MOD74HC595_Configuration( const struct data_ModBackend *config, uint8_t ele
 void MOD74HC595_setOutput(const struct data_ModBackend *config, uint8_t elements )
 {
     for( uint8_t i = 0; i < elements; i++ ){
-        sr.setNoUpdate((uint8_t)config[i].posPin , (uint8_t)config[i].estadoPin);
+        sr.setNoUpdate((uint8_t)config[i].posPin , config[i].estadoPin> 0);
     }
     sr.updateRegisters();
 }

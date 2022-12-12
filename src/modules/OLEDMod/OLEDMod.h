@@ -15,7 +15,7 @@
 #if defined(ESP8266)
     #define ADDRES_OLED 0X3C
 #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
-    #define ADDRES_OLED 0X3D
+    #define ADDRES_OLED 0X3C
 #endif
 
 #define WIRE Wire

@@ -84,11 +84,11 @@ void setup()
   strConfInit += "\"ARCH\": {";
   strConfInit += "\"MSA\": {";
   strConfInit += "\"PINNAME\": [\"EXD\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"SM\"],";
-  strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 1]";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 1, 1, 1, 0]";
   strConfInit += "},";
   strConfInit += "\"MS2\": {";
   strConfInit += "\"PINNAME\": [\"BOMB\", \"EMER\", \"Q1\", \"Q2\", \"FOTO\", \"MANT\", \"PTC\", \"AUTAR\"],";
-  strConfInit += "\"VAL\": [0, 0, 0, 0, 0,0, 0, 0]";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 0,0, 0, 1]";
   strConfInit += "},";
   strConfInit += "\"MS1\": {";
   strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
@@ -122,14 +122,15 @@ void setup()
   ESP_SERIAL.println("Init Asc:");
   Ascensor_Init(strConfInit);
   Banderas_resetContadorBanderas();
-  delay(3000);
-
+  //delay(3000);
+  Seguridades_ActivarSM();
   ESP_SERIAL.println("Starting firmware");
 }
 
 void loop()
 {
   // put your main code here, to run repeatedly:
+  static bool init =false;
 
   #if defined(ESP8266)
     static unsigned long tstart = millis();
@@ -145,7 +146,7 @@ void loop()
   static bool PuertaCerradaEsperandoStop = false;
   static bool PuertaStop = false;
   bool CabinaEnMovimiento = false;
-
+  if( !init ){ ESP_SERIAL.print(F("lecturaPuerta:")); ESP_SERIAL.println(lecturaPuerta,BIN); ESP_SERIAL.print(F("lecturaSeg:")); ESP_SERIAL.println(lecturaSeg,BIN); init = true; }
   switch (lecturaPuerta)
   {
   case puertaAbriendo:
