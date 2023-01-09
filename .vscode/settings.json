@@ -10,5 +10,6 @@
         "string": "cpp",
         "string_view": "cpp",
         "ranges": "cpp"
-    }
+    },
+    "nrf-connect.topdir": "${nrf-connect.sdk:2.0.0}"
 }

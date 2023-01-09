@@ -104,7 +104,7 @@ void setup()
   strConfInit += "}";
   strConfInit += "},";
   strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
-  strConfInit += "\"TOTAL_PISOS\": 8";
+  strConfInit += "\"TOTAL_PISOS\": 14";
   strConfInit += "}";
   #ifdef ARD_MOD_SER
   

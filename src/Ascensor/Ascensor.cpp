@@ -12,7 +12,7 @@
 
 SoftwareSerial ESP_SERIAL_ASC(ESP_RX, ESP_TX);
 
-int TotalPisos = 8;
+int TotalPisos = 14;
 int pisoActual = 1;
 
 uint8_t Ascensor_VerificarModuloSegunPosicion(uint8_t PosicionEnPlaca)
