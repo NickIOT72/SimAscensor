@@ -28,10 +28,6 @@
 #endif
 
 #include <Wire.h>
-/**
- * Init Software Serial
-*/
-SoftwareSerial ESP_SERIAL(ESP_RX, ESP_TX);
 
 /**
  * There are 2 modes for the simulator
@@ -239,7 +235,7 @@ void loop()
 #else
 void setup()
 {
-  ESP_SERIAL.begin(9600);
+  SoftSerial_IniModules();
   OLED_Init();
   OLED_MensajeInicial();
 

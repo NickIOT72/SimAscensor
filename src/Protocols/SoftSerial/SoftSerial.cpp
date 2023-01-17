@@ -12,7 +12,7 @@ bool ALLOW_GSM_SERIAL = false;
  * 
  */
 
-#if defined(__AVR_ATmega644A__) 
+#if defined(__AVR_ATmega644A__) || defined(ESP8266)
 
 HardwareSerial & DEGUB_SERIAL = Serial1;
 SoftwareSerial BLE_SERIAL(BLE_RX, BLE_TX);
