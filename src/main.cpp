@@ -3,16 +3,20 @@
 #include <ArduinoJson.h>
 #include "Ascensor/Ascensor.h"
 #include "modules/JsonMod/JsonMod.h"
-#include <modules/Mod74hc595/Mod74hc595.h>
+
 #include <modules/PCF8575/PCF8575Mod.h>
 #include <modules/74HC4067MOD/74HC4067MOD.h>
 #include <Ascensor/Puertas/Puertas.h>
 #include "Ascensor/Seguridades/Seguridades.h"
 #include "Ascensor/Banderas/Banderas.h"
+
+
+/**
+ * Colocar Nuevos Modulos
+*/
 #include "Protocols/SoftSerial/SoftSerial.h"
-#include "modules/OLEDMod/OLEDMod.h"
-
-
+#include "FirmwareModules/OLEDMod/OLEDMod.h"
+#include "FirmwareModules/Mod74hc595/Mod74hc595.h"
 
 /**
  * If the moudle used is the ESP8266 
@@ -36,17 +40,25 @@
  * 
 */
 
-#define ESP_MOD_WIFI
+// #define ESP_MOD_WIFI
 // #define ARD_MOD_SER
 
+
+/**
+ * If we are using an Dev board with not WiFiMidules
+ * This is the set where: 
+ * 1. Init the Software Serial Module
+ * 2. Start the OLED Module
+*/
 #ifndef ESP_MOD_WIFI
 void setup()
 {
-  ESP_SERIAL.begin(9600);
-  // OLED_Init();
-  // OLED_MensajeInicial();
-  MOD74HC595_Init();
-  MUX74HC4067_Init();
+  SoftSerial_IniModules();
+  OLED_Init();
+  OLED_TestFile();
+  MOD74HC595_InitReles();
+  
+
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
