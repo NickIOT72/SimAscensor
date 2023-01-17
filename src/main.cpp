@@ -1,5 +1,5 @@
 #include <Arduino.h>
-//#include "../.pio/libdeps/Arduino Mega/avr-debugger/avr8-stub/avr8-stub.h"
+// #include "../.pio/libdeps/Arduino Mega/avr-debugger/avr8-stub/avr8-stub.h"
 #include <ArduinoJson.h>
 #include "Ascensor/Ascensor.h"
 #include "modules/JsonMod/JsonMod.h"
@@ -11,66 +11,44 @@
 #include "Ascensor/Banderas/Banderas.h"
 #include "Protocols/SoftSerial/SoftSerial.h"
 #include "modules/OLEDMod/OLEDMod.h"
+
+
+
+/**
+ * If the moudle used is the ESP8266 
+ * add the libraries used to init Web server
+ * Add the API for SPIFFSS for Elevator
+ * Add API for SPIFFSS
+*/
 #if defined(ESP8266)
 #include "modules/WebServer/WebServer.h"
 #include "Ascensor/AscWebServer/AscWebServer.h"
 #include "Ascensor/AscSPIFFS/AscSPIFFS.h"
 #include "Protocols/SPIFFS/SPIFFS.h"
 #endif
-#include <Wire.h>
 
+#include <Wire.h>
+/**
+ * Init Software Serial
+*/
 SoftwareSerial ESP_SERIAL(ESP_RX, ESP_TX);
 
-//#define ESP_MOD_WIFI
-#define ARD_MOD_SER
+/**
+ * There are 2 modes for the simulator
+ * 1) ESP_MOD_WIFI => used to set the board as WiFi Module and Master Controller
+ * The board will send the notifications to and  interface where the client will be connectted
+ * 
+*/
 
-void getI2Caddress()
-{
-  Wire.begin();
-  byte error, address;
-  int nDevices;
-
-  ESP_SERIAL.println("Scanning...");
-
-  nDevices = 0;
-  for (address = 1; address < 127; address++)
-  {
-    // The i2c_scanner uses the return value of
-    // the Write.endTransmisstion to see if
-    // a device did acknowledge to the address.
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0)
-    {
-      ESP_SERIAL.print("I2C device found at address 0x");
-      if (address < 16)
-        ESP_SERIAL.print("0");
-      ESP_SERIAL.print(address, HEX);
-      ESP_SERIAL.println("  !");
-
-      nDevices++;
-    }
-    else if (error == 4)
-    {
-      ESP_SERIAL.print("Unknown error at address 0x");
-      if (address < 16)
-        ESP_SERIAL.print("0");
-      ESP_SERIAL.println(address, HEX);
-    }
-  }
-  if (nDevices == 0)
-    ESP_SERIAL.println("No I2C devices found\n");
-  else
-    ESP_SERIAL.println("done\n");
-}
+#define ESP_MOD_WIFI
+// #define ARD_MOD_SER
 
 #ifndef ESP_MOD_WIFI
 void setup()
 {
   ESP_SERIAL.begin(9600);
-  //OLED_Init();
-  //OLED_MensajeInicial();
+  // OLED_Init();
+  // OLED_MensajeInicial();
   MOD74HC595_Init();
   MUX74HC4067_Init();
 
@@ -106,10 +84,9 @@ void setup()
   strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
   strConfInit += "\"TOTAL_PISOS\": 14";
   strConfInit += "}";
-  #ifdef ARD_MOD_SER
-  
-  #endif
-  
+#ifdef ARD_MOD_SER
+
+#endif
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
@@ -118,11 +95,11 @@ void setup()
   SPIFFS_printFiles();
   AscensorWebServer_InitServer();
 #endif
-  //ESP_SERIAL.println("str:" + strConfInit);
+  // ESP_SERIAL.println("str:" + strConfInit);
   ESP_SERIAL.println("Init Asc:");
   Ascensor_Init(strConfInit);
   Banderas_resetContadorBanderas();
-  //delay(3000);
+  // delay(3000);
   Seguridades_ActivarSM();
   ESP_SERIAL.println("Starting firmware");
 }
@@ -130,14 +107,21 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
-  static bool init =false;
+  static bool init = false;
 
-  #if defined(ESP8266)
-    static unsigned long tstart = millis();
-    static unsigned long tstartWiFi = millis();
-    bool WifiDesconectado = false;
-    if (!WifiDesconectado) AscWebServer_handleClient();
-  #endif
+/**
+ * If the module used is ESP8266:
+ * the Module will verify if connectted or not
+ * If not, will open the WiFi Manager
+ * if not will continue with the rest of the code
+*/
+#if defined(ESP8266)
+  static unsigned long tstart = millis();
+  static unsigned long tstartWiFi = millis();
+  bool WifiDesconectado = false;
+  if (!WifiDesconectado)
+    AscWebServer_handleClient();/* Function to connect to wifi */
+#endif
 
   uint16_t lecturaPuerta = Puertas_leerEstadoPuerta();
   uint16_t lecturaSeg = Seguridades_leerEstadoPuerta();
@@ -146,7 +130,14 @@ void loop()
   static bool PuertaCerradaEsperandoStop = false;
   static bool PuertaStop = false;
   bool CabinaEnMovimiento = false;
-  if( !init ){ ESP_SERIAL.print(F("lecturaPuerta:")); ESP_SERIAL.println(lecturaPuerta,BIN); ESP_SERIAL.print(F("lecturaSeg:")); ESP_SERIAL.println(lecturaSeg,BIN); init = true; }
+  if (!init)
+  {
+    ESP_SERIAL.print(F("lecturaPuerta:"));
+    ESP_SERIAL.println(lecturaPuerta, BIN);
+    ESP_SERIAL.print(F("lecturaSeg:"));
+    ESP_SERIAL.println(lecturaSeg, BIN);
+    init = true;
+  }
   switch (lecturaPuerta)
   {
   case puertaAbriendo:
@@ -252,50 +243,50 @@ void setup()
   OLED_Init();
   OLED_MensajeInicial();
 
-  #if defined(ESP8266)
-    WebServer_InitWiFiManager(AscensorWebServer_InitServer);
+#if defined(ESP8266)
+  WebServer_InitWiFiManager(AscensorWebServer_InitServer);
 
-    String strConfInit = "{";
-    strConfInit += "\"NombrePlaca\": \"\",";
-    strConfInit += "\"Modelo\": \"V1\",";
-    strConfInit += "\"ARCH\": {";
-    strConfInit += "\"MSA\": {";
-    strConfInit += "\"PINNAME\": [\"EXD\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"SM\"],";
-    strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 1]";
-    strConfInit += "},";
-    strConfInit += "\"MS2\": {";
-    strConfInit += "\"PINNAME\": [\"BOMB\", \"EMER\", \"Q1\", \"Q2\", \"FOTO\", \"MANT\", \"PTC\", \"AUTAR\"],";
-    strConfInit += "\"VAL\": [0, 0, 0, 0, 0,0, 0, 0]";
-    strConfInit += "},";
-    strConfInit += "\"MS1\": {";
-    strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
-    strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0,0, 0]";
-    strConfInit += "},";
-    strConfInit += "\"ME1\": {";
-    strConfInit += "\"PINNAME\": [\"RSUB\", \"RBAJ\", \"RAV\", \"RBV\", \"RABR\", \"RCER\", \"VENT\", \"PATIN\"],";
-    strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
-    strConfInit += "},";
-    strConfInit += "\"MEA\": {";
-    strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
-    strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
-    strConfInit += "}";
-    strConfInit += "},";
-    strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
-    strConfInit += "\"TOTAL_PISOS\": 8";
-    strConfInit += "}";
+  String strConfInit = "{";
+  strConfInit += "\"NombrePlaca\": \"\",";
+  strConfInit += "\"Modelo\": \"V1\",";
+  strConfInit += "\"ARCH\": {";
+  strConfInit += "\"MSA\": {";
+  strConfInit += "\"PINNAME\": [\"EXD\", \"PAD_PN\", \"PAS\", \"EXS\", \"FPA\", \"SPC\", \"SA\", \"SM\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0,0, 1, 1, 1]";
+  strConfInit += "},";
+  strConfInit += "\"MS2\": {";
+  strConfInit += "\"PINNAME\": [\"BOMB\", \"EMER\", \"Q1\", \"Q2\", \"FOTO\", \"MANT\", \"PTC\", \"AUTAR\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 0,0, 0, 0]";
+  strConfInit += "},";
+  strConfInit += "\"MS1\": {";
+  strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0,0, 0]";
+  strConfInit += "},";
+  strConfInit += "\"ME1\": {";
+  strConfInit += "\"PINNAME\": [\"RSUB\", \"RBAJ\", \"RAV\", \"RBV\", \"RABR\", \"RCER\", \"VENT\", \"PATIN\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
+  strConfInit += "},";
+  strConfInit += "\"MEA\": {";
+  strConfInit += "\"PINNAME\": [\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],";
+  strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
+  strConfInit += "}";
+  strConfInit += "},";
+  strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
+  strConfInit += "\"TOTAL_PISOS\": 8";
+  strConfInit += "}";
 
-    VerificarArchivos(strConfInit, "ConfgFile.json");
-    strConfInit = SPIFFS_ReadFile("ConfgFile.json");
-    SPIFFS_printFiles();
-    AscensorWebServer_InitServer();
+  VerificarArchivos(strConfInit, "ConfgFile.json");
+  strConfInit = SPIFFS_ReadFile("ConfgFile.json");
+  SPIFFS_printFiles();
+  AscensorWebServer_InitServer();
 
-  #elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
-    while (true)
-    {
-      delay(1);
-    }
-    
-  #endif
+#elif defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__)
+  while (true)
+  {
+    delay(1);
+  }
+
+#endif
 
   ESP_SERIAL.println("Init Mdo");
   delay(3000);
@@ -308,8 +299,9 @@ void loop()
   static unsigned long tstartWiFi = millis();
   bool WifiDesconectado = false;
 
-  if (!WifiDesconectado)AscWebServer_handleClient();
-  
+  if (!WifiDesconectado)
+    AscWebServer_handleClient();
+
   if (millis() - tstartWiFi >= 10000 && !WifiDesconectado)
   {
     if (WiFi.status() != WL_CONNECTED && !WifiDesconectado)
