@@ -45,12 +45,12 @@ uint8_t Ascensor_VerificarPosicionInicialDeModulos(uint8_t ModuloDev)
  *
  *
  */
-
+String StrJSONObject2 = "";
 void Ascensor_Init(String StrJSONObject)
 {
-  JsonMod_SerialInit();
-  //SoftSerial_Degub_println("STR 2:" + StrJSONObject );
-  ActualizarModulos(StrJSONObject);
+  StrJSONObject2 = StrJSONObject;
+  SoftSerial_Degub_println("STR 2:" + StrJSONObject2 );
+  ActualizarModulos();
 }
 
 /**
@@ -72,7 +72,7 @@ void Ascensor_Init(String StrJSONObject)
  *
  */
 
-void ActualizarModulos(String StrJSONObject)
+void ActualizarModulos()
 {
   //DynamicJsonDocument JSONObject(JSON_Buffer);
   ////SoftSerial_Degub_println("STR 3:" + StrJSONObject );
@@ -94,6 +94,7 @@ void ActualizarModulos(String StrJSONObject)
     posAl = 16,
     posPuertas = 18
   };
+  String StrJSONObject = StrJSONObject2;
   char TIPO_CONTEO_C[20];
   char *titlePart[1] = { "TIPO_CONTEO" };
   JsonMod_FilterChar( StrJSONObject, TIPO_CONTEO_C , titlePart, 1 );
@@ -252,6 +253,7 @@ void ActualizarModulos(String StrJSONObject)
   Alertas_Init(data_mod_Alertas, 8);
   Puertas_Init(data_mod_Puertas, 2);
   Cabinas_Init(data_mod_Cabinas, 4);
+  StrJSONObject2 = "";
 }
 
 bool VerificarCabina()

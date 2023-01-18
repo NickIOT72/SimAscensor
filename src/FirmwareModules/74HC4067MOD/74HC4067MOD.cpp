@@ -25,11 +25,11 @@ void MUX74HC4067_Init()
 void MUX74HC4067_test()
 {
   SoftSerial_Degub_println(F("Test MUX74HC4067 "));
-  delay(5000);
+  delay(100);
   uint16_t data;
   uint16_t arrayPinEnable[NUM_4067_MODINP] = {MUX_PIN_ENA};
   Mux arrayMux[NUM_4067_MODINP] = {muxmod};
-  for (uint8_t j = 0; j < NUM_4067_MODINP; j = j + 3)
+  for (uint8_t j = 0; j < NUM_4067_MODINP; j = j + 1)
   {
     digitalWrite(arrayPinEnable[j], LOW);
     for (byte i = 0; i < arrayMux[j].channelCount(); i++)
@@ -41,8 +41,8 @@ void MUX74HC4067_test()
       SoftSerial_Degub_print(F(" , Push button at channel "));
       SoftSerial_Degub_print(j * 16 + i);
       SoftSerial_Degub_print(F(" is "));
-      SoftSerial_Degub_println(data > 500 ? "pressed" : "not pressed");
-      delay(5000);
+      SoftSerial_Degub_println(data > 0 ? "pressed" : "not pressed");
+      delay(500);
     }
     digitalWrite(arrayPinEnable[j], HIGH);
   }

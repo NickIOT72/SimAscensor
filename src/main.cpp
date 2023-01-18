@@ -54,9 +54,11 @@ void setup()
   /** Init All Modules */
   SoftSerial_IniModules();
   OLED_Init();
-  OLED_TestFile();
-  MOD74HC595_Init();
-  MUX74HC4067_Init();
+  //OLED_TestFile();
+  //MOD74HC595_Init();
+  //MOD74HC595_test();
+  //MUX74HC4067_Init();
+  //MUX74HC4067_test();
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);

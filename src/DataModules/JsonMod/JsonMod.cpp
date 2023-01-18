@@ -396,6 +396,7 @@ void JsonMod_FilterChar(String NewJsonInit, char *variableStore, char *titleDta[
 
     // Deserialize the document
     deserializeJson(doc, NewJsonInit, DeserializationOption::Filter(filter));
+    Serial1.println(doc.memoryUsage());
     // SoftSerial_Degub_println(doc.memoryUsage());  // 16 on AVR
     char *returnData;
 

@@ -15,4 +15,6 @@ void MOD74HC595_Reset( );
 void MOD74HC595_Init( );
 void MOD74HC595_setOutput(const struct data_PinBackend *config, uint8_t elements  );
 void MOD74HC595_getInput(struct data_PinBackend *config, uint8_t elements  );
+void MOD74HC595_test();
+
 #endif // !1

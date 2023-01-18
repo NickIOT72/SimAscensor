@@ -104,8 +104,8 @@
     #define NUM_4067_MODINP 1
     
     /* MUX INP 1  (SEGURIDADES, BANDERAS Y ALERTAS)(74HC4067) */
-    #define MUX_PIN_ENA 29
-    #define MUX_PIN_OUT A3
+    #define MUX_PIN_ENA 26
+    #define MUX_PIN_OUT 27
     
     /***
      * Module RELES (74HC595 )
@@ -258,7 +258,7 @@
  * 2) Se debe identificar el tipo de modulo de cada MUX, qu puede variar de acuerdo al tipo de entrada
  */
 
-#define NUM_DEVICES 3
+#define NUM_DEVICES 2
 enum tipeDevices
 {
     MUXBID_MOD,
@@ -275,12 +275,6 @@ enum positionDevices
 };
 
 #endif
-
-#define TOTAL_PINS_BOARD_CONFIG 40
-#define TOTAL_IO_MODULES_BOARD_CONFIG 10
-#define NUM_PIN_MODULO 8
-
-#define NUM_MAX_PISOS 24
 
 void Board_InitModules();
 

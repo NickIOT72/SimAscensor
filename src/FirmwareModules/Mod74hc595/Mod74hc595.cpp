@@ -14,20 +14,24 @@ void MOD74HC595_Reset( )
 void MOD74HC595_Init( )
 {
     sr_595.setAllLow();
+}
 
-    while(true)
+void MOD74HC595_test()
+{
+    uint8_t tt = 0;
+    while(tt < 2)
     {
         for( int i = 0 ; i < NUM_595_MOD*8; i++ )
         {
             SoftSerial_Degub_println("Rele pin" + String(i) + ": HIGH");
             sr_595.set(i,HIGH);
-            delay(5000);
+            delay(100);
             SoftSerial_Degub_println("Rele pin" + String(i) + ": LOW");
             sr_595.set(i,LOW);
-            delay(5000);
+            delay(100);
         }
+        tt++;
     }
-
 }
 
 void MOD74HC595_setOutput(const struct data_PinBackend *config, uint8_t elements )
