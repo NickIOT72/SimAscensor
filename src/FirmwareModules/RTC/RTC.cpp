@@ -1,5 +1,5 @@
 #include "RTC.h"
-#include "../SoftSerial/SoftSerial.h"
+#include "../../Protocols/SoftSerial/SoftSerial.h"
 #include <RTClib.h>
 #include <EEPROM.h>
 

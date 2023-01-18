@@ -100,6 +100,16 @@ void SoftSerial_Degub_print(long num, int type = DEC)
     DEGUB_SERIAL.println(num, type);
 }
 
+void SoftSerial_Degub_print(uint8_t num, int type)
+{
+    DEGUB_SERIAL.print(num, type);
+}
+
+void SoftSerial_Degub_print(uint16_t num, int type)
+{
+    DEGUB_SERIAL.print(num, type);
+}
+
 void SoftSerial_Degub_println(String Str)
 {
     DEGUB_SERIAL.println(Str);
@@ -115,6 +125,16 @@ void SoftSerial_Degub_println(int num, int type)
     DEGUB_SERIAL.println(num, type);
 }
 
+void SoftSerial_Degub_println(uint8_t num, int type)
+{
+    DEGUB_SERIAL.println(num, type);
+}
+
+void SoftSerial_Degub_println(uint16_t num, int type)
+{
+    DEGUB_SERIAL.println(num, type);
+}
+
 void SoftSerial_Degub_println(unsigned long num, int type)
 {
     DEGUB_SERIAL.println(num, type);
@@ -124,6 +144,8 @@ void SoftSerial_Degub_println(long num, int type)
 {
     DEGUB_SERIAL.println(num, type);
 }
+
+
 
 void SoftSerial_Degub_println(float num)
 {

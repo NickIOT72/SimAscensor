@@ -104,17 +104,17 @@
     #define NUM_4067_MODINP 1
     
     /* MUX INP 1  (SEGURIDADES, BANDERAS Y ALERTAS)(74HC4067) */
-    #define MUX_PIN_ENA4 29
-    #define MUX_PIN_OUT4 A3
+    #define MUX_PIN_ENA 29
+    #define MUX_PIN_OUT A3
     
     /***
      * Module RELES (74HC595 )
      */
-    #define NUM_595_MODRELES 3
+    #define NUM_595_MOD 3
     /* Module 74HC595 */
-    #define MUX_DATAPIN_RELE 39
-    #define MUX_CLKPIN_RELE 38
-    #define MUX_LATCHPIN_RELE 37
+    #define MUX_DATAPIN 39
+    #define MUX_CLKPIN 38
+    #define MUX_LATCHPIN 37
     
     /**
      * Module Software Serial

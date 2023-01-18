@@ -4,38 +4,29 @@
 #include "../../Protocols/SoftSerial/SoftSerial.h"
 #include <ShiftRegister74HC595.h>
 
-ShiftRegister74HC595<NUM_595_MODRELES> sr_reles(MUX_DATAPIN_RELE, MUX_CLKPIN_RELE, MUX_LATCHPIN_RELE);
+ShiftRegister74HC595<NUM_595_MOD> sr_595(MUX_DATAPIN, MUX_CLKPIN, MUX_LATCHPIN);
 
-void MOD74HC595_ResetReles( )
+void MOD74HC595_Reset( )
 {
-    sr_reles.setAllLow();
+    sr_595.setAllLow();
 }
 
-void MOD74HC595_InitReles( )
+void MOD74HC595_Init( )
 {
-    sr_reles.setAllLow();
+    sr_595.setAllLow();
 
-    //while(true)
-    //{
-    //    for( int i = 0 ; i < 16; i++ )
-    //    {
-    //        SoftSerial_Degub_println("Rele pin" + String(i) + ": HIGH");
-    //        sr_reles.set(i,HIGH);
-    //        delay(5000);
-    //        SoftSerial_Degub_println("Rele pin" + String(i) + ": LOW");
-    //        sr_reles.set(i,LOW);
-    //        delay(5000);
-    //    }
-    //    for( int i = 0 ; i < 16; i++ )
-    //    {
-    //        SoftSerial_Degub_println("Llamadas pin" + String(i) + ": HIGH");
-    //        sr_llamadas.set(i,HIGH);
-    //        delay(5000);
-    //        SoftSerial_Degub_println("Llamadas pin" + String(i) + ": LOW");
-    //        sr_llamadas.set(i,LOW);
-    //        delay(5000);
-    //    }
-    //}
+    while(true)
+    {
+        for( int i = 0 ; i < NUM_595_MOD*8; i++ )
+        {
+            SoftSerial_Degub_println("Rele pin" + String(i) + ": HIGH");
+            sr_595.set(i,HIGH);
+            delay(5000);
+            SoftSerial_Degub_println("Rele pin" + String(i) + ": LOW");
+            sr_595.set(i,LOW);
+            delay(5000);
+        }
+    }
 
 }
 
@@ -43,25 +34,15 @@ void MOD74HC595_setOutput(const struct data_PinBackend *config, uint8_t elements
 {
     bool ReleConfg = false;
     for( uint8_t i = 0; i < elements; i++ ){
-        uint8_t posPlaca = config[i].PosicionPlaca;
-        uint8_t typeDevice = config[i].ModuloDevice;
-        if( typeDevice == RELE595_MOD )
-        {
-            ReleConfg = true;
-            sr_reles.setNoUpdate(posPlaca - RELE595_MOD_POS, config[i].EstadoPin?HIGH:LOW);
-        }
+        if(!ReleConfg)ReleConfg = true;
+        sr_595.setNoUpdate(config[i].PosModulo, config[i].EstadoPin?HIGH:LOW);
     }
-    if(ReleConfg)sr_reles.updateRegisters();
+    if(ReleConfg)sr_595.updateRegisters();
 }
 
 void MOD74HC595_getInput(struct data_PinBackend *config, uint8_t elements  )
 {
     for( uint8_t i = 0; i < elements; i++ ){
-        uint8_t posPlaca = config[i].PosicionPlaca;
-        uint8_t typeDevice = config[i].ModuloDevice;
-        if( typeDevice == RELE595_MOD )
-        {
-            config[i].EstadoPin = sr_reles.get(posPlaca - RELE595_MOD_POS);
-        }
+        config[i].EstadoPin = sr_595.get(config[i].PosModulo);
     }
 }

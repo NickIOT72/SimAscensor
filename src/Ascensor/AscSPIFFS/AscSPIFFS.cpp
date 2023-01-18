@@ -1,9 +1,7 @@
 
 
-#include "../../modules/JsonMod/JsonMod.h"
+#include "../../DataModules/JsonMod/JsonMod.h"
 #include "../../Protocols/SoftSerial/SoftSerial.h"
-
-SoftwareSerial ESP_SERIAL_ASCSPIFFS(ESP_RX, ESP_TX);
 
 #if defined(ESP8266)
 #include "AscSPIFFS.h"

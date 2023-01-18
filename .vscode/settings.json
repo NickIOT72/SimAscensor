@@ -1,6 +1,7 @@
 {
-    "nrf-connect.toolchain.path": "${nrf-connect.toolchain:2.0.0}",
+    "nrf-connect.toolchain.path": "${nrf-connect.toolchain:2.1.2}",
     "files.associations": {
+        "*.html": "cshtml",
         "*.c": "c",
         "pcf8575.h": "c",
         "modbackend.h": "c",
@@ -9,7 +10,9 @@
         "array": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "stdint-gcc.h": "c",
+        "inttypes.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.0.0}"
 }

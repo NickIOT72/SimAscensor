@@ -1,5 +1,5 @@
 #include "JsonMod.h"
-#include "../../FirmwareModules/SoftSerial/SoftSerial.h"
+#include "../../Protocols/SoftSerial/SoftSerial.h"
 #include "../../FirmwareModules/BoardArch.h"
 
 // SoftwareSerial DEGUB_SERIAL_JSONMOD(DEBUG_RX, DEBUG_TX);

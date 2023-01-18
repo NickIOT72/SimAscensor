@@ -2,11 +2,11 @@
 // #include "../.pio/libdeps/Arduino Mega/avr-debugger/avr8-stub/avr8-stub.h"
 #include <ArduinoJson.h>
 #include "Ascensor/Ascensor.h"
-#include "modules/JsonMod/JsonMod.h"
-
-#include <modules/PCF8575/PCF8575Mod.h>
-#include <modules/74HC4067MOD/74HC4067MOD.h>
-#include <Ascensor/Puertas/Puertas.h>
+#include "Protocols/SoftSerial/SoftSerial.h"
+#include "FirmwareModules/OLEDMod/OLEDMod.h"
+#include "FirmwareModules/Mod74hc595/Mod74hc595.h"
+#include "FirmwareModules/74HC4067MOD/74HC4067MOD.h"
+#include "Ascensor/Puertas/Puertas.h"
 #include "Ascensor/Seguridades/Seguridades.h"
 #include "Ascensor/Banderas/Banderas.h"
 
@@ -14,9 +14,7 @@
 /**
  * Colocar Nuevos Modulos
 */
-#include "Protocols/SoftSerial/SoftSerial.h"
-#include "FirmwareModules/OLEDMod/OLEDMod.h"
-#include "FirmwareModules/Mod74hc595/Mod74hc595.h"
+
 
 /**
  * If the moudle used is the ESP8266 
@@ -53,17 +51,19 @@
 #ifndef ESP_MOD_WIFI
 void setup()
 {
+  /** Init All Modules */
   SoftSerial_IniModules();
   OLED_Init();
   OLED_TestFile();
-  MOD74HC595_InitReles();
-  
-
+  MOD74HC595_Init();
+  MUX74HC4067_Init();
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
 #endif
-
+  /** As we are using Arduino Noard wtn o WiFI mODULE
+   * Let's create the JSON for our Baord Configuration in the flash
+   */
   String strConfInit = "{";
   strConfInit += "\"NombrePlaca\": \"Placa1\",";
   strConfInit += "\"Modelo\": \"V1\",";
@@ -93,30 +93,33 @@ void setup()
   strConfInit += "\"TOTAL_PISOS\": 14";
   strConfInit += "}";
 #ifdef ARD_MOD_SER
-
+  /** if we are connectted to wifi module
+   * Let's send a command inidcating the system is active.
+   */
 #endif
 
 #if defined(ESP8266)
+/** Let's connect the ESp to Internet */
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
   VerificarArchivos(strConfInit, CONFG_FILE);
   strConfInit = SPIFFS_ReadFile(CONFG_FILE);
   SPIFFS_printFiles();
   AscensorWebServer_InitServer();
 #endif
-  // ESP_SERIAL.println("str:" + strConfInit);
-  ESP_SERIAL.println("Init Asc:");
+  /** Now, will be configured the board and reset its parameters
+   * Simulating a initiation of elevator
+   */
+  SoftSerial_Degub_println("Init Asc:");
   Ascensor_Init(strConfInit);
   Banderas_resetContadorBanderas();
-  // delay(3000);
   Seguridades_ActivarSM();
-  ESP_SERIAL.println("Starting firmware");
+  SoftSerial_Degub_println("Starting firmware");
 }
 
 void loop()
 {
   // put your main code here, to run repeatedly:
-  static bool init = false;
-
+  static bool init = false;// used to verify parameters at the initiation
 /**
  * If the module used is ESP8266:
  * the Module will verify if connectted or not
@@ -130,20 +133,21 @@ void loop()
   if (!WifiDesconectado)
     AscWebServer_handleClient();/* Function to connect to wifi */
 #endif
-
+  /** Read Door and Securities and determinate the movement of the elevator*/
   uint16_t lecturaPuerta = Puertas_leerEstadoPuerta();
   uint16_t lecturaSeg = Seguridades_leerEstadoPuerta();
 
   static bool PuertaAbiertaEsperandoStop = false;
   static bool PuertaCerradaEsperandoStop = false;
   static bool PuertaStop = false;
+
   bool CabinaEnMovimiento = false;
   if (!init)
   {
-    ESP_SERIAL.print(F("lecturaPuerta:"));
-    ESP_SERIAL.println(lecturaPuerta, BIN);
-    ESP_SERIAL.print(F("lecturaSeg:"));
-    ESP_SERIAL.println(lecturaSeg, BIN);
+    SoftSerial_Degub_print(F("lecturaPuerta:"));
+    SoftSerial_Degub_println(lecturaPuerta, BIN);
+    SoftSerial_Degub_print(F("lecturaSeg:"));
+    SoftSerial_Degub_println(lecturaSeg, BIN);
     init = true;
   }
   switch (lecturaPuerta)
@@ -156,8 +160,7 @@ void loop()
       {
         break;
       }
-
-      ESP_SERIAL.println("Puerta Abierta.");
+      SoftSerial_Degub_println("Puerta Abierta.");
       PuertaAbiertaEsperandoStop = true;
       break;
     case entrePuerta:
@@ -180,7 +183,7 @@ void loop()
     case cerradoPuerta:
       if (!PuertaCerradaEsperandoStop)
       {
-        ESP_SERIAL.println("Puerta Cerrada");
+        SoftSerial_Degub_println("Puerta Cerrada");
         PuertaCerradaEsperandoStop = true;
       }
       CabinaEnMovimiento = VerificarCabina();
@@ -203,7 +206,7 @@ void loop()
 
     if (PuertaStop)
     {
-      ESP_SERIAL.println("Puerta Stop. Esperando por rele");
+      SoftSerial_Degub_println("Puerta Stop. Esperando por rele");
       PuertaStop = false;
     }
   default:
@@ -226,7 +229,7 @@ void loop()
   {
     if (WiFi.status() != WL_CONNECTED && !WifiDesconectado)
     {
-      ESP_SERIAL.println("ESP desconectado de la red. Por favor Reseteelo y vuelva a conectar");
+      SoftSerial_Degub_println("ESP desconectado de la red. Por favor Reseteelo y vuelva a conectar");
       WifiDesconectado = true;
     }
     tstartWiFi = millis();
@@ -235,7 +238,7 @@ void loop()
   {
     if (WiFi.status() == WL_CONNECTED && WifiDesconectado)
     {
-      ESP_SERIAL.println("ESP conectado nuevamente la red");
+      SoftSerial_Degub_println("ESP conectado nuevamente la red");
       WifiDesconectado = false;
     }
     tstartWiFi = millis();
@@ -296,9 +299,9 @@ void setup()
 
 #endif
 
-  ESP_SERIAL.println("Init Mdo");
+  SoftSerial_Degub_println("Init Mdo");
   delay(3000);
-  ESP_SERIAL.println("Starting firmware");
+  SoftSerial_Degub_println("Starting firmware");
 }
 
 void loop()
@@ -314,7 +317,7 @@ void loop()
   {
     if (WiFi.status() != WL_CONNECTED && !WifiDesconectado)
     {
-      ESP_SERIAL.println("ESP desconectado de la red. Por favor Reseteelo y vuelva a conectar");
+      SoftSerial_Degub_println("ESP desconectado de la red. Por favor Reseteelo y vuelva a conectar");
       WifiDesconectado = true;
     }
     tstartWiFi = millis();
@@ -323,7 +326,7 @@ void loop()
   {
     if (WiFi.status() == WL_CONNECTED && WifiDesconectado)
     {
-      ESP_SERIAL.println("ESP conectado nuevamente la red");
+      SoftSerial_Degub_println("ESP conectado nuevamente la red");
       WifiDesconectado = false;
     }
     tstartWiFi = millis();

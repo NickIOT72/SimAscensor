@@ -1,5 +1,6 @@
 #include "I2C.h"
 #include <Wire.h>
+#include "../SoftSerial/SoftSerial.h"
 
 void getI2Caddress()
 {
@@ -7,7 +8,7 @@ void getI2Caddress()
   byte error, address;
   int nDevices;
 
-  ESP_SERIAL.println("Scanning...");
+  SoftSerial_Degub_println("Scanning...");
 
   nDevices = 0;
   for (address = 1; address < 127; address++)
@@ -20,24 +21,24 @@ void getI2Caddress()
 
     if (error == 0)
     {
-      ESP_SERIAL.print("I2C device found at address 0x");
+      SoftSerial_Degub_print("I2C device found at address 0x");
       if (address < 16)
-        ESP_SERIAL.print("0");
-      ESP_SERIAL.print(address, HEX);
-      ESP_SERIAL.println("  !");
+        SoftSerial_Degub_print("0");
+      SoftSerial_Degub_print(address, HEX);
+      SoftSerial_Degub_println("  !");
 
       nDevices++;
     }
     else if (error == 4)
     {
-      ESP_SERIAL.print("Unknown error at address 0x");
+      SoftSerial_Degub_print("Unknown error at address 0x");
       if (address < 16)
-        ESP_SERIAL.print("0");
-      ESP_SERIAL.println(address, HEX);
+        SoftSerial_Degub_print("0");
+      SoftSerial_Degub_println(address, HEX);
     }
   }
   if (nDevices == 0)
-    ESP_SERIAL.println("No I2C devices found\n");
+    SoftSerial_Degub_println("No I2C devices found\n");
   else
-    ESP_SERIAL.println("done\n");
+    SoftSerial_Degub_println("done\n");
 }

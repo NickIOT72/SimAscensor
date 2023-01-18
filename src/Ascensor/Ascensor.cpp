@@ -1,16 +1,16 @@
 #include <Arduino.h>
 #include "Ascensor.h"
-#include "../modules/ModBackend.h"
-#include "../modules/PCF8575/PCF8575Mod.h"
+#include "../DataModules/ModBackend/ModBackend.h"
+#include "../FirmwareModules/Mod74hc595/Mod74hc595.h"
 #include "Seguridades/Seguridades.h"
 #include "Banderas/Banderas.h"
 #include "Alertas/Alertas.h"
 #include "Puertas/Puertas.h"
 #include "../Protocols/SoftSerial/SoftSerial.h"
-#include "../modules/JsonMod/JsonMod.h"
+#include "../DataModules/JsonMod/JsonMod.h"
 #include "Cabina/Cabina.h"
 
-SoftwareSerial ESP_SERIAL_ASC(ESP_RX, ESP_TX);
+
 
 int TotalPisos = 14;
 int pisoActual = 1;
@@ -22,6 +22,16 @@ uint8_t Ascensor_VerificarModuloSegunPosicion(uint8_t PosicionEnPlaca)
     valRet = dev595;
   else if (PosicionEnPlaca < deviceMUX4067pos)
     valRet = dev4067;
+  return valRet;
+}
+
+uint8_t Ascensor_VerificarPosicionInicialDeModulos(uint8_t ModuloDev)
+{
+  uint8_t valRet = 0;
+  if (ModuloDev == device595pos)
+    valRet = 0;
+  else if (ModuloDev == deviceMUX4067pos )
+    valRet = device595pos;
   return valRet;
 }
 
@@ -38,9 +48,8 @@ uint8_t Ascensor_VerificarModuloSegunPosicion(uint8_t PosicionEnPlaca)
 
 void Ascensor_Init(String StrJSONObject)
 {
-  ESP_SERIAL_ASC.begin(BAUD_SERIAL);
   JsonMod_SerialInit();
-  //ESP_SERIAL_ASC.println("STR 2:" + StrJSONObject );
+  //SoftSerial_Degub_println("STR 2:" + StrJSONObject );
   ActualizarModulos(StrJSONObject);
 }
 
@@ -66,10 +75,10 @@ void Ascensor_Init(String StrJSONObject)
 void ActualizarModulos(String StrJSONObject)
 {
   //DynamicJsonDocument JSONObject(JSON_Buffer);
-  ////ESP_SERIAL_ASC.println("STR 3:" + StrJSONObject );
+  ////SoftSerial_Degub_println("STR 3:" + StrJSONObject );
   //if (!jsonMod_verificarJson(StrJSONObject, JSONObject))
   //{
-  //  ESP_SERIAL_ASC.println("Eror1");
+  //  SoftSerial_Degub_println("Eror1");
   //  while (true)
   //  {
   //    delay(1);
@@ -89,7 +98,7 @@ void ActualizarModulos(String StrJSONObject)
   char *titlePart[1] = { "TIPO_CONTEO" };
   JsonMod_FilterChar( StrJSONObject, TIPO_CONTEO_C , titlePart, 1 );
   String TIPO_CONTEO = String(TIPO_CONTEO_C);
-  ESP_SERIAL_ASC.println("TIPO_CONTEO: " + TIPO_CONTEO);
+  SoftSerial_Degub_println("TIPO_CONTEO: " + TIPO_CONTEO);
   int TOTAL_PISOS;
   char *titlePart2[1] = { "TOTAL_PISOS" };
   JsonMod_FilterInt( StrJSONObject, &TOTAL_PISOS, titlePart2, 1 );
@@ -100,13 +109,13 @@ void ActualizarModulos(String StrJSONObject)
 
   //JsonObject EstructuraV = JSONObject["ARCH"];
 
-  struct data_ModBackend data_mod_Band[4];
-  struct data_ModBackend data_mod_Seguridades[4];
-  struct data_ModBackend data_mod_Alertas[8];
-  struct data_ModBackend data_mod_Puertas[2];
-  struct data_ModBackend data_mod_Cabinas[4];
+  struct data_PinBackend data_mod_Band[4];
+  struct data_PinBackend data_mod_Seguridades[4];
+  struct data_PinBackend data_mod_Alertas[8];
+  struct data_PinBackend data_mod_Puertas[2];
+  struct data_PinBackend data_mod_Cabinas[4];
 
-  // struct data_ModBackend data_mod_PCF[16];
+  // struct data_PinBackend data_mod_PCF[16];
   // uint8_t countPCF = 0;
   const int  TOTAL_IO_MODULES_BOARD_CONFIG = 5;
   const int TOTAL_PINS_BOARD_CONFIG = 24;
@@ -115,7 +124,7 @@ void ActualizarModulos(String StrJSONObject)
 
 
   uint16_t counterPos = 0;
-  ESP_SERIAL_ASC.println("Start system");
+  SoftSerial_Degub_println("Start system");
   for (uint8_t i = 0; i < TOTAL_IO_MODULES_BOARD_CONFIG; i++)
   {
     
@@ -123,26 +132,26 @@ void ActualizarModulos(String StrJSONObject)
     char *titlePart4[3] = { "ARCH",Modff[i], "PINNAME" };
     char PINNAME[8][10];
     JsonMod_FilterCharArray( StrJSONObject,  &PINNAME[0][0], 10, titlePart4, 3 );
-    //ESP_SERIAL_ASC.println("ARCH" +  String(Modff[i]) +"PINNAME: ");
+    //SoftSerial_Degub_println("ARCH" +  String(Modff[i]) +"PINNAME: ");
     //for (size_t i = 0; i < 8; i++)
     //{
-    //  ESP_SERIAL_ASC.println(PINNAME[i]);
+    //  SoftSerial_Degub_println(PINNAME[i]);
     //}
 
     char *titlePart5[3] = { "ARCH", Modff[i], "VAL" };
     uint8_t Values[8];
     JsonMod_FilterIntArray( StrJSONObject,  Values, titlePart5, 3 );
-    //ESP_SERIAL_ASC.println("ARCH" +  String(Modff[i]) +"PINNAME: ");
+    //SoftSerial_Degub_println("ARCH" +  String(Modff[i]) +"PINNAME: ");
     //for (size_t i = 0; i < 8; i++)
     //{
-    //  ESP_SERIAL_ASC.println(Values[i]);
+    //  SoftSerial_Degub_println(Values[i]);
     //}
 
     for (uint8_t j = 0; j < EspacioModulos[i]; j++)
     {
       char* pinameStr = PINNAME[j] ;
       //strcpy( pinameStr, PINNAME[j] );
-      //ESP_SERIAL_ASC.println("pinameStr:" + String(pinameStr)  );
+      //SoftSerial_Degub_println("pinameStr:" + String(pinameStr)  );
       if (strcmp(pinameStr , "" ) != 0)
       {
         for (uint8_t k = 0; k < TOTAL_PINS_BOARD_CONFIG ; k++)
@@ -152,74 +161,77 @@ void ActualizarModulos(String StrJSONObject)
             &&  String(CongfPinsStr[k]) != "PATIN" /*strcmp( CongfPinsStr[k] ,pinameStr ) == 0*/ )
           {
             uint8_t pinameVal = Values[j];
-            //ESP_SERIAL_ASC.println("pinameVal:" + String(pinameVal)  );
+            //SoftSerial_Degub_println("pinameVal:" + String(pinameVal)  );
             uint8_t PosicionEnPlaca = counterPos;
-            struct data_ModBackend prov_data_mod;
+            struct data_PinBackend prov_data_mod;
             
             if (k < 4)
             {
-              data_mod_Band[k].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Band[k].posPin = PosicionEnPlaca;
+              data_mod_Band[k].ModuloDevice = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Band[k].PosicionPlaca = PosicionEnPlaca;
               //strcpy( data_mod_Band[k].nombrePin, pinameStr );
-              data_mod_Band[k].estadoPin= pinameVal >0 ;
+              data_mod_Band[k].EstadoPin = pinameVal >0 ;
+              data_mod_Band[k].PosModulo =  PosicionEnPlaca - Ascensor_VerificarPosicionInicialDeModulos( data_mod_Band[k].ModuloDevice );
               //data_mod_Band[k]. = CongfPinsStr[k];
               prov_data_mod = data_mod_Band[k];
             }
             else if (k < 8 && k >= 4)
             {
-              data_mod_Seguridades[k - posBand].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Seguridades[k - posBand].posPin = PosicionEnPlaca;
+              data_mod_Seguridades[k - posBand].ModuloDevice  = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Seguridades[k - posBand].PosicionPlaca  = PosicionEnPlaca;
               //strcpy( data_mod_Seguridades[k - posBand].nombrePin, pinameStr );
               //data_mod_Seguridades[k - posBand].nombrePin = CongfPinsStr[k];
-              data_mod_Seguridades[k - posBand].estadoPin= pinameVal >0 ;
+              data_mod_Seguridades[k - posBand].EstadoPin = pinameVal >0 ;
+              data_mod_Seguridades[k].PosModulo = PosicionEnPlaca - Ascensor_VerificarPosicionInicialDeModulos( data_mod_Band[k].ModuloDevice );
               //data_mod_Seguridades[k].available = false;
               prov_data_mod = data_mod_Seguridades[k - posBand];
             }
             else if (k < 16 && k >= 8)
             {
-              data_mod_Alertas[k - posSeg].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Alertas[k - posSeg].posPin = PosicionEnPlaca;
+              data_mod_Alertas[k - posSeg].ModuloDevice  = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Alertas[k - posSeg].PosicionPlaca  = PosicionEnPlaca;
               //strcpy( data_mod_Alertas[k - posSeg].nombrePin, pinameStr );
               //data_mod_Alertas[k - posSeg].nombrePin = CongfPinsStr[k];
-              data_mod_Alertas[k - posSeg].estadoPin= pinameVal >0 ;
+              data_mod_Alertas[k - posSeg].EstadoPin= pinameVal >0 ;
+              data_mod_Alertas[k].PosModulo = PosicionEnPlaca - Ascensor_VerificarPosicionInicialDeModulos( data_mod_Band[k].ModuloDevice );
               //data_mod_Alertas[k - posSeg].available = false;
               prov_data_mod = data_mod_Alertas[k - posSeg];
             }
             else if (k < 22 && k >= 20)
             {
-              data_mod_Puertas[k - 20].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Puertas[k - 20].posPin = PosicionEnPlaca;
+              data_mod_Puertas[k - 20].ModuloDevice  = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Puertas[k - 20].PosicionPlaca  = PosicionEnPlaca;
               //strcpy( data_mod_Puertas[k - 20].nombrePin, pinameStr );
               //data_mod_Puertas[k - 20].nombrePin = CongfPinsStr[k];
-              data_mod_Puertas[k - 20].estadoPin= pinameVal >0 ;
+              data_mod_Puertas[k - 20].EstadoPin= pinameVal >0 ;
               //data_mod_Puertas[k - 20].available = false;
               prov_data_mod = data_mod_Puertas[k - 20];
             }
             else if (k < 20 && k >= 16)
             {
-              data_mod_Cabinas[k - 16].device = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
-              data_mod_Cabinas[k - 16].posPin = PosicionEnPlaca;
-              data_mod_Cabinas[k - 16].estadoPin= pinameVal >0 ;
+              data_mod_Cabinas[k - 16].ModuloDevice  = Ascensor_VerificarModuloSegunPosicion(PosicionEnPlaca);
+              data_mod_Cabinas[k - 16].PosicionPlaca  = PosicionEnPlaca;
+              data_mod_Cabinas[k - 16].EstadoPin= pinameVal >0 ;
               //strcpy( data_mod_Cabinas[k - 16].nombrePin, pinameStr );
               //data_mod_Cabinas[k - 16].nombrePin = CongfPinsStr[k];
               //data_mod_Cabinas[k - 16].available = false;
               prov_data_mod = data_mod_Cabinas[k - 16];
             }
-            //ESP_SERIAL_ASC.print( F("K: "));
-            //ESP_SERIAL_ASC.print( k);
-            //ESP_SERIAL_ASC.print( F(" , "));
-            //ESP_SERIAL_ASC.print( F("PosicionPlaca: "));
-            //ESP_SERIAL_ASC.print(String( prov_data_mod.posPin ));
-            //ESP_SERIAL_ASC.print(F(" , NombrePin: "));
-            //ESP_SERIAL_ASC.print( pinameStr   );
-            //String deviceName = ( prov_data_mod.device == dev595 )?"595":"MUXBID";
-            //ESP_SERIAL_ASC.print( F("Device:") );
-            //ESP_SERIAL_ASC.print( deviceName );
-            //ESP_SERIAL_ASC.print(F(", Pos:") );
-            //ESP_SERIAL_ASC.print(String(  prov_data_mod.posPin) );
-            //deviceName = ( prov_data_mod.estadoPin )?"ON":"OFF";
-            //ESP_SERIAL_ASC.print(F(", Estado:"));
-            //ESP_SERIAL_ASC.println( deviceName  );
+            //SoftSerial_Degub_print( F("K: "));
+            //SoftSerial_Degub_print( k);
+            //SoftSerial_Degub_print( F(" , "));
+            //SoftSerial_Degub_print( F("PosicionPlaca: "));
+            //SoftSerial_Degub_print(String( prov_data_mod.PosicionPlaca  ));
+            //SoftSerial_Degub_print(F(" , NombrePin: "));
+            //SoftSerial_Degub_print( pinameStr   );
+            //String deviceName = ( prov_data_mod.ModuloDevice  == dev595 )?"595":"MUXBID";
+            //SoftSerial_Degub_print( F("Device:") );
+            //SoftSerial_Degub_print( deviceName );
+            //SoftSerial_Degub_print(F(", Pos:") );
+            //SoftSerial_Degub_print(String(  prov_data_mod.PosicionPlaca ) );
+            //deviceName = ( prov_data_mod.EstadoPin )?"ON":"OFF";
+            //SoftSerial_Degub_print(F(", Estado:"));
+            //SoftSerial_Degub_println( deviceName  );
 
             break;
           }
@@ -232,8 +244,7 @@ void ActualizarModulos(String StrJSONObject)
   while(Serial.available() > 0) {
     char t = Serial.read();
   }
-  Backend_ResetModules();
-  // PCF_Configuration( data_mod_PCF , countPCF );
+  MOD74HC595_Reset();
   Seguridades_ApagarSM();
   delay(100);
   Banderas_Init(data_mod_Band, 4, modoConteoBandera);
@@ -260,13 +271,13 @@ bool VerificarCabina()
         if (Cabina_leerEstadoCabina() == cabinaSubiendoEnAlta && lecturaPuertaAct != cabinaSubiendoEnAlta)
         {
           lecturaPuertaAct = cabinaSubiendoEnAlta;
-          ESP_SERIAL_ASC.println("Cabina Subiendo en Alta");
+          SoftSerial_Degub_println("Cabina Subiendo en Alta");
           reateardoBaja = false;
         }
         else if (Cabina_leerEstadoCabina() == cabinaSubiendoEnBaja && lecturaPuertaAct != cabinaSubiendoEnBaja)
         {
           lecturaPuertaAct = cabinaSubiendoEnBaja;
-          ESP_SERIAL_ASC.println("Cabina Subiendo en baja");
+          SoftSerial_Degub_println("Cabina Subiendo en baja");
           reateardoBaja = true;
         }
       }
@@ -276,13 +287,13 @@ bool VerificarCabina()
         if (Cabina_leerEstadoCabina() == cabinaBajandoEnAlta && lecturaPuertaAct != cabinaBajandoEnAlta)
         {
           lecturaPuertaAct = cabinaBajandoEnAlta;
-          ESP_SERIAL_ASC.println("Cabina Bajando en Alta");
+          SoftSerial_Degub_println("Cabina Bajando en Alta");
           reateardoBaja = false;
         }
         else if (Cabina_leerEstadoCabina() == cabinaBajandoEnBaja && lecturaPuertaAct != cabinaBajandoEnBaja)
         {
           lecturaPuertaAct = cabinaBajandoEnBaja;
-          ESP_SERIAL_ASC.println("Cabina Bajando en baja");
+          SoftSerial_Degub_println("Cabina Bajando en baja");
           reateardoBaja = true;
         }
       }

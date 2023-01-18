@@ -18,6 +18,7 @@ struct data_EventRegisterBackend {
 struct data_PinBackend {
     uint8_t PosicionPlaca;
     uint8_t ModuloDevice;
+    uint8_t PosModulo;
     bool EstadoPin;
     bool disponible = false;
     char* nombrePin;

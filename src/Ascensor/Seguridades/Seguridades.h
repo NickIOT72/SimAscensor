@@ -2,7 +2,7 @@
 #define _SEGURIDADES_H
 
 #include <Arduino.h>
-#include "../../modules/ModBackend.h"
+#include "../../DataModules/ModBackend/ModBackend.h"
 
 #define NUM_SEG 4
 
@@ -35,7 +35,7 @@ FALLA_FPA_SPC,
 abiertaPuerta
 };
 
-void Seguridades_Init(  const struct data_ModBackend *confg, uint8_t elements);
+void Seguridades_Init(  const struct data_PinBackend *confg, uint8_t elements);
 
 uint8_t Seguridades_leerEstadoPuerta();
 void Seguridades_ActivarSM();

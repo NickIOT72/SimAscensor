@@ -2,7 +2,6 @@
 #define _BANDERAS_H
 
 #include <Arduino.h>
-#include "../../modules/ModBackend.h"
 
 #define DELAY_AV 10
 #define DELAY_BV 40
@@ -57,7 +56,7 @@ enum bitOrder_Banderas {
     bitEXS
 };
 
-void Banderas_Init(  const struct data_ModBackend *confg, uint8_t elements, uint8_t modoConteoBanderas);
+void Banderas_Init(  const struct data_PinBackend *confg, uint8_t elements, uint8_t modoConteoBanderas);
 
 uint8_t Banderas_leerBanderas();
 void IncrementarBandera(int *PisoActual, int *TotalPisos);

@@ -5,7 +5,6 @@
 
 #include "../SoftSerial/SoftSerial.h"
 
-SoftwareSerial ESP_SERIAL_SPIFFS(ESP_RX, ESP_TX);
 
 #if defined(ESP8266)
 

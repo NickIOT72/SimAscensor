@@ -1,7 +1,7 @@
 #ifndef _PUERTAS_H
 #define _PUERTAS_H
 
-#include "../../modules/ModBackend.h"
+#include "../../DataModules/ModBackend/ModBackend.h"
 
 #define NUM_SEG 4
 
@@ -19,7 +19,7 @@ enum bitOrder_Puertas {
 
 enum puertaEstadoRele { puertoStop , puertaAbriendo, puertaCerrando, falllaPuerta };
 
-void Puertas_Init(  const struct data_ModBackend *confg, uint8_t elements);
+void Puertas_Init(  const struct data_PinBackend *confg, uint8_t elements);
 
 uint16_t Puertas_leerEstadoPuerta();
 void Puertas_AbriendoPuerta();

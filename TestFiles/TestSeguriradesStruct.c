@@ -9,9 +9,9 @@ struct data_ModBackend {
 
 struct data_ModBackend data_mod_595[4];
 
-void Seguridades_Init( const struct data_ModBackend *confg, uint8_t elements)
+void Seguridades_Init( const struct data_ModBackend *confg, int elements)
 {
-    for( uint8_t i = 0; i < elements; i++  )
+    for( int i = 0; i < elements; i++  )
     {
         data_mod_595[i].posPin = confg[i].posPin;
         data_mod_595[i].estadoPin = confg[i].estadoPin;

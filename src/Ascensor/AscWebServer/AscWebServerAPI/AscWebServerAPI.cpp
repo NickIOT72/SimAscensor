@@ -2,7 +2,6 @@
 
 #include "../../../Protocols/SoftSerial/SoftSerial.h"
 #include <ArduinoJson.h>
-SoftwareSerial ESP_SERIAL_ASCWEBSERVERAPI(ESP_RX, ESP_TX);
 
 #if defined(ESP8266)
 #include "./AscWebServerAPI.h"
@@ -88,7 +87,7 @@ void EscribirConfPlaca(JsonDocument &JSONObject)
           strG += "},";
           strG += "\"TIPO_CONTEO\": \"" + TIPO_CONTEOV + "\"";
       strG += "}";
-   ESP_SERIAL_ASCWEBSERVERAPI.println("Datos a ver: " + strG );
+   SoftSerial_Degub_println("Datos a ver: " + strG );
 
    SPIFFS_UpdateFile(CONFG_FILE, strG);
    
@@ -102,10 +101,10 @@ bool ActulizarConfgPlaca(String jsonConfg)
    DeserializationError error = deserializeJson(JSONObject, StrProvp);
    if (error)
    {
-      ESP_SERIAL_ASCWEBSERVERAPI.println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
+      SoftSerial_Degub_println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
       return false;
    }
-   ESP_SERIAL_ASCWEBSERVERAPI.println(F("Json received: "));
+   SoftSerial_Degub_println(F("Json received: "));
    serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
    EscribirConfPlaca(JSONObject);
@@ -115,8 +114,8 @@ bool ActulizarConfgPlaca(String jsonConfg)
 
 void AscWebServerAPI_handleSendConfg(std::unique_ptr<ESP8266WebServer> & server)
 {
-   ESP_SERIAL_ASCWEBSERVERAPI.println("handleSendConfg");
-   ESP_SERIAL_ASCWEBSERVERAPI.println("");
+   SoftSerial_Degub_println("handleSendConfg");
+   SoftSerial_Degub_println("");
 
    String jsonConfg = WebServerAPI_returnReqData(server);
    if( !jsonConfg )return;
@@ -161,12 +160,12 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
    DeserializationError error = deserializeJson(JSONObject, StrProvp);
    if (error)
    {
-      ESP_SERIAL_ASCWEBSERVERAPI.println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
+      SoftSerial_Degub_println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
       return false;
    }
    else
    {
-      ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
+      SoftSerial_Degub_print(F("Json received: "));
       serializeJson(JSONObject, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
       String ConfgFile = SPIFFS_ReadFile("/ConfgPlaca.text");
@@ -177,12 +176,12 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
       DeserializationError error2 = deserializeJson(JSONObjectConfg, StrProvp);
       if (error2)
       {
-         ESP_SERIAL_ASCWEBSERVERAPI.println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
+         SoftSerial_Degub_println("DeserializeJson() for f2b message failed: " + String(error2.c_str()));
          return false;
       }
       else
       {
-         ESP_SERIAL_ASCWEBSERVERAPI.print(F("Json received: "));
+         SoftSerial_Degub_print(F("Json received: "));
          serializeJson(JSONObjectConfg, ESP_SERIAL_ASCWEBSERVERAPI); /**/
 
          if (mod == MOD_IN)
@@ -193,11 +192,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
             JsonArray PINNAMEnew = JSONObject["SETPIN"]["PINNAME"];
             JsonArray VALnew = JSONObject["SETPIN"]["VAL"];
 
-            ESP_SERIAL_ASCWEBSERVERAPI.print("arrayPinnameME1.size(): ");
-            ESP_SERIAL_ASCWEBSERVERAPI.println(arrayPinnameME1.size());
+            SoftSerial_Degub_print("arrayPinnameME1.size(): ");
+            SoftSerial_Degub_println(arrayPinnameME1.size());
 
-            ESP_SERIAL_ASCWEBSERVERAPI.print("arrayPinnameME1.size(): ");
-            ESP_SERIAL_ASCWEBSERVERAPI.println(arrayPinnameMEA.size());
+            SoftSerial_Degub_print("arrayPinnameME1.size(): ");
+            SoftSerial_Degub_println(arrayPinnameMEA.size());
 
             for (size_t  i = 0; i < arrayPinnameME1.size(); i++)
             {
@@ -206,11 +205,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                {
                   String pinnameStrNew = PINNAMEnew[j];
                   String valStrNew = VALnew[j];
-                  ESP_SERIAL_ASCWEBSERVERAPI.print("pinnameStrNew == pinnameStr: ");
-                  ESP_SERIAL_ASCWEBSERVERAPI.println(pinnameStrNew + "," + pinnameStr + ";");
+                  SoftSerial_Degub_print("pinnameStrNew == pinnameStr: ");
+                  SoftSerial_Degub_println(pinnameStrNew + "," + pinnameStr + ";");
                   if (pinnameStrNew == pinnameStr)
                   {
-                     ESP_SERIAL_ASCWEBSERVERAPI.println("OK MIN1");
+                     SoftSerial_Degub_println("OK MIN1");
                      JSONObjectConfg["ARCH"]["ME1"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["ME1"]["VAL"][i] = valStrNew;
                      serializeJson(JSONObjectConfg["ARCH"]["MIN1"], ESP_SERIAL_ASCWEBSERVERAPI); 
@@ -226,14 +225,14 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                {
                   String pinnameStrNew = PINNAMEnew[j];
                   String valStrNew = VALnew[j];
-                  ESP_SERIAL_ASCWEBSERVERAPI.print("pinnameStrNew == pinnameStr: ");
-                  ESP_SERIAL_ASCWEBSERVERAPI.println(pinnameStrNew + "," + pinnameStr + ";");
+                  SoftSerial_Degub_print("pinnameStrNew == pinnameStr: ");
+                  SoftSerial_Degub_println(pinnameStrNew + "," + pinnameStr + ";");
                   if (pinnameStrNew == pinnameStr)
                   {
-                     ESP_SERIAL_ASCWEBSERVERAPI.println("OK min2");
+                     SoftSerial_Degub_println("OK min2");
                      JSONObjectConfg["ARCH"]["MEA"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MEA"]["VAL"][i] = valStrNew;
-                     ESP_SERIAL_ASCWEBSERVERAPI.print(F("  NEW Json received: "));
+                     SoftSerial_Degub_print(F("  NEW Json received: "));
                      serializeJson(JSONObjectConfg["ARCH"]["MIN2"], ESP_SERIAL_ASCWEBSERVERAPI); 
                      break;
                   }
@@ -255,11 +254,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
             JsonArray PINNAMEnew = JSONObject["SETPIN"]["PINNAME"];
             JsonArray VALnew = JSONObject["SETPIN"]["VAL"];
 
-            ESP_SERIAL_ASCWEBSERVERAPI.print("arrayPinnameMS1.size(): ");
-            ESP_SERIAL_ASCWEBSERVERAPI.println(arrayPinnameMS1.size());
+            SoftSerial_Degub_print("arrayPinnameMS1.size(): ");
+            SoftSerial_Degub_println(arrayPinnameMS1.size());
 
-            ESP_SERIAL_ASCWEBSERVERAPI.print("arrayPinnameMS2.size(): ");
-            ESP_SERIAL_ASCWEBSERVERAPI.println(arrayPinnameMS2.size());
+            SoftSerial_Degub_print("arrayPinnameMS2.size(): ");
+            SoftSerial_Degub_println(arrayPinnameMS2.size());
 
 
             for (size_t  i = 0; i < arrayPinnameMS1.size(); i++)
@@ -269,11 +268,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                {
                   String pinnameStrNew = PINNAMEnew[j];
                   String valStrNew = VALnew[j];
-                  ESP_SERIAL_ASCWEBSERVERAPI.print("pinnameStrNew == pinnameStr: ");
-                  ESP_SERIAL_ASCWEBSERVERAPI.println(pinnameStrNew + "," + pinnameStr + ";");
+                  SoftSerial_Degub_print("pinnameStrNew == pinnameStr: ");
+                  SoftSerial_Degub_println(pinnameStrNew + "," + pinnameStr + ";");
                   if (pinnameStrNew == pinnameStr)
                   {
-                     ESP_SERIAL_ASCWEBSERVERAPI.println("OK MS1");
+                     SoftSerial_Degub_println("OK MS1");
                      JSONObjectConfg["ARCH"]["MS1"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MS1"]["VAL"][i] = valStrNew;
                      break;
@@ -288,11 +287,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                {
                   String pinnameStrNew = PINNAMEnew[j];
                   String valStrNew = VALnew[j];
-                  ESP_SERIAL_ASCWEBSERVERAPI.print("pinnameStrNew == pinnameStr: ");
-                  ESP_SERIAL_ASCWEBSERVERAPI.println(pinnameStrNew + "," + pinnameStr + ";");
+                  SoftSerial_Degub_print("pinnameStrNew == pinnameStr: ");
+                  SoftSerial_Degub_println(pinnameStrNew + "," + pinnameStr + ";");
                   if (pinnameStrNew == pinnameStr)
                   {
-                     ESP_SERIAL_ASCWEBSERVERAPI.println("OK MS2");
+                     SoftSerial_Degub_println("OK MS2");
                      JSONObjectConfg["ARCH"]["MS2"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MS2"]["VAL"][i] = valStrNew;
                      break;
@@ -307,11 +306,11 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
                {
                   String pinnameStrNew = PINNAMEnew[j];
                   String valStrNew = VALnew[j];
-                  ESP_SERIAL_ASCWEBSERVERAPI.print("pinnameStrNew == pinnameStr: ");
-                  ESP_SERIAL_ASCWEBSERVERAPI.println(pinnameStrNew + "," + pinnameStr + ";");
+                  SoftSerial_Degub_print("pinnameStrNew == pinnameStr: ");
+                  SoftSerial_Degub_println(pinnameStrNew + "," + pinnameStr + ";");
                   if (pinnameStrNew == pinnameStr)
                   {
-                     ESP_SERIAL_ASCWEBSERVERAPI.println("OK MSA");
+                     SoftSerial_Degub_println("OK MSA");
                      JSONObjectConfg["ARCH"]["MSA"]["PINNAME"][i] = pinnameStrNew;
                      JSONObjectConfg["ARCH"]["MSA"]["VAL"][i] = valStrNew;
                      break;
@@ -332,8 +331,8 @@ bool setPinsEnConfg(String jsonSTR, uint8 mod)
 
 void AscWebServerAPI_handleSetPin(std::unique_ptr<ESP8266WebServer> & server)
 {
-   ESP_SERIAL_ASCWEBSERVERAPI.println("handleSetPin");
-   ESP_SERIAL_ASCWEBSERVERAPI.println("");
+   SoftSerial_Degub_println("handleSetPin");
+   SoftSerial_Degub_println("");
 
    String jsonConfg = WebServerAPI_returnReqData(server);
    if( !jsonConfg )return;
@@ -347,7 +346,7 @@ void AscWebServerAPI_handleSetPin(std::unique_ptr<ESP8266WebServer> & server)
       DeserializationError error = deserializeJson(JSONObject, StrProvp);
       if (error)
       {
-         ESP_SERIAL_ASCWEBSERVERAPI.println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
+         SoftSerial_Degub_println("DeserializeJson() for f2b message failed: " + String(error.c_str()));
          // server->send(200, "text/plain", "{\"resp\":\"NOK\"}");
          return;
       }
@@ -355,13 +354,13 @@ void AscWebServerAPI_handleSetPin(std::unique_ptr<ESP8266WebServer> & server)
       JsonArray PINNAME = SETPIN["PINNAME"];
       JsonArray VAL = SETPIN["VAL"];
 
-      ESP_SERIAL_ASCWEBSERVERAPI.println("Act PINS");
+      SoftSerial_Degub_println("Act PINS");
       uint8_t pinSize = PINNAME.size();
       for (uint8_t i = 0; i < pinSize; i++)
       {
          String pinnameStr = PINNAME[i];
          String valStr = VAL[i];
-         ESP_SERIAL_ASCWEBSERVERAPI.println("PIN:" + pinnameStr + " -> VAL:" + valStr);
+         SoftSerial_Degub_println("PIN:" + pinnameStr + " -> VAL:" + valStr);
       }
       
       server->send(200, "text/plain", "{\"resp\":\"OK\"}");

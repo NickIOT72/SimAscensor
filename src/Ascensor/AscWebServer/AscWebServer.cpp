@@ -1,6 +1,5 @@
 
 #include "../../Protocols/SoftSerial/SoftSerial.h"
-SoftwareSerial ESP_SERIAL_ASCWEBSERVER(ESP_RX, ESP_TX);
 
 #if defined(ESP8266)
 

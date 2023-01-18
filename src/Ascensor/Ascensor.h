@@ -3,7 +3,8 @@
 
 #include <ArduinoJson.h>
 
-
+enum deviceMod { dev595, devPCF, dev4067 };
+enum oredenDeviceMod { device595pos=24, deviceMUX4067pos = 40 };
 
 #define NUM_PISOS 24
 extern int TotalPisos;
