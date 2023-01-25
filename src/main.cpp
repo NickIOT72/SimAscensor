@@ -73,6 +73,7 @@ void setup()
   //OLED_MensajeInicial();
   MOD74HC595_Init();
   MUX74HC4067_Init();
+  //SerialTest595();
 
 #if defined(ESP8266)
   WebServer_InitWiFiManager(AscensorWebServer_InitServer);
@@ -103,7 +104,7 @@ void setup()
   strConfInit += "\"VAL\": [0, 0, 0, 0, 0, 0, 0, 0]";
   strConfInit += "}";
   strConfInit += "},";
-  strConfInit += "\"TIPO_CONTEO\": \"PADPAS\",";
+  strConfInit += "\"TIPO_CONTEO\": \"PN\",";
   strConfInit += "\"TOTAL_PISOS\": 14";
   strConfInit += "}";
   #ifdef ARD_MOD_SER

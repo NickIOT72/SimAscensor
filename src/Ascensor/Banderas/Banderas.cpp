@@ -27,14 +27,23 @@ void Banderas_resetBanderas()
 
 void Banderas_ActualizarEstadoBanderas( uint8_t SecAct){
   
+  uint8_t SecAct2 = SecAct;
   data_mod_Banderas[bitEXD].estadoPin = ((SecAct>>3)&0x01);
   data_mod_Banderas[bitPAD_PN].estadoPin = ((SecAct>>2)&0x01);
   data_mod_Banderas[bitPAS].estadoPin = ((SecAct>>1)&0x01);
   data_mod_Banderas[bitEXS].estadoPin = ((SecAct>>0)&0x01);
+
+  if( modoConteoBandera == PN )
+  {
+    data_mod_Banderas[bitPAD_PN].estadoPin = (SecAct == 4 || SecAct == 2) && pisosSecuenciaPASPAD[contadorSecuenciaPiso+1] == 0 && pisosSecuenciaPASPAD[contadorSecuenciaPiso-1] == 0 || SecAct == 7 || SecAct == 14 || SecAct == 6;
+    data_mod_Banderas[bitPAS].estadoPin = 0;
+    SecAct2 = (uint8_t)(data_mod_Banderas[bitEXD].estadoPin) << 3 | (uint8_t)(data_mod_Banderas[bitPAD_PN].estadoPin) << 2 | (uint8_t)(data_mod_Banderas[bitPAS].estadoPin) << 1| (uint8_t)(data_mod_Banderas[bitEXS].estadoPin);
+  }
+
   Backend_setOutputDevice(data_mod_Banderas , 4 );
   contadorBanderas = 0;
   ESP_SERIAL_BANDERAS.print("EXD,PAD,PAS,EXS:");
-  ESP_SERIAL_BANDERAS.println(SecAct , BIN);
+  ESP_SERIAL_BANDERAS.println(SecAct2 , BIN);
 }
 
 /**
@@ -79,7 +88,7 @@ void Banderas_Init( const struct data_ModBackend *confg, uint8_t elements, uint8
 uint8_t Banderas_leerBanderas()
 {
     uint8_t mod = 0;
-    if ( modoConteoBandera ==  PADPAS )
+    if ( modoConteoBandera ==  PADPAS || modoConteoBandera == PN )
     {
       mod = (uint8_t)(data_mod_Banderas[bitEXD].estadoPin) << 3 | (uint8_t)(data_mod_Banderas[bitPAD_PN].estadoPin) << 2 | (uint8_t)(data_mod_Banderas[bitPAS].estadoPin) << 1| (uint8_t)(data_mod_Banderas[bitEXS].estadoPin);
     }
@@ -101,7 +110,7 @@ void IncrementarBandera(int *PisoActual, int *TotalPisos)
 {
   bool pisodelay = false;
   if(contadorSecuenciaPiso == CANT_POS_ASC -1 && *PisoActual ==  *TotalPisos ) return;
-  if (  modoConteoBandera == PADPAS )
+  if (  modoConteoBandera == PADPAS || modoConteoBandera == PN )
   {
     if( !direccion &&  contadorBanderas > 0 ) { contadorBanderas--; return;}
     if( !direccion ) { contadorSecuenciaPiso = contadorSecuenciaAnterior ; contadorBanderas = limiteConteoBanderas[contadorSecuenciaPiso]; direccion=true;}
@@ -126,7 +135,7 @@ void IncrementarBandera(int *PisoActual, int *TotalPisos)
           llegando = true;
         }
         else {
-          contadorSecuenciaPiso = piso_ascensor_x;
+          contadorSecuenciaPiso = piso_ascensor_x;//piso_ascensor_x si es 2 velocidades, 5 si es una velocidad
           ESP_SERIAL_BANDERAS.println("llegando a piso seguiente");
           llegando = true;
         }
@@ -162,7 +171,7 @@ void DecrementarBandera(int *PisoActual)
 {
   bool pisodelay = false;
   if(contadorSecuenciaPiso == 0 && *PisoActual == 0) return;
-  if (  modoConteoBandera == PADPAS )
+  if (  modoConteoBandera == PADPAS || modoConteoBandera == PN )
   {
     if( direccion &&  contadorBanderas > 0 ) { contadorBanderas--; return;}
     if( direccion ) { contadorSecuenciaPiso = contadorSecuenciaAnterior ; contadorBanderas = limiteConteoBanderas[contadorSecuenciaPiso]; direccion=false;}
@@ -187,7 +196,7 @@ void DecrementarBandera(int *PisoActual)
           llegando = true;
         }
         else {
-          contadorSecuenciaPiso = piso_ascensor_y;
+          contadorSecuenciaPiso = piso_ascensor_y;//piso_ascensor_y si es 2 velocidades y si es 8 velocidad
           ESP_SERIAL_BANDERAS.println("llegando a piso seguiente");
           llegando = true;
         }
